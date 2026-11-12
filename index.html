@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Case Study Usability Website SMKN 21 Jakarta</title>
+<style>
+  :root {
+    --biru:#0f2c5c;
+    --biru-terang:#1e56c8;
+    --aksen:#2f6bff;
+    --kuning:#f5b400;
+    --abu:#f4f6fb;
+    --abu-2:#e8edf7;
+    --teks:#1c2433;
+    --teks-lembut:#5b6478;
+    --hijau:#1a8a4a;
+    --merah:#c62828;
+    --radius:14px;
+    --emas: linear-gradient(135deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html { scroll-behavior:smooth; scroll-padding-top:84px; }
+  
+  body {
+    font-family:'Segoe UI', system-ui, -apple-system, Arial, sans-serif;
+    color:var(--teks);
+    line-height:1.75;
+    background:#fff;
+    -webkit-font-smoothing:antialiased;
+    overflow-x: hidden; 
+  }
+  a { color:var(--aksen); text-decoration:none; transition:color .2s; }
+  a:hover { color:var(--biru); }
+  img { max-width:100%; display:block; }
+
+  /* ---------- HEADER ---------- */
+  header {
+    background:rgba(15,44,92,.92);
+    backdrop-filter:blur(12px);
+    position:sticky; top:0; z-index:50;
+    border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  .nav {
+    max-width:1120px; margin:auto; padding:0 24px; min-height:64px;
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;
+  }
+  .brand {
+    color:#fff; font-weight:700; font-size:1.05rem;
+    display:flex; align-items:center; gap:10px; letter-spacing:.2px;
+  }
+  .brand::before {
+    content:"RR"; display:inline-grid; place-items:center;
+    width:32px; height:32px; border-radius:9px;
+    background:linear-gradient(135deg,var(--aksen),#ffce4d);
+    color:var(--biru); font-weight:800; font-size:.82rem;
+  }
+  .nav ul { list-style:none; display:flex; gap:6px; }
+  .nav ul a {
+    color:rgba(255,255,255,.85); padding:8px 14px; border-radius:8px;
+    font-size:.92rem; transition:background .2s, color .2s;
+  }
+  .nav ul a:hover { background:rgba(255,255,255,.1); color:#fff; text-decoration:none; }
+  #toggle { display:none; background:none; border:0; color:#fff; font-size:1.6rem; cursor:pointer; padding:8px; }
+
+  /* ---------- HERO ---------- */
+  .hero {
+    background:
+      radial-gradient(circle at 80% -20%, rgba(245,180,0,.28), transparent 45%),
+      radial-gradient(circle at 10% 120%, rgba(47,107,255,.45), transparent 50%),
+      linear-gradient(135deg, #0f2c5c, #1e56c8);
+    color:#fff; padding:80px 24px 72px; text-align:center;
+    position:relative; overflow:hidden;
+  }
+  .hero .badge {
+    display:inline-block; background:rgba(255,255,255,.14);
+    border:1px solid rgba(255,255,255,.25);
+    padding:6px 16px; border-radius:999px; font-size:.82rem;
+    letter-spacing:.5px; margin-bottom:20px; font-weight:600;
+  }
+  .hero h1 { font-size:2.3rem; line-height:1.25; margin-bottom:14px; font-weight:800; letter-spacing:-.5px; }
+  .hero p { max-width:660px; margin:auto; opacity:.92; font-size:1.02rem; }
+
+  /* ---------- LAYOUT & FIX SIDEBAR ---------- */
+  .layout {
+    max-width:1120px; margin:auto; padding:48px 24px;
+    display:grid; grid-template-columns:240px 1fr; gap:56px;
+  }
+  main { min-width: 0; max-width: 100%; }
+  
+  aside { 
+    position: -webkit-sticky;
+    position: sticky; 
+    top: 88px; align-self: start; font-size: .92rem; 
+    max-height: calc(100vh - 100px); height: max-content;
+    overflow-y: auto; padding-right: 6px; z-index: 10;
+  }
+  aside ul { list-style:none; }
+  aside > ul > li { margin-bottom:14px; }
+  aside > ul > li > a { font-weight:700; color:var(--biru); display:block; padding:4px 0; }
+  aside ul ul { margin:6px 0 0 12px; border-left:2px solid var(--abu-2); }
+  aside ul ul a { display:block; padding:4px 12px; color:var(--teks-lembut); border-radius:0 6px 6px 0; font-size:.88rem; }
+  aside ul ul a:hover { background:var(--abu); color:var(--biru); text-decoration:none; }
+  aside a.aktif { color:var(--aksen); font-weight:600; background:var(--abu); }
+
+  main h2 { color:var(--biru); font-size:1.7rem; margin:8px 0 10px; font-weight:800; letter-spacing:-.3px; }
+  main hr { border:0; height:4px; width:64px; border-radius:99px; background:linear-gradient(90deg,var(--kuning),#ffd45e); margin-bottom:24px; }
+  main h3 { margin:28px 0 8px; font-size:1.15rem; color:var(--biru); font-weight:700; }
+  main h4 { margin:22px 0 8px; font-size:1.02rem; color:var(--biru); font-weight:700; }
+  main p, main ul.t, main ol { margin-bottom:14px; }
+  main ol, main ul.t { padding-left:24px; }
+  main ul.t li, main ol li { margin-bottom:6px; }
+  main section { margin-bottom:56px; }
+
+  /* ---------- PERKECIL GAMBAR ---------- */
+  figure { margin:20px 0; }
+  figure .g {
+    background:linear-gradient(135deg,#dbe5f7,#eef3fd);
+    border-radius:var(--radius); overflow:hidden; 
+    border:1px solid var(--abu-2);
+    max-width: 100%; 
+    margin: 0 auto; 
+  }
+  figure img { 
+    width:100%; 
+    display:block; 
+    max-height: 380px; 
+    object-fit: cover; 
+  }
+  figcaption { font-size:.88rem; color:var(--teks-lembut); text-align:center; margin-top:8px; font-style:italic; }
+
+  /* ---------- INFO GRID ---------- */
+  .info {
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:14px;
+    background:var(--abu); padding:20px; border-radius:var(--radius); margin:16px 0;
+    border:1px solid var(--abu-2);
+  }
+  .info > div { padding:4px 0; }
+  .info b { display:block; font-size:.74rem; text-transform:uppercase; letter-spacing:.6px; color:var(--teks-lembut); margin-bottom:2px; }
+
+  /* ---------- TOMBOL VIEW PROJECT ---------- */
+  .view-project { display:flex; justify-content:center; margin-top:10px; }
+  .view-project .btn-view {
+    display:inline-flex; align-items:center; gap:8px;
+    background:linear-gradient(135deg, var(--aksen), #1e56c8);
+    color:#fff; padding:9px 20px; border-radius:9px;
+    font-weight:600; font-size:.88rem; border:0; cursor:pointer;
+    box-shadow:0 4px 14px rgba(47,107,255,.28);
+    transition:transform .15s, box-shadow .2s, filter .2s;
+    text-decoration:none;
+  }
+  .view-project .btn-view:hover {
+    transform:translateY(-1px); filter:brightness(1.06);
+    box-shadow:0 8px 20px rgba(47,107,255,.4); color:#fff; text-decoration:none;
+  }
+  .view-project .btn-view svg { width:15px; height:15px; flex-shrink:0; }
+  .view-project .btn-view.yt { background:linear-gradient(135deg, #ff0033, #c62828); box-shadow:0 4px 14px rgba(255,0,51,.3); }
+  .view-project .btn-view.yt:hover { box-shadow:0 8px 20px rgba(255,0,51,.45); }
+
+  /* ---------- TABLE UMUM ---------- */
+  .tw { overflow-x:auto; margin-bottom:16px; border-radius:var(--radius); border:1px solid var(--abu-2); }
+  table { border-collapse:collapse; width:100%; font-size:.93rem; }
+  th, td { border-bottom:1px solid var(--abu-2); padding:11px 14px; text-align:left; vertical-align:top; }
+  th { background:var(--abu); color:var(--biru); font-weight:700; font-size:.86rem; text-transform:uppercase; letter-spacing:.4px; }
+  tr:last-child td { border-bottom:0; }
+  tbody tr:hover { background:#fafbfe; }
+  tfoot th { background:#eef2fb; color:var(--biru); }
+
+  /* ---------- KHUSUS TABEL REKAP SEQ (BISA DIGESER) ---------- */
+  .table-scroll {
+    width: 100%; max-width: 100%;
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    border-radius: var(--radius); border: 1px solid var(--abu-2); box-shadow: 0 4px 12px rgba(0,0,0,0.03); margin-bottom: 20px; background: #fff;
+  }
+  .table-scroll::-webkit-scrollbar { height: 8px; }
+  .table-scroll::-webkit-scrollbar-track { background: #f4f6fb; border-radius: 4px; }
+  .table-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+  .table-scroll::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+  .tabel-seq {
+    width: 100%; min-width: 1000px; table-layout: fixed; border-collapse: collapse; font-size: 0.85rem; white-space: nowrap;
+  }
+  .tabel-seq th, .tabel-seq td {
+    border: 1px solid var(--abu-2); padding: 8px 10px; text-align: center; vertical-align: middle;
+    overflow: hidden; text-overflow: ellipsis;
+  }
+  .tabel-seq th { background: #e8edf7; color: var(--biru); font-weight: 700; }
+  
+  .tabel-seq th:nth-child(1), .tabel-seq td:nth-child(1) { width: 40px; }
+  .tabel-seq th:nth-child(2), .tabel-seq td:nth-child(2) { width: 160px; }
+  .tabel-seq th:last-child, .tabel-seq td:last-child { width: 90px; }
+  
+  /* Kolom Nomor (Sticky) */
+  .tabel-seq th:nth-child(1), .tabel-seq td:nth-child(1) {
+    position: sticky; left: 0; background: #f4f6fb; z-index: 2; box-shadow: 2px 0 4px rgba(0,0,0,0.05);
+  }
+  .tabel-seq th:nth-child(1) { background: #e8edf7; z-index: 3; }
+
+  /* Kolom Nama (Sticky) */
+  .tabel-seq th:nth-child(2), .tabel-seq td:nth-child(2) {
+    text-align: left; position: sticky; left: 40px; background: #fff; z-index: 2; box-shadow: 2px 0 4px rgba(0,0,0,0.05);
+  }
+  .tabel-seq th:nth-child(2) { background: #e8edf7; z-index: 3; }
+  
+  /* Footer / Baris Rata-rata */
+  .tabel-seq tfoot th { background: #fdf6e3; color: var(--teks); border-top: 2px solid var(--kuning); }
+  
+  .tabel-seq tfoot th:nth-child(1),
+  .tabel-seq tfoot th:nth-child(2) {
+    position: sticky; background: #fdf6e3; z-index: 3;
+  }
+  .tabel-seq tfoot th:nth-child(1) { left: 0; box-shadow: 2px 0 4px rgba(0,0,0,0.05); }
+  .tabel-seq tfoot th:nth-child(2) { left: 40px; box-shadow: 2px 0 4px rgba(0,0,0,0.05); }
+
+  .tabel-seq tbody tr:hover td { background: #f4f6fb; }
+  .tabel-seq tbody tr:hover td:nth-child(2) { background: #f4f6fb; }
+
+  /* ---------- DOKUMEN ---------- */
+  .dok { list-style:none; }
+  .dok li {
+    background:var(--abu); padding:14px 18px; border-radius:10px; margin-bottom:10px;
+    display:flex; justify-content:space-between; gap:12px; align-items:center;
+    border:1px solid var(--abu-2); transition:background .2s;
+  }
+  .dok li:hover { background:#eef2fb; }
+  .dok li a {
+    background:#fff; border:1px solid var(--abu-2); padding:6px 16px;
+    border-radius:8px; font-size:.88rem; font-weight:600; white-space:nowrap;
+  }
+  .dok li a:hover { background:var(--aksen); color:#fff; border-color:var(--aksen); text-decoration:none; }
+
+  /* ---------- BUTTONS ---------- */
+  .btn {
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--kuning); color:#1c2433; padding:11px 24px; border:0;
+    border-radius:9px; font-weight:700; cursor:pointer; font-size:.95rem;
+    transition:transform .15s, box-shadow .2s, filter .2s;
+    box-shadow:0 4px 14px rgba(245,180,0,.3);
+  }
+  .btn:hover { text-decoration:none; filter:brightness(.96); transform:translateY(-1px); box-shadow:0 8px 20px rgba(245,180,0,.4); }
+
+  /* ---------- KHUSUS GRAFIK SEQ ---------- */
+  .grafik-wrap {
+    background:#fff; border:1px solid var(--abu-2); border-radius:var(--radius);
+    padding:16px; margin:16px 0 8px; box-shadow:0 4px 12px rgba(0,0,0,.03);
+    position:relative; height:420px;
+  }
+  .grafik-wrap canvas { width:100% !important; height:100% !important; }
+
+  /* ---------- KHUSUS TABEL BEFORE/AFTER ---------- */
+  .ba-table { table-layout: fixed; }
+  .ba-table td img {
+    border-radius:8px; border:1px solid var(--abu-2);
+    width:100%;
+    height:auto;
+    max-height:420px;
+    object-fit:contain;
+    background:#f4f6fb;
+    display:block;
+    transition:transform .15s;
+  }
+  .ba-table td img:hover { transform:scale(1.02); }
+  .ba-table td { width:calc((100% - 170px)/2); }
+  .ba-table td:first-child { width:170px; }
+
+  /* ---------- FOOTER ---------- */
+  footer {
+    background:
+      radial-gradient(circle at 80% -20%, rgba(245,180,0,.18), transparent 45%),
+      radial-gradient(circle at 10% 120%, rgba(47,107,255,.45), transparent 50%),
+      linear-gradient(135deg, #0f2c5c, #1e56c8);
+    color:#fff; padding:56px 24px 36px; text-align:center; font-size:.9rem;
+    position:relative; overflow:hidden;
+  }
+
+  footer .ucapan {
+    max-width:640px;
+    margin:0 auto 28px;
+    padding: 0 8px;
+  }
+  footer .ucapan h2 {
+    font-family: 'Brush Script MT', 'Dancing Script', 'Pacifico', cursive;
+    font-size: 3.4rem;
+    font-style: italic;
+    font-weight: normal;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    background: var(--emas);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: #B38728;
+    animation: kelipEmas 1.6s ease-in-out infinite;
+  }
+  footer .ucapan p {
+    font-size: 1.02rem;
+    color: rgba(255,255,255,.92);
+    font-style: italic;
+    margin: 0 auto;
+    animation: kelipTeks 2.4s ease-in-out infinite;
+  }
+
+  footer .link-footer {
+    border-top:1px solid rgba(255,255,255,.18);
+    padding-top:22px;
+    margin-top:8px;
+  }
+  footer a { color:rgba(255,255,255,.85); margin:0 8px; }
+  footer a:hover { color:var(--kuning); text-decoration:none; }
+  footer .copy { margin-top:10px; opacity:.6; font-size:.82rem; }
+
+  @keyframes kelipEmas {
+    0%, 100% {
+      opacity: 1;
+      filter: drop-shadow(0 0 12px rgba(252,246,186,.85)) drop-shadow(0 0 24px rgba(245,180,0,.55));
+      transform: scale(1);
+    }
+    50% {
+      opacity: .55;
+      filter: drop-shadow(0 0 2px rgba(252,246,186,.15));
+      transform: scale(.985);
+    }
+  }
+
+  @keyframes kelipTeks {
+    0%, 100% { opacity: .95; text-shadow: 0 0 8px rgba(255,255,255,.35); }
+    50%      { opacity: .45; text-shadow: 0 0 0 rgba(255,255,255,0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    footer .ucapan h2,
+    footer .ucapan p { animation: none; }
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:820px) {
+    #toggle { display:block; }
+    .nav nav { width:100%; display:none; }
+    .nav nav.buka { display:block; }
+    .nav ul { flex-direction:column; gap:0; padding:8px 0; }
+    .nav ul a { display:block; padding:11px 0; border-top:1px solid rgba(255,255,255,.12); }
+    .layout { grid-template-columns:1fr; gap:12px; padding:32px 20px; }
+    aside { display:none; }
+    .hero { padding:60px 20px 52px; }
+    .hero h1 { font-size:1.65rem; }
+    figure img { max-height: 250px; }
+
+    footer { padding:44px 18px 28px; }
+    footer .ucapan h2 { font-size: 2.6rem; }
+    footer .ucapan p { font-size: .98rem; }
+
+    .grafik-wrap { height:340px; padding:10px; }
+    .ba-table td { display:block; width:100% !important; border-bottom:0; }
+    .ba-table td:first-child { background:var(--abu); border-radius:8px 8px 0 0; font-weight:700; }
+    .ba-table td img { max-height:none; height:auto; }
+    .ba-table tr { border-bottom:2px solid var(--abu-2); }
+  }
+</style>
+</head>
+<body>
+
+<header><div class="nav">
+  <span class="brand">Rizki Ramdani</span>
+  <button id="toggle" aria-label="Menu">&#9776;</button>
+  <nav id="menu"><ul>
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#metodologi">Metodologi</a></li>
+    <li><a href="#tahap1">Pengujian 1</a></li>
+    <li><a href="#desain">Desain</a></li>
+    <li><a href="#tahap2">Pengujian Ulang</a></li>
+    <li><a href="#dokumen">Dokumen</a></li>
+  </ul></nav>
+</div></header>
+
+<div class="hero">
+  <span class="badge">CASE STUDY · UX RESEARCH</span>
+  <h1>Evaluasi Usability Website<br>SMKN 21 Jakarta</h1>
+  <p>Card sorting, pengujian SEQ, wawancara, perbaikan (mockup, wireframe, wireflow, userflow, prototype), dan pengujian ulang untuk memastikan website lebih mudah digunakan.</p>
+</div>
+
+<div class="layout">
+<aside><ul>
+  <li><a href="#overview">Overview</a><ul>
+    <li><a href="#objek">Objek Penelitian</a></li>
+    <li><a href="#masalah">Masalah</a></li><li><a href="#alur">Alur Pengerjaan</a></li></ul></li>
+  <li><a href="#metodologi">Metodologi</a><ul>
+    <li><a href="#pendekatan">Pendekatan</a></li>
+    <li><a href="#setting">Setting &amp; Prosedur</a></li>
+    <li><a href="#tasklist">Task List 15 Tugas</a></li>
+    <li><a href="#skoring">Skoring &amp; Kriteria</a></li></ul></li>
+  <li><a href="#tahap1">Pengujian Pertama</a><ul>
+    <li><a href="#tujuan-uji1">Yang Diteliti</a></li>
+    <li><a href="#gambaran-uji1">Gambaran Umum</a></li>
+    <li><a href="#cardsort">Card Sorting 1</a></li>
+    <li><a href="#seq">Formulir SEQ</a></li>
+    <li><a href="#user1">Peserta &amp; Nilai per User</a></li>
+    <li><a href="#wawancara">Wawancara</a></li>
+    <li><a href="#hitung">Perhitungan SEQ</a></li>
+    <li><a href="#lap1">Laporan 1</a></li></ul></li>
+  <li><a href="#desain">Desain / Mockup</a><ul>
+    <li><a href="#mockup">Mockup</a></li>
+    <li><a href="#wireframe">Wireframe</a></li>
+    <li><a href="#wireflow">Wireflow</a></li>
+    <li><a href="#userflow">Userflow</a></li>
+    <li><a href="#prototype">Prototype</a></li></ul></li>
+  <li><a href="#tahap2">Pengujian Ulang</a><ul>
+    <li><a href="#tujuh">7 Perbaikan</a></li>
+    <li><a href="#before-after">Before / After</a></li>
+    <li><a href="#cardsort2">Card Sorting 2</a></li>
+    <li><a href="#seq2">Formulir SEQ 2</a></li>
+    <li><a href="#user2">Peserta &amp; Nilai per User</a></li>
+    <li><a href="#wawancara2">Wawancara 2</a></li>
+    <li><a href="#hitung2">Perhitungan SEQ 2</a></li>
+    <li><a href="#lap2">Laporan 2</a></li>
+    <li><a href="#grafik">Grafik P1 vs P2</a></li>
+    <li><a href="#banding">Perbandingan SEQ</a></li></ul></li>
+  <li><a href="#dokumen">Dokumen</a></li>
+  <li><a href="#belajar">Yang Dipelajari</a></li>
+</ul></aside>
+
+<main>
+<section id="overview">
+  <h2>Overview</h2><hr>
+  
+  <h3 id="objek">Objek Penelitian</h3>
+  <p>Website yang dievaluasi dalam studi kasus ini adalah <b>website resmi SMKN 21 Jakarta</b>. Pengujian dilakukan terhadap versi website yang aktif pada saat penelitian (November 2026).</p>
+  <div class="info">
+    <div><b>Nama Situs</b>Website SMKN 21 Jakarta</div>
+    <div><b>URL</b><a href="https://smkn21jakarta.sch.id" target="_blank" rel="noopener">smkn21jakarta.sch.id</a></div>
+    <div><b>Institusi</b>SMK Negeri 21 Jakarta</div>
+    <div><b>Lokasi</b>Jakarta Pusat, DKI Jakarta</div>
+  </div>
+  <p><small>Catatan: Terdapat juga domain alternatif <a href="https://smkn21jakarta.id" target="_blank" rel="noopener">smkn21jakarta.id</a> yang dikaitkan dengan sekolah ini. Domain utama yang digunakan saat pengujian adalah <b>smkn21jakarta.sch.id</b>.</small></p>
+
+  <h3 id="masalah">Masalah</h3>
+  <p>Website SMKN 21 Jakarta seharusnya memudahkan siswa dan orang tua dalam mencari informasi. Namun, kenyataannya pengguna justru sering tersesat karena posisi menu tidak sesuai ekspektasi dan beberapa tautan tidak terlihat bisa diklik.</p>
+  <p>Sebagai contoh, saat mencari dokumentasi P5 tahun lalu atau informasi prestasi siswa, pengguna harus membuka banyak halaman dan sering berakhir kebingungan. Di sisi lain, penggunaan istilah asing seperti "Job Fair" dan "Tracer Study" serta tidak adanya tombol "Beranda" yang jelas membuat navigasi terasa menyulitkan.</p>
+  <p>Karena waktu pengguna habis hanya untuk menebak struktur menu, evaluasi usability ini dilakukan untuk menemukan akar masalahnya dan merancang perbaikan yang paling berdampak.</p>
+
+  <div class="info">
+    <div><b>Peran</b>UX Researcher &amp; Designer</div>
+    <div><b>Timeline</b>November 2026</div>
+    <div><b>Tim</b>Rizki Ramdani</div>
+    <div><b>Tools</b>Figma, Google Workspace, YouTube</div>
+  </div>
+  
+  <h3 id="alur">Alur Pengerjaan</h3>
+  <ol>
+    <li><b>Pengujian pertama:</b> menganalisis card sorting bawaan website, mengisi formulir SEQ, wawancara, menghitung hasil SEQ, lalu membuat laporan.</li>
+    <li><b>Desain:</b> membuat mockup, wireframe, wireflow, userflow, dan prototype.</li>
+    <li><b>Perbaikan:</b> 7 perbaikan, menyusun ulang Card Sorting, menguji ulang (Formulir, Wawancara, Perhitungan, Laporan).</li>
+    <li><b>Pengujian ulang:</b> card sorting, SEQ, wawancara, perhitungan, laporan. Hasilnya semua perbaikan lolos.</li>
+  </ol>
+</section>
+
+<!-- ====== SECTION METODOLOGI ====== -->
+<section id="metodologi">
+  <h2>Metodologi &amp; Prosedur Pengujian</h2><hr>
+
+  <h3 id="pendekatan">Pendekatan Penelitian</h3>
+  <p>Evaluasi usability ini menggunakan <b>mixed-methods</b> (kuantitatif + kualitatif) untuk mendapatkan gambaran menyeluruh tentang pengalaman pengguna website SMKN 21 Jakarta. Data kuantitatif diambil dari <b>SEQ (Single Ease Question)</b>, sedangkan data kualitatif digali melalui <b>wawancara semi-terstruktur</b> dan <b>card sorting</b>.</p>
+
+  <div class="info">
+    <div><b>Jenis Penelitian</b>Evaluasi Usability (Formative)</div>
+    <div><b>Metode</b>Card Sorting, Task-Based Testing, SEQ, Wawancara</div>
+    <div><b>Pendekatan</b>Moderated, Tatap Muka</div>
+    <div><b>Instrumen</b>Google Form (SEQ), Lembar Tugas, Panduan Wawancara</div>
+  </div>
+
+  <h3 id="setting">Setting &amp; Prosedur</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Aspek</th><th>Detail</th></tr></thead>
+    <tbody>
+      <tr><td><b>Lokasi</b></td><td>SMKN 1 Cipeundeuy (tatap muka)</td></tr>
+      <tr><td><b>Perangkat</b></td><td>Laptop/PC dengan browser Chrome (default)</td></tr>
+      <tr><td><b>Moderator</b></td><td>1 orang (Rizki Ramdani) — tanpa asisten</td></tr>
+      <tr><td><b>Durasi per sesi</b></td><td>±5–10 menit per peserta</td></tr>
+      <tr><td><b>Perekaman</b></td><td>Video wawancara (YouTube), screenshot layar, catatan moderator</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 id="tasklist">Task List (15 Tugas yang Diuji)</h3>
+  <p>Setiap peserta diminta menyelesaikan 15 tugas berikut pada website, lalu menilai tingkat kemudahan setiap tugas dengan SEQ (1–7):</p>
+  <div class="tw"><table>
+    <thead><tr><th>No</th><th>Tugas</th><th>Target Halaman/Elemen</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Menemukan profil/sejarah sekolah</td><td>Profil</td></tr>
+      <tr><td>2</td><td>Menemukan kurikulum sistem pembelajaran sekolah</td><td>Berita</td></tr>
+      <tr><td>3</td><td><b>Menemukan informasi P5</b></td><td>Kurikulum → P5</td></tr>
+      <tr><td>4</td><td>Menemukan informasi TEFA (Teaching Factory)</td><td>Kurikulum → TEFA</td></tr>
+      <tr><td>5</td><td>Menemukan informasi ekstrakurikuler</td><td>Kesiswaan → Ekstrakurikuler</td></tr>
+      <tr><td>6</td><td><b>Menemukan informasi Prestasi siswa</b></td><td>Kesiswaan → Prestasi</td></tr>
+      <tr><td>7</td><td>Menemukan informasi SPMB</td><td>Kesiswaan → SPMB</td></tr>
+      <tr><td>8</td><td>Menemukan halaman Sapras</td><td>Menu Sapras</td></tr>
+      <tr><td>9</td><td><b>Menemukan informasi Job Fair / Bursa Kerja</b></td><td>Hubin/Humas → Job Fair</td></tr>
+      <tr><td>10</td><td><b>Menemukan informasi Tracer Study / Data Alumni</b></td><td>Hubin/Humas → Tracer Study</td></tr>
+      <tr><td>11</td><td>Menemukan kontak sekolah</td><td>Kontak</td></tr>
+      <tr><td>12</td><td>Menemukan galeri/foto kegiatan</td><td>Adiwiyata</td></tr>
+      <tr><td>13</td><td><b>Membuka menu Kesiswaan (klik)</b></td><td>Menu Kesiswaan</td></tr>
+      <tr><td>14</td><td><b>Menemukan arsip P5 tahun 2024–2025</b></td><td>Kurikulum → P5 → Arsip</td></tr>
+      <tr><td>15</td><td><b>Kembali ke Beranda</b></td><td>Tombol Beranda / Logo</td></tr>
+    </tbody>
+  </table></div>
+  <p><small>Catatan: Tugas yang <b>ditebalkan</b> adalah tugas dengan skor SEQ terendah pada Pengujian 1 dan menjadi dasar 7 perbaikan.</small></p>
+
+  <h3 id="skoring">Cara Skoring SEQ &amp; Kriteria Keberhasilan</h3>
+  <p>SEQ menggunakan skala <b>1–7</b> (1 = sangat sulit, 7 = sangat mudah). Skor rata-rata dihitung per tugas (dari seluruh peserta) dan per peserta (dari seluruh tugas). Nilai rata-rata keseluruhan diperoleh dari rata-rata seluruh skor. Interpretasi: skor mendekati 7 menunjukkan tugas semakin mudah; skor di bawah 5 mengindikasikan masalah usability yang perlu diperbaiki.</p>
+  <p><b>Kriteria keberhasilan pengujian ulang:</b></p>
+  <ul class="t">
+    <li>Rata-rata SEQ keseluruhan <b>≥ 6,0</b> setelah perbaikan.</li>
+    <li>Tidak ada tugas dengan rata-rata SEQ <b>&lt; 5,0</b>.</li>
+    <li>Peserta menyatakan (melalui wawancara) bahwa menu dan istilah lebih mudah dipahami.</li>
+  </ul>
+</section>
+
+<section id="tahap1">
+  <h2>Pengujian Pertama</h2><hr>
+
+  <h3 id="tujuan-uji1">Apa yang Diteliti pada Pengujian Pertama</h3>
+  <p>Pengujian pertama bertujuan untuk <b>mengukur kondisi awal (baseline) usability website SMKN 21 Jakarta</b> sebelum dilakukan perbaikan apa pun. Dengan kata lain, tahap ini menjawab pertanyaan: <i>“Seberapa mudah website yang sekarang digunakan, dan di mana letak kesulitannya?”</i></p>
+  <p>Aspek yang diteliti pada pengujian pertama meliputi:</p>
+  <ul class="t">
+    <li><b>Struktur informasi (information architecture):</b> bagaimana menu dan kategori bawaan website tersusun, serta apakah susunan tersebut sesuai dengan cara pengguna mencari informasi.</li>
+    <li><b>Kemudahan menemukan informasi (findability):</b> apakah pengguna dapat menemukan halaman penting seperti P5, Prestasi, Job Fair, dan Tracer Study tanpa kebingungan.</li>
+    <li><b>Kejelasan label dan istilah menu:</b> apakah istilah yang digunakan (termasuk istilah berbahasa Inggris) dipahami oleh pengguna.</li>
+    <li><b>Kejelasan navigasi dan elemen interaktif:</b> apakah menu terlihat bisa diklik, dan apakah pengguna tahu cara kembali ke halaman utama.</li>
+    <li><b>Tingkat kesulitan tugas (task difficulty):</b> diukur dengan <b>SEQ (Single Ease Question)</b> skala 1–7 setelah pengguna menyelesaikan tugas.</li>
+    <li><b>Pengalaman dan keluhan pengguna:</b> digali melalui <b>wawancara</b> setelah pengujian untuk mendapatkan alasan di balik kesulitan yang dialami.</li>
+  </ul>
+  <div class="info">
+    <div><b>Metode</b>Card Sorting, SEQ, Wawancara</div>
+    <div><b>Objek</b>Website asli SMKN 21 Jakarta</div>
+    <div><b>Fokus</b>Menemukan masalah usability</div>
+    <div><b>Output</b>Daftar temuan &amp; rekomendasi perbaikan</div>
+  </div>
+
+  <h3 id="gambaran-uji1">Gambaran Keseluruhan Pengujian Pertama</h3>
+  <p>Pengujian pertama dilakukan dalam satu rangkaian yang saling melengkapi, sehingga data kuantitatif (skor) dan data kualitatif (alasan pengguna) bisa dibandingkan:</p>
+  <ol>
+    <li><b>Card Sorting 1:</b> memetakan <b>struktur menu bawaan website asli</b> — kategori apa saja yang ada dan kartu/isi apa yang berada di dalamnya. Hasilnya menjadi gambaran awal bagaimana informasi dikelompokkan oleh pembuat website.</li>
+    <li><b>Formulir SEQ:</b> peserta diminta menyelesaikan tugas-tugas tertentu (misalnya mencari informasi P5, Prestasi, dan Job Fair), lalu menilai seberapa mudah tugas tersebut dengan skala 1 (sangat sulit) sampai 7 (sangat mudah).</li>
+    <li><b>Wawancara:</b> setelah mengisi SEQ, peserta diwawancarai untuk menggali bagian mana yang membingungkan, penyebab kesulitan, dan saran perbaikan menurut mereka.</li>
+    <li><b>Perhitungan SEQ:</b> skor dari seluruh peserta diolah untuk mendapatkan nilai rata-rata, sehingga tingkat kesulitan website bisa diukur secara angka dan menjadi pembanding pada pengujian ulang.</li>
+    <li><b>Laporan Pengujian 1:</b> seluruh temuan dirangkum menjadi daftar masalah (TC-3, TC-6, TC-9, TC-10, TC-13, TC-14, TC-15) yang kemudian menjadi dasar 7 perbaikan pada tahap desain dan pengujian ulang.</li>
+  </ol>
+  <p><b>Hasil akhir pengujian pertama</b> menunjukkan bahwa website asli masih menyulitkan pengguna dalam menemukan informasi tertentu, terutama karena struktur menu yang tidak sesuai ekspektasi, istilah asing yang membingungkan, dan elemen navigasi yang kurang jelas. Temuan inilah yang menjadi titik awal seluruh proses perbaikan pada case study ini.</p>
+
+  <h3 id="cardsort">Card Sorting 1 — Bawaan Website Asli</h3>
+  <p>Card sorting pertama diambil dari <b>struktur bawaan website asli</b> SMKN 21 Jakarta, yaitu menu dan kategori yang memang sudah ada di website tersebut. Tujuannya untuk melihat struktur konten yang berjalan saat ini.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Kategori (Menu Website Asli)</th><th>Kartu / Isi Website</th><th>Catatan</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>KURIKULUM</td>
+        <td>P5 (di dalamnya ada P5 2024-2025), TEFA (Teaching Factory)</td>
+        <td>Struktur bawaan website</td>
+      </tr>
+      <tr>
+        <td>KESISWAAN</td>
+        <td>Ekstrakurikuler, Prestasi, SPMB</td>
+        <td>Struktur bawaan website</td>
+      </tr>
+      <tr>
+        <td>HUBIN / HUMAS</td>
+        <td>Job Fair, Tracer Study</td>
+        <td>Struktur bawaan website</td>
+      </tr>
+    </tbody>
+  </table></div>
+  
+  <figure>
+    <div class="g">
+      <img src="gambar/card1.png" alt="Hasil card sorting 1 website asli">
+    </div>
+    <figcaption>Dokumentasi card sorting 1 (website asli)</figcaption>
+  </figure>
+
+  <h3 id="seq">Formulir Pengujian SEQ</h3>
+  <p>SEQ (Single Ease Question) menanyakan seberapa mudah tugas dilakukan, dengan skala 1 (sangat sulit) sampai 7 (sangat mudah).</p>
+  <figure>
+    <div class="g">
+      <img src="gambar/pengujian1.png" alt="Formulir SEQ pengujian 1">
+    </div>
+    <figcaption>Formulir SEQ pengujian 1</figcaption>
+    <div class="view-project">
+      <a class="btn-view" href="https://drive.google.com/file/d/1iEo5nQSuRKE73B1Ngc3idh7p8EAgR3XT/view?usp=drivesdk" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        View Project
+      </a>
+    </div>
+  </figure>
+
+  <h3 id="user1">Rekap Nilai SEQ per User (Pengujian 1)</h3>
+  <p>Berikut data peserta (Abdul Manaf, Nopal, Gustian Maulana, Moch Nazrul, M. Zaki Fadli) beserta nilai SEQ dari tugas 1 sampai 15 untuk masing-masing tugas pada website asli.</p>
+  
+  <div class="table-scroll">
+    <table class="tabel-seq">
+      <thead>
+        <tr>
+          <th>NO</th>
+          <th>Responden/User</th>
+          <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>
+          <th>6</th><th>7</th><th>8</th><th>9</th><th>10</th>
+          <th>11</th><th>12</th><th>13</th><th>14</th><th>15</th>
+          <th>Rata-rata</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>Abdul Manaf</td><td>6</td><td>6</td><td>5</td><td>5</td><td>5</td><td>4</td><td>5</td><td>5</td><td>3</td><td>1</td><td>7</td><td>6</td><td>5</td><td>7</td><td>2</td><td><b>5</b></td></tr>
+        <tr><td>2</td><td>Nopal</td><td>6</td><td>6</td><td>6</td><td>6</td><td>6</td><td>5</td><td>6</td><td>7</td><td>5</td><td>6</td><td>7</td><td>7</td><td>4</td><td>5</td><td>7</td><td><b>6</b></td></tr>
+        <tr><td>3</td><td>Gustian Maulana</td><td>7</td><td>6</td><td>6</td><td>6</td><td>6</td><td>4</td><td>6</td><td>7</td><td>6</td><td>6</td><td>6</td><td>6</td><td>7</td><td>5</td><td>7</td><td><b>6</b></td></tr>
+        <tr><td>4</td><td>Moch Nazrul</td><td>6</td><td>7</td><td>5</td><td>6</td><td>6</td><td>5</td><td>5</td><td>7</td><td>7</td><td>5</td><td>5</td><td>4</td><td>7</td><td>4</td><td>7</td><td><b>6</b></td></tr>
+        <tr><td>5</td><td>M. Zaki Fadli</td><td>5</td><td>6</td><td>5</td><td>7</td><td>5</td><td>5</td><td>7</td><td>7</td><td>4</td><td>5</td><td>5</td><td>6</td><td>4</td><td>4</td><td>2</td><td><b>5</b></td></tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <th></th>
+          <th style="text-align:left;">Rata-rata Skenario</th>
+          <th>6</th><th>6,2</th><th>5,4</th><th>6</th><th>5,6</th>
+          <th>4,6</th><th>6,2</th><th>6,6</th><th>4,6</th><th>4,6</th>
+          <th>5,8</th><th>6,4</th><th>4,8</th><th>5</th><th>5</th>
+          <th>5,5</th>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <p>Rata-rata keseluruhan SEQ Pengujian 1 adalah <b>5,5</b> dari skala 1–7. Meskipun terlihat cukup tinggi secara keseluruhan, terdapat beberapa skenario yang nilainya cukup rendah, seperti tugas ke-6 (rata-rata 4,6), ke-9 (rata-rata 4,6), ke-10 (rata-rata 4,6), ke-13 (rata-rata 4,8), dan ke-14 (rata-rata 5). Ini sejalan dengan temuan bahwa pengguna masih kesulitan pada bagian tertentu.</p>
+
+  <h3 id="wawancara">Wawancara</h3>
+  <p>Setelah mengerjakan tugas, setiap peserta diwawancarai untuk mencari hal yang perlu diperbaiki.</p>
+  <ul class="t">
+    <li>Bagian mana yang paling membingungkan?</li>
+    <li>Apa yang membuat tugas tadi terasa sulit?</li>
+    <li>Apa saran kamu agar website lebih enak digunakan?</li>
+  </ul>
+  <p><b>Ringkasan jawaban peserta pengujian 1:</b></p>
+  <ul class="t">
+    <li><b>Kebingungan utama:</b> pengguna kesulitan menemukan informasi P5 dan Prestasi karena posisi menu tidak sesuai dugaan mereka.</li>
+    <li><b>Penyebab kesulitan:</b> istilah berbahasa Inggris ("Job Fair", "Tracer Study") tidak dipahami, dan menu Kesiswaan tidak terlihat bisa diklik.</li>
+    <li><b>Saran pengguna:</b> gunakan istilah berbahasa Indonesia yang umum, tambahkan tombol "Beranda", buat menu lebih jelas dan mudah diklik, serta sediakan arsip P5 berdasarkan tahun.</li>
+  </ul>
+  <figure>
+    <div class="g">
+      <img src="gambar/vidio1.png" alt="Thumbnail Video Wawancara 1">
+    </div>
+    <figcaption>Dokumentasi wawancara pengujian 1</figcaption>
+    <div class="view-project">
+      <a class="btn-view yt" href="https://youtu.be/fd08vq5lzcQ?si=QnRwOD4fDZlFrDsx" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.4 31.4 0 0 0 0 12a31.4 31.4 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.4 31.4 0 0 0 24 12a31.4 31.4 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg>
+        View Project
+      </a>
+    </div>
+  </figure>
+
+  <h3 id="hitung">Perhitungan SEQ</h3>
+  <p>Hasil perhitungan skor SEQ dari jawaban pengguna.</p>
+  <figure>
+    <div class="g">
+      <img src="gambar/perhitungan1.png" alt="Perhitungan SEQ pengujian 1">
+    </div>
+    <figcaption>Perhitungan SEQ pengujian 1</figcaption>
+    <div class="view-project">
+      <a class="btn-view" href="https://docs.google.com/spreadsheets/d/1R8cjXrSjE5eKj_6e7JNp3Z2bfPJBp8SO/edit?usp=drivesdk&ouid=113743465150629458824&rtpof=true&sd=true" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        View Project
+      </a>
+    </div>
+  </figure>
+
+  <h3 id="lap1">Laporan Pengujian 1</h3>
+  <p>Berisi tujuan, hasil card sorting, hasil SEQ, temuan wawancara, dan daftar perbaikan.</p>
+  <figure>
+    <div class="g">
+      <img src="gambar/laporan1.png" alt="Laporan Pengujian 1">
+    </div>
+    <figcaption>Laporan Pengujian 1</figcaption>
+    <div class="view-project">
+      <a class="btn-view" href="https://drive.google.com/file/d/1X9GLFz44b1LhCimljjVJ4V59fMPmxcgA/view?usp=drivesdk" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        View Project
+      </a>
+    </div>
+  </figure>
+</section>
+
+<!-- ====== SECTION DESAIN ====== -->
+<section id="desain">
+  <h2>Desain (Mockup, Wireframe, Wireflow, Userflow, Prototype)</h2><hr>
+  
+  <h3 id="mockup">Mockup</h3>
+  <p>Mockup adalah tampilan visual desain yang sudah menggunakan warna, tipografi, gambar, dan elemen antarmuka sebenarnya. Mockup pada case study ini merupakan <b>hasil pembuatan ulang (redesign) dari tampilan website asli SMKN 21 Jakarta</b> — saya meniru layout dan gaya visual aslinya, kemudian memperbaikinya berdasarkan temuan pengujian pertama, seperti penataan menu P5 dan Prestasi, penggantian istilah asing ("Job Fair" → "Bursa Kerja", "Tracer Study" → "Data Alumni"), penegasan menu Kesiswaan agar terlihat bisa diklik, serta penambahan tombol "Beranda". Dengan begitu, pengguna tetap mengenali website aslinya, tetapi pengalamannya menjadi lebih mudah.</p>
+  <figure>
+    <div class="g"><img src="gambar/mockup.png" alt="Mockup"></div>
+    <figcaption>Mockup hasil perbaikan</figcaption>
+    <div class="view-project">
+      <a class="btn-view" href="https://www.figma.com/design/W7Jjf9chuPflyUrtNvHNB1/moc-up---prototype?node-id=137-2&t=vp8nNrOySdFFyhQg-1" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> View Project
+      </a>
+    </div>
+  </figure>
+
+  <h3 id="wireframe">Wireframe</h3>
+  <p>Wireframe yang saya buat adalah <b>kerangka halaman utama website SMKN 21 Jakarta versi perbaikan</b>, yang hanya menampilkan tata letak tanpa warna dan gambar detail. Di dalamnya saya menyusun ulang posisi elemen berdasarkan temuan pengujian pertama: menu <b>Kurikulum</b> (berisi Kurikulum, P5, TEFA), <b>Kesiswaan</b> (berisi Kesiswaan, Ekstrakurikuler, Prestasi, SPMB), dan <b>Hubin/Humas</b> (berisi Bursa Kerja, Data Alumni) ditempatkan pada posisi yang sesuai ekspektasi pengguna. Tombol <b>Beranda</b> juga saya letakkan jelas di navigasi.</p>
+  <p><b>Untuk apa wireframe ini saya buat?</b> Untuk memastikan <b>posisi menu, konten, dan navigasi</b> sudah benar sebelum masuk ke desain visual — sehingga saya tidak membuang waktu mewarnai atau memberi gambar pada tata letak yang masih salah. Wireframe ini menjadi acuan saya saat membuat mockup dan prototype.</p>
+  <figure>
+    <div class="g"><img src="gambar/wireframe.png" alt="Wireframe"></div>
+    <figcaption>Wireframe halaman utama</figcaption>
+    <div class="view-project">
+      <a class="btn-view" href="https://www.figma.com/design/W7Jjf9chuPflyUrtNvHNB1/moc-up---prototype?node-id=374-184&t=vp8nNrOySdFFyhQg-1" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> View Project
+      </a>
+    </div>
+  </figure>
+
+  <h3 id="wireflow">Wireflow</h3>
+  <p>Wireflow yang saya buat adalah <b>gabungan wireframe halaman-halaman hasil perbaikan yang dihubungkan dengan panah alur navigasi</b>. Di dalamnya terlihat bagaimana pengguna berpindah dari <b>Beranda → Kurikulum → P5 → Arsip P5 2024–2025</b>, atau dari <b>Beranda → Kesiswaan → Prestasi</b>, atau dari <b>Beranda → Hubin/Humas → Bursa Kerja</b>.</p>
+  <p><b>Untuk apa wireflow ini saya buat?</b> Untuk memeriksa apakah <b>alur navigasi antar halaman sudah logis dan tidak memutar</b>. Misalnya, apakah akses ke P5 benar-benar bisa dicapai dalam dua klik dari Beranda, atau apakah menu Kesiswaan benar-benar mengarah ke halaman Prestasi. Wireflow membantu saya menemukan jalur yang buntu atau tautan yang salah <b>sebelum</b> saya membuat prototype interaktif.</p>
+  <figure>
+    <div class="g"><img src="gambar/wireflow.png" alt="Wireflow"></div>
+    <figcaption>Wireflow alur navigasi hasil perbaikan</figcaption>
+    <div class="view-project">
+      <a class="btn-view" href="https://www.figma.com/design/W7Jjf9chuPflyUrtNvHNB1/moc-up---prototype?node-id=503-184&t=fC7HfEINfq5ClEpk-1" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> View Project
+      </a>
+    </div>
+  </figure>
+
+  <h3 id="userflow">Userflow</h3>
+  <p>Userflow yang saya buat adalah <b>diagram langkah-langkah pengguna</b> dalam menyelesaikan tugas-tugas yang diuji pada pengujian ulang, khususnya tiga tugas yang paling bermasalah di pengujian pertama: <b>mencari informasi P5, mencari Prestasi, dan mencari Bursa Kerja (Job Fair)</b>. Setiap userflow dimulai dari titik awal (membuka Beranda) hingga tujuan akhir (menemukan informasi yang dicari), dengan jalur yang sudah disederhanakan sesuai hasil perbaikan.</p>
+  <p><b>Untuk apa userflow ini saya buat?</b> Untuk memastikan setiap tugas memiliki <b>jalur yang singkat, jelas, dan sesuai ekspektasi pengguna</b> — bukan jalur yang menurut pembuat website wajar, tapi jalur yang benar-benar ditempuh pengguna. Userflow inilah yang menjadi dasar saya menilai apakah perbaikan (akses P5, penempatan Prestasi, penggantian istilah) benar-benar memudahkan pengguna saat diuji ulang dengan SEQ.</p>
+  <figure>
+    <div class="g"><img src="gambar/userflow.png" alt="Userflow"></div>
+    <figcaption>Userflow untuk tugas mencari P5, Prestasi, dan Bursa Kerja</figcaption>
+    <div class="view-project">
+      <a class="btn-view" href="https://www.figma.com/design/W7Jjf9chuPflyUrtNvHNB1/moc-up---prototype?node-id=503-9069&t=fC7HfEINfq5ClEpk-1" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> View Project
+      </a>
+    </div>
+  </figure>
+
+  <h3 id="prototype">Prototype</h3>
+  <p>Prototype yang saya buat adalah <b>versi interaktif dari seluruh desain hasil perbaikan</b> — menggabungkan wireframe, wireflow, dan userflow menjadi alur yang bisa diklik dan dijelajahi seperti website sungguhan di Figma. Prototype ini <b>bukan meniru tampilan website asli</b>, melainkan hasil desain saya sendiri berdasarkan 7 perbaikan dari pengujian pertama: akses P5 yang jelas, penempatan Prestasi di Kesiswaan, istilah "Bursa Kerja" dan "Data Alumni", menu Kesiswaan yang terlihat bisa diklik, arsip P5 per tahun, dan tombol Beranda.</p>
+  <p><b>Untuk apa prototype ini saya buat?</b> Untuk <b>menguji ulang desain secara nyata</b> — peserta pengujian 2 benar-benar mencoba prototype ini, mengisi SEQ (hasilnya naik dari 5,5 ke 6,5), dan diwawancarai. Jadi prototype ini berfungsi sebagai <b>alat verifikasi</b> bahwa 7 perbaikan yang saya rancang benar-benar membantu pengguna, bukan hanya diasumsikan berhasil. Prototype ini juga menjadi acuan final bagi pengembang tentang perilaku website yang diharapkan.</p>
+  <figure>
+    <div class="g"><img src="gambar/prototype.png" alt="Prototype"></div>
+    <figcaption>Tampilan prototype</figcaption>
+    <div class="view-project">
+      <a class="btn-view" href="https://www.figma.com/proto/W7Jjf9chuPflyUrtNvHNB1/moc-up---prototype?node-id=193-1183&p=f&t=tupXLtGY4FjwZCmY-1&scaling=min-zoom&content-scaling=fixed&page-id=193%3A1182" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> View Project
+      </a>
+    </div>
+  </figure>
+
+  <h3>Hubungan Keempat Desain</h3>
+  <div class="tw"><table>
+    <thead>
+      <tr>
+        <th>Desain</th>
+        <th>Isi desain saya</th>
+        <th>Untuk apa</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>Wireframe</b></td>
+        <td>Kerangka halaman utama dengan menu Kurikulum, Kesiswaan, Hubin/Humas yang sudah ditata ulang</td>
+        <td>Memastikan posisi elemen benar sebelum diberi warna</td>
+      </tr>
+      <tr>
+        <td><b>Wireflow</b></td>
+        <td>Kerangka halaman + panah alur (Beranda → P5, Prestasi, Bursa Kerja)</td>
+        <td>Memastikan hubungan antar halaman logis dan tidak memutar</td>
+      </tr>
+      <tr>
+        <td><b>Userflow</b></td>
+        <td>Langkah pengguna mencari P5, Prestasi, dan Bursa Kerja dari Beranda hingga tujuan</td>
+        <td>Memastikan jalur tugas singkat dan sesuai ekspektasi pengguna</td>
+      </tr>
+      <tr>
+        <td><b>Prototype</b></td>
+        <td>Versi interaktif seluruh perbaikan yang bisa diklik di Figma</td>
+        <td>Menguji ulang desain secara nyata (SEQ naik 5,5 → 6,5)</td>
+      </tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- PENGUJIAN ULANG -->
+<section id="tahap2">
+  <h2>Pengujian Ulang</h2><hr>
+  <h3 id="tujuh">7 Perbaikan dari Pengujian 1</h3>
+  <div class="tw"><table>
+    <thead><tr><th>No</th><th>Temuan</th><th>Perbaikan</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><b>Tugas ke-3 – Informasi P5:</b> Akses menuju informasi P5 kurang jelas.</td><td>Membuat akses menuju informasi P5 lebih jelas melalui menu atau submenu yang mudah dikenali.</td></tr>
+      <tr><td>2</td><td><b>Tugas ke-6 – Informasi Prestasi:</b> Informasi prestasi sulit ditemukan.</td><td>Menempatkan informasi Prestasi pada menu Kesiswaan dengan struktur navigasi yang lebih jelas agar mudah ditemukan.</td></tr>
+      <tr><td>3</td><td><b>Tugas ke-9 – Informasi Job Fair:</b> Istilah dalam bahasa Inggris membingungkan pengguna.</td><td>Menggunakan istilah "Bursa Kerja" atau "Lowongan Kerja" agar lebih mudah dipahami oleh pengguna yang kurang familiar dengan istilah bahasa Inggris.</td></tr>
+      <tr><td>4</td><td><b>Tugas ke-10 – Informasi Tracer Study:</b> Istilah dan akses menuju halaman membingungkan.</td><td>Menggunakan istilah yang lebih mudah dipahami, misalnya "Tracer Study (Data Alumni)", serta membuat akses menuju halaman tersebut lebih jelas.</td></tr>
+      <tr><td>5</td><td><b>Tugas ke-13 – Informasi Kesiswaan:</b> Menu Kesiswaan tidak terlihat bisa diklik.</td><td>Membuat menu utama "Kesiswaan" lebih jelas sebagai bagian yang dapat diklik, misalnya dengan memberikan tanda atau petunjuk bahwa menu tersebut dapat dipilih untuk menuju halaman Kesiswaan.</td></tr>
+      <tr><td>6</td><td><b>Tugas ke-14 – P5 Tahun 2024–2025:</b> Pengguna kesulitan mencari informasi P5 dari tahun sebelumnya.</td><td>Menambahkan daftar atau arsip berdasarkan tahun sehingga pengguna lebih mudah menemukan informasi P5 dari tahun sebelumnya.</td></tr>
+      <tr><td>7</td><td><b>Tugas ke-15 – Kembali ke Beranda:</b> Pengguna hanya bergantung pada logo sekolah untuk kembali ke halaman utama.</td><td>Menambahkan tombol atau tulisan "Beranda" yang jelas pada navigasi agar pengguna tidak hanya bergantung pada logo sekolah untuk kembali ke halaman utama.</td></tr>
+    </tbody>
+  </table></div>
+
+  <!-- ====== BEFORE / AFTER (MENU + DESAIN) ====== -->
+  <h3 id="before-after">Perbandingan Visual: Sebelum vs Sesudah Perbaikan</h3>
+  <p>Berikut perbandingan langsung antara tampilan website asli dan hasil redesign, disusun berdasarkan struktur menu website (navbar + 3 dropdown) serta tampilan halaman beranda secara keseluruhan.</p>
+
+  <h4>A. Perbandingan Menu (Navbar &amp; Dropdown)</h4>
+  <div class="tw"><table class="ba-table">
+    <thead>
+      <tr>
+        <th style="width:170px;">Bagian Website</th>
+        <th>Sebelum (Website Asli)</th>
+        <th>Sesudah (Redesign)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>Navbar / Beranda</b></td>
+        <td><img src="gambar/before-home.png" alt="Navbar website asli"></td>
+        <td><img src="gambar/after-home.png" alt="Navbar redesign dengan tombol Beranda"></td>
+      </tr>
+      <tr>
+        <td><b>Dropdown KURIKULUM</b></td>
+        <td><img src="gambar/before-kurikulum.png" alt="Dropdown Kurikulum website asli"></td>
+        <td><img src="gambar/after-kurikulum.png" alt="Dropdown Kurikulum redesign"></td>
+      </tr>
+      <tr>
+        <td><b>Dropdown KESISWAAN</b></td>
+        <td><img src="gambar/before-kesiswaan.png" alt="Dropdown Kesiswaan website asli"></td>
+        <td><img src="gambar/after-kesiswaan.png" alt="Dropdown Kesiswaan redesign"></td>
+      </tr>
+      <tr>
+        <td><b>Dropdown HUBIN / HUMAS</b></td>
+        <td><img src="gambar/before-hubin.png" alt="Dropdown Hubin website asli"></td>
+        <td><img src="gambar/after-hubin.png" alt="Dropdown Hubin redesign"></td>
+      </tr>
+    </tbody>
+  </table></div>
+
+  <h4>B. Perbandingan Desain Halaman (Contoh: Beranda)</h4>
+  <p>Selain menu, berikut perbandingan tampilan visual <b>halaman Beranda</b> secara keseluruhan antara website asli dan hasil redesign (mockup).</p>
+  <div class="tw"><table class="ba-table">
+    <thead>
+      <tr>
+        <th style="width:170px;">Halaman</th>
+        <th>Website Asli</th>
+        <th>Redesign (Mockup)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>Halaman Beranda</b></td>
+        <td><img src="gambar/asli-beranda.png" alt="Halaman beranda website asli"></td>
+        <td><img src="gambar/redesign-beranda.png" alt="Halaman beranda redesign"></td>
+      </tr>
+    </tbody>
+  </table></div>
+  <p><small>Gambar "sebelum" diambil dari screenshot website asli saat pengujian. Gambar "sesudah" diambil dari mockup/prototype Figma hasil perbaikan.</small></p>
+
+  <h3 id="cardsort2">Card Sorting 2 — Susunan Saya</h3>
+  <p>Setelah melihat struktur bawaan website dan hasil wawancara, saya <b>menyusun ulang card sorting sendiri</b> untuk merapikan kategori dan menu.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Kategori (Susunan Saya)</th><th>Kartu / Isi Website</th><th>Perubahan dari Website Asli</th></tr></thead>
+    <tbody>
+      <tr><td>KURIKULUM</td><td>Kurikulum, P5, TEFA (Teaching Factory)</td><td>Struktur lebih rapi dan istilah diperjelas</td></tr>
+      <tr><td>KESISWAAN</td><td>Kesiswaan, Ekstrakurikuler, Prestasi, SPMB</td><td>Menu Kesiswaan dibuat lebih jelas dan mudah diklik</td></tr>
+      <tr><td>HUBIN / HUMAS</td><td>Bursa Kerja, Data Alumni</td><td>Istilah "Job Fair" &amp; "Tracer Study" diganti agar lebih mudah dipahami</td></tr>
+    </tbody>
+  </table></div>
+  
+  <figure>
+    <div class="g"><img src="gambar/card2.png" alt="Hasil card sorting 2 susunan saya"></div>
+    <figcaption>Dokumentasi card sorting 2 (susunan saya)</figcaption>
+  </figure>
+
+  <h3 id="seq2">Formulir SEQ 2</h3>
+  <p>Formulir evaluasi SEQ setelah dilakukan perbaikan desain.</p>
+  <figure>
+    <div class="g"><img src="gambar/pengujian2.png" alt="Formulir SEQ pengujian 2"></div>
+    <figcaption>Formulir SEQ pengujian 2</figcaption>
+    <div class="view-project">
+      <a class="btn-view" href="https://drive.google.com/file/d/1lt41x_2p69DiuHU1tCoL7wdzKUrUHfau/view?usp=drivesdk" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> View Project
+      </a>
+    </div>
+  </figure>
+
+  <h3 id="user2">Rekap Nilai SEQ per User (Pengujian 2)</h3>
+  <p>Daftar peserta (Nopal Januar, Ainiya Fadla Azmi, Aditia Surya Saputra, Mesya Sri Mulyani, Abdul Manaf) pada pengujian ulang beserta nilai SEQ setelah desain diperbaiki.</p>
+  
+  <div class="table-scroll">
+    <table class="tabel-seq">
+      <thead>
+        <tr>
+          <th>NO</th>
+          <th>Responden/User</th>
+          <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>
+          <th>6</th><th>7</th><th>8</th><th>9</th><th>10</th>
+          <th>11</th><th>12</th><th>13</th><th>14</th><th>15</th>
+          <th>Rata-rata</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>Nopal Januar J.S</td><td>7</td><td>6</td><td>7</td><td>7</td><td>7</td><td>7</td><td>7</td><td>7</td><td>6</td><td>7</td><td>7</td><td>7</td><td>6</td><td>6</td><td>7</td><td><b>6,7</b></td></tr>
+        <tr><td>2</td><td>Ainiya Fadla azmi</td><td>7</td><td>6</td><td>7</td><td>6</td><td>7</td><td>7</td><td>7</td><td>6</td><td>6</td><td>7</td><td>6</td><td>6</td><td>7</td><td>7</td><td>7</td><td><b>6,5</b></td></tr>
+        <tr><td>3</td><td>Aditia Surya Saputra</td><td>7</td><td>6</td><td>7</td><td>7</td><td>7</td><td>6</td><td>7</td><td>6</td><td>7</td><td>7</td><td>7</td><td>6</td><td>7</td><td>6</td><td>7</td><td><b>6,6</b></td></tr>
+        <tr><td>4</td><td>Mesya sri mulyani</td><td>6</td><td>6</td><td>6</td><td>7</td><td>6</td><td>7</td><td>7</td><td>7</td><td>6</td><td>7</td><td>6</td><td>6</td><td>7</td><td>7</td><td>7</td><td><b>6,5</b></td></tr>
+        <tr><td>5</td><td>Abdul Manaf</td><td>7</td><td>6</td><td>6</td><td>7</td><td>6</td><td>7</td><td>6</td><td>7</td><td>6</td><td>7</td><td>6</td><td>7</td><td>6</td><td>7</td><td>7</td><td><b>6,5</b></td></tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <th></th>
+          <th style="text-align:left;">Rata-rata Skenario</th>
+          <th>6,8</th><th>6</th><th>6,8</th><th>6,8</th><th>6,4</th>
+          <th>6,8</th><th>6,6</th><th>6,8</th><th>6,4</th><th>6,4</th>
+          <th>6,8</th><th>6,6</th><th>6,4</th><th>6,6</th><th>7</th>
+          <th>6,5</th>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <p>Rata-rata keseluruhan SEQ Pengujian 2 adalah <b>6,5</b> (skala 1–7). Hampir seluruh skenario berada di atas angka 6, menunjukkan bahwa pengguna merasa desain yang baru jauh lebih mudah digunakan dibandingkan website asli.</p>
+
+  <h3 id="wawancara2">Wawancara 2</h3>
+  <p>Dokumentasi wawancara dengan pengguna setelah desain diperbaiki.</p>
+  <p><b>Ringkasan jawaban peserta pengujian 2:</b></p>
+  <ul class="t">
+    <li>Pengguna merasa menu sudah lebih jelas dan mudah ditemukan, terutama akses ke P5 dan Prestasi.</li>
+    <li>Istilah "Bursa Kerja" dan "Data Alumni" lebih mudah dipahami dibanding "Job Fair" dan "Tracer Study".</li>
+    <li>Tombol "Beranda" memudahkan pengguna kembali ke halaman utama tanpa harus mengklik logo.</li>
+    <li>Menu Kesiswaan sekarang terlihat bisa diklik sehingga pengguna tidak ragu membukanya.</li>
+  </ul>
+  <figure>
+    <div class="g"><img src="gambar/wawancara2.png" alt="Wawancara pengujian 2"></div>
+    <figcaption>Dokumentasi wawancara pengujian 2</figcaption>
+    <div class="view-project">
+      <a class="btn-view yt" href="https://youtu.be/keB66xBGScQ?si=XrT7ctwgFHVXuuwv" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.4 31.4 0 0 0 0 12a31.4 31.4 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.4 31.4 0 0 0 24 12a31.4 31.4 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg> View Project
+      </a>
+    </div>
+  </figure>
+
+  <h3 id="hitung2">Perhitungan SEQ 2</h3>
+  <p>Hasil perhitungan skor SEQ pengujian kedua.</p>
+  <figure>
+    <div class="g"><img src="gambar/perhitungan2.png" alt="Perhitungan SEQ pengujian 2"></div>
+    <figcaption>Perhitungan SEQ pengujian 2</figcaption>
+    <div class="view-project">
+      <a class="btn-view" href="https://docs.google.com/spreadsheets/d/1DPOgrww75h_NGiCg1GeuJqOWUmASwYPg/edit?usp=drive_link&ouid=113743465150629458824&rtpof=true&sd=true" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> View Project
+      </a>
+    </div>
+  </figure>
+
+  <h3 id="lap2">Laporan Pengujian 2</h3>
+  <p>Berisi hasil evaluasi pengujian ulang setelah perbaikan.</p>
+  <figure>
+    <div class="g"><img src="gambar/laporan2.png" alt="Laporan Pengujian 2"></div>
+    <figcaption>Laporan Pengujian 2</figcaption>
+    <div class="view-project">
+      <a class="btn-view" href="https://drive.google.com/file/d/1hV_joGKrufsE6SP6gPbyGAHQxR5n1l21/view?usp=drive_link" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> View Project
+      </a>
+    </div>
+  </figure>
+
+  <!-- ====== GRAFIK SEQ P1 vs P2 ====== -->
+  <h3 id="grafik">Grafik Perbandingan SEQ per Tugas (P1 vs P2)</h3>
+  <p>Grafik berikut menunjukkan peningkatan skor rata-rata SEQ untuk setiap tugas dari Pengujian 1 (website asli) ke Pengujian 2 (setelah perbaikan). Tugas 3, 6, 9, 10, 13, 14, dan 15 — yang menjadi dasar 7 perbaikan — menunjukkan kenaikan paling signifikan.</p>
+
+  <figure>
+    <div class="grafik-wrap">
+      <canvas id="grafikSEQ"></canvas>
+    </div>
+    <figcaption>Perbandingan rata-rata SEQ per tugas: Pengujian 1 vs Pengujian 2</figcaption>
+  </figure>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script>
+  (function() {
+    function initChart() {
+      const ctx = document.getElementById('grafikSEQ');
+      if (!ctx) return;
+      if (typeof Chart === 'undefined') {
+        ctx.parentElement.innerHTML = '<p style="color:#c62828;text-align:center;padding:40px;">Grafik tidak dapat dimuat. Periksa koneksi internet.</p>';
+        return;
+      }
+
+      const labels = ['T1','T2','T3','T4','T5','T6','T7','T8','T9','T10','T11','T12','T13','T14','T15'];
+      const p1 = [6.0, 6.2, 5.4, 6.0, 5.6, 4.6, 6.2, 6.6, 4.6, 4.6, 5.8, 6.4, 4.8, 5.0, 5.0];
+      const p2 = [6.8, 6.0, 6.8, 6.8, 6.4, 6.8, 6.6, 6.8, 6.4, 6.4, 6.8, 6.6, 6.4, 6.6, 7.0];
+
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Pengujian 1 (Website Asli)',
+              data: p1,
+              backgroundColor: 'rgba(198, 40, 40, 0.65)',
+              borderColor: 'rgba(198, 40, 40, 1)',
+              borderWidth: 1
+            },
+            {
+              label: 'Pengujian 2 (Setelah Perbaikan)',
+              data: p2,
+              backgroundColor: 'rgba(26, 138, 74, 0.65)',
+              borderColor: 'rgba(26, 138, 74, 1)',
+              borderWidth: 1
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: false,
+              min: 1,
+              max: 7,
+              ticks: { stepSize: 1 },
+              title: { display: true, text: 'Rata-rata SEQ (1–7)' }
+            },
+            x: {
+              title: { display: true, text: 'Tugas' }
+            }
+          },
+          plugins: {
+            legend: { position: 'top' },
+            tooltip: {
+              callbacks: {
+                afterBody: function(items) {
+                  const idx = items[0].dataIndex;
+                  const diff = (p2[idx] - p1[idx]).toFixed(1);
+                  return 'Peningkatan: +' + diff;
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initChart);
+    } else {
+      initChart();
+    }
+  })();
+  </script>
+
+  <h3 id="banding">Perbandingan Rata-rata SEQ Pengujian 1 vs Pengujian 2</h3>
+  <p>Setelah seluruh perbaikan diterapkan, berikut perbandingan nilai rata-rata SEQ keseluruhan antara pengujian pertama (website asli) dan pengujian ulang (desain hasil perbaikan):</p>
+  <div class="tw"><table>
+    <thead>
+      <tr>
+        <th>Aspek</th>
+        <th>Pengujian 1<br>(Website Asli)</th>
+        <th>Pengujian 2<br>(Setelah Perbaikan)</th>
+        <th>Peningkatan</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>Rata-rata Keseluruhan SEQ</b></td>
+        <td>5,5</td>
+        <td>6,5</td>
+        <td><b style="color:var(--hijau)">+1,0</b></td>
+      </tr>
+    </tbody>
+  </table></div>
+  <p>Rata-rata keseluruhan SEQ naik dari <b>5,5</b> menjadi <b>6,5</b> — peningkatan sebesar <b>1,0 poin</b> pada skala 1–7. Kenaikan ini menunjukkan bahwa seluruh perbaikan (akses P5 yang lebih jelas, penempatan Prestasi, penggantian istilah asing, penegasan menu Kesiswaan, arsip P5 per tahun, dan tombol Beranda) benar-benar membantu pengguna menyelesaikan tugas dengan lebih mudah. Hasil ini juga <b>memenuhi kriteria keberhasilan</b> yang ditetapkan pada bagian Metodologi (rata-rata ≥ 6,0 dan tidak ada tugas &lt; 5,0).</p>
+  <div class="info">
+    <div><b>Rata-rata Pengujian 1</b>5,5 / 7</div>
+    <div><b>Rata-rata Pengujian 2</b>6,5 / 7</div>
+    <div><b>Peningkatan</b>+1,0 poin</div>
+    <div><b>Kesimpulan</b>Semua perbaikan lolos</div>
+  </div>
+</section>
+
+<section id="dokumen">
+  <h2>Dokumen</h2><hr>
+  <ul class="dok">
+    <li><span>Website Asli SMKN 21 Jakarta</span><a href="https://smkn21jakarta.sch.id" target="_blank" rel="noopener">Buka</a></li>
+    <li><span>Laporan Pengujian 1 (Google Drive)</span><a href="https://drive.google.com/file/d/1X9GLFz44b1LhCimljjVJ4V59fMPmxcgA/view?usp=drivesdk" target="_blank" rel="noopener">Buka</a></li>
+    <li><span>Laporan Pengujian 2 (Google Drive)</span><a href="https://drive.google.com/file/d/1hV_joGKrufsE6SP6gPbyGAHQxR5n1l21/view?usp=drive_link" target="_blank" rel="noopener">Buka</a></li>
+    <li><span>Formulir SEQ Pengujian 1 (Google Drive)</span><a href="https://drive.google.com/file/d/1iEo5nQSuRKE73B1Ngc3idh7p8EAgR3XT/view?usp=drivesdk" target="_blank" rel="noopener">Buka</a></li>
+    <li><span>Formulir SEQ Pengujian 2 (Google Drive)</span><a href="https://drive.google.com/file/d/1lt41x_2p69DiuHU1tCoL7wdzKUrUHfau/view?usp=drivesdk" target="_blank" rel="noopener">Buka</a></li>
+    <li><span>Perhitungan SEQ Pengujian 1 (Google Sheets)</span><a href="https://docs.google.com/spreadsheets/d/1R8cjXrSjE5eKj_6e7JNp3Z2bfPJBp8SO/edit?usp=drivesdk&ouid=113743465150629458824&rtpof=true&sd=true" target="_blank" rel="noopener">Buka</a></li>
+    <li><span>Perhitungan SEQ Pengujian 2 (Google Sheets)</span><a href="https://docs.google.com/spreadsheets/d/1DPOgrww75h_NGiCg1GeuJqOWUmASwYPg/edit?usp=drive_link&ouid=113743465150629458824&rtpof=true&sd=true" target="_blank" rel="noopener">Buka</a></li>
+    <li><span>Wawancara Pengujian 1 (YouTube)</span><a href="https://youtu.be/fd08vq5lzcQ?si=QnRwOD4fDZlFrDsx" target="_blank" rel="noopener">Buka</a></li>
+    <li><span>Wawancara Pengujian 2 (YouTube)</span><a href="https://youtu.be/keB66xBGScQ?si=XrT7ctwgFHVXuuwv" target="_blank" rel="noopener">Buka</a></li>
+    <li><span>Mockup (Figma)</span><a href="https://www.figma.com/design/W7Jjf9chuPflyUrtNvHNB1/moc-up---prototype?node-id=137-2&t=vp8nNrOySdFFyhQg-1" target="_blank" rel="noopener">Buka</a></li>
+    <li><span>Wireframe (Figma)</span><a href="https://www.figma.com/design/W7Jjf9chuPflyUrtNvHNB1/moc-up---prototype?node-id=374-184&t=vp8nNrOySdFFyhQg-1" target="_blank" rel="noopener">Buka</a></li>
+    <li><span>Wireflow (Figma)</span><a href="https://www.figma.com/design/W7Jjf9chuPflyUrtNvHNB1/moc-up---prototype?node-id=503-184&t=fC7HfEINfq5ClEpk-1" target="_blank" rel="noopener">Buka</a></li>
+    <li><span>Userflow (Figma)</span><a href="https://www.figma.com/design/W7Jjf9chuPflyUrtNvHNB1/moc-up---prototype?node-id=503-9069&t=fC7HfEINfq5ClEpk-1" target="_blank" rel="noopener">Buka</a></li>
+    <li><span>Prototype (Figma)</span><a href="https://www.figma.com/proto/W7Jjf9chuPflyUrtNvHNB1/moc-up---prototype?node-id=193-1183&p=f&t=tupXLtGY4FjwZCmY-1&scaling=min-zoom&content-scaling=fixed&page-id=193%3A1182" target="_blank" rel="noopener">Buka</a></li>
+  </ul>
+</section>
+
+<section id="belajar">
+  <h2>Yang Saya Pelajari</h2><hr>
+  <p>Dari proses evaluasi usability ini, saya belajar bahwa:</p>
+  <ul class="t">
+    <li><b>Desain yang terlihat rapi belum tentu mudah digunakan.</b> Struktur menu yang tampak wajar bagi pembuat website bisa membingungkan pengguna karena ekspektasi mereka berbeda.</li>
+    <li><b>Data pengguna lebih penting daripada asumsi.</b> Hasil card sorting, SEQ, dan wawancara menunjukkan masalah nyata yang tidak terlihat saat hanya mengamati tampilan.</li>
+    <li><b>Istilah sangat memengaruhi kemudahan.</b> Mengganti istilah asing dengan bahasa yang lebih umum ("Bursa Kerja", "Data Alumni") langsung meningkatkan pemahaman pengguna.</li>
+    <li><b>Umpan balik pengguna adalah dasar perbaikan.</b> Tujuh perbaikan yang saya lakukan berasal langsung dari keluhan peserta, dan hasil pengujian ulang menunjukkan peningkatan yang jelas.</li>
+    <li><b>Pengujian ulang penting.</b> Perbaikan perlu diverifikasi, bukan hanya diasumsikan berhasil — SEQ dan wawancara putaran kedua membuktikan perbaikan benar-benar membantu.</li>
+  </ul>
+</section>
+</main>
+</div>
+
+<!-- ====== FOOTER ====== -->
+<footer>
+  <div class="ucapan">
+    <h2>Terima Kasih</h2>
+    <p>Terima kasih telah meluangkan waktu untuk membaca studi kasus ini. Semoga bermanfaat!</p>
+  </div>
+
+  <div class="link-footer">
+    <p>
+      <a href="#overview">Overview</a> ·
+      <a href="#metodologi">Metodologi</a> ·
+      <a href="#tahap1">Pengujian 1</a> ·
+      <a href="#desain">Desain</a> ·
+      <a href="#tahap2">Pengujian Ulang</a>
+    </p>
+    <p class="copy">&copy; 2026 Rizki Ramdani</p>
+  </div>
+</footer>
+
+<script>
+  /* ===== Menu mobile ===== */
+  const menu = document.getElementById('menu');
+  document.getElementById('toggle').onclick = () => menu.classList.toggle('buka');
+  menu.querySelectorAll('a').forEach(a => a.onclick = () => menu.classList.remove('buka'));
+
+  /* ===== Scrollspy + Auto-scroll Sidebar ===== */
+  const sidebar = document.querySelector('aside');
+  const tautan = document.querySelectorAll('aside a');
+  let isHoveringSidebar = false;
+
+  sidebar.addEventListener('mouseenter', () => { isHoveringSidebar = true; });
+  sidebar.addEventListener('mouseleave', () => { isHoveringSidebar = false; });
+
+  const bagian = [];
+  tautan.forEach(a => {
+    const href = a.getAttribute('href');
+    if (href && href.startsWith('#')) {
+      const el = document.querySelector(href);
+      if (el) bagian.push([a, el]);
+    }
+  });
+
+  let aktifSebelumnya = null;
+
+  function perbaruiAktif() {
+    if (isHoveringSidebar) return; 
+
+    const isMentokBawah = (window.innerHeight + window.scrollY) >= document.body.offsetHeight - 50;
+    const isMentokAtas = window.scrollY === 0;
+
+    let aktif = null;
+    let posisiTerbaik = -Infinity;
+
+    bagian.forEach(([link, el]) => {
+      const top = el.getBoundingClientRect().top;
+      if (top - 140 <= 0 && top > posisiTerbaik) {
+        posisiTerbaik = top;
+        aktif = link;
+      }
+    });
+
+    if (!aktif && bagian.length) aktif = bagian[0][0];
+
+    tautan.forEach(a => a.classList.toggle('aktif', a === aktif));
+
+    if (aktif && aktif !== aktifSebelumnya) {
+      aktifSebelumnya = aktif;
+
+      if (sidebar.scrollHeight > sidebar.clientHeight && window.innerWidth > 820 && !isMentokBawah && !isMentokAtas) {
+        const scrollTarget = aktif.offsetTop - (sidebar.clientHeight / 2) + (aktif.offsetHeight / 2);
+        
+        sidebar.scrollTo({
+          top: scrollTarget,
+          behavior: 'auto'
+        });
+      }
+    }
+  }
+
+  let menunggu = false;
+  window.addEventListener('scroll', () => {
+    if (!menunggu) {
+      menunggu = true;
+      requestAnimationFrame(() => {
+        perbaruiAktif();
+        menunggu = false;
+      });
+    }
+  }, { passive: true });
+
+  window.addEventListener('DOMContentLoaded', perbaruiAktif);
+  window.addEventListener('load', perbaruiAktif);
+</script>
+</body>
+</html>
