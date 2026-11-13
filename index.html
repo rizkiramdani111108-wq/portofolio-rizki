@@ -1,1214 +1,2503 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Case Study Usability Website SMKN 21 Jakarta</title>
-<style>
-  :root {
-    --biru:#0f2c5c;
-    --biru-terang:#1e56c8;
-    --aksen:#2f6bff;
-    --kuning:#f5b400;
-    --abu:#f4f6fb;
-    --abu-2:#e8edf7;
-    --teks:#1c2433;
-    --teks-lembut:#5b6478;
-    --hijau:#1a8a4a;
-    --merah:#c62828;
-    --radius:14px;
-    --emas: linear-gradient(135deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
-  }
-  * { box-sizing:border-box; margin:0; padding:0; }
-  html { scroll-behavior:smooth; scroll-padding-top:84px; }
-  
-  body {
-    font-family:'Segoe UI', system-ui, -apple-system, Arial, sans-serif;
-    color:var(--teks);
-    line-height:1.75;
-    background:#fff;
-    -webkit-font-smoothing:antialiased;
-    overflow-x: hidden; 
-  }
-  a { color:var(--aksen); text-decoration:none; transition:color .2s; }
-  a:hover { color:var(--biru); }
-  img { max-width:100%; display:block; }
-
-  /* ---------- HEADER ---------- */
-  header {
-    background:rgba(15,44,92,.92);
-    backdrop-filter:blur(12px);
-    position:sticky; top:0; z-index:50;
-    border-bottom:1px solid rgba(255,255,255,.08);
-  }
-  .nav {
-    max-width:1120px; margin:auto; padding:0 24px; min-height:64px;
-    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;
-  }
-  .brand {
-    color:#fff; font-weight:700; font-size:1.05rem;
-    display:flex; align-items:center; gap:10px; letter-spacing:.2px;
-  }
-  .brand::before {
-    content:"RR"; display:inline-grid; place-items:center;
-    width:32px; height:32px; border-radius:9px;
-    background:linear-gradient(135deg,var(--aksen),#ffce4d);
-    color:var(--biru); font-weight:800; font-size:.82rem;
-  }
-  .nav ul { list-style:none; display:flex; gap:6px; }
-  .nav ul a {
-    color:rgba(255,255,255,.85); padding:8px 14px; border-radius:8px;
-    font-size:.92rem; transition:background .2s, color .2s;
-  }
-  .nav ul a:hover { background:rgba(255,255,255,.1); color:#fff; text-decoration:none; }
-  #toggle { display:none; background:none; border:0; color:#fff; font-size:1.6rem; cursor:pointer; padding:8px; }
-
-  /* ---------- HERO ---------- */
-  .hero {
-    background:
-      radial-gradient(circle at 80% -20%, rgba(245,180,0,.28), transparent 45%),
-      radial-gradient(circle at 10% 120%, rgba(47,107,255,.45), transparent 50%),
-      linear-gradient(135deg, #0f2c5c, #1e56c8);
-    color:#fff; padding:80px 24px 72px; text-align:center;
-    position:relative; overflow:hidden;
-  }
-  .hero .badge {
-    display:inline-block; background:rgba(255,255,255,.14);
-    border:1px solid rgba(255,255,255,.25);
-    padding:6px 16px; border-radius:999px; font-size:.82rem;
-    letter-spacing:.5px; margin-bottom:20px; font-weight:600;
-  }
-  .hero h1 { font-size:2.3rem; line-height:1.25; margin-bottom:14px; font-weight:800; letter-spacing:-.5px; }
-  .hero p { max-width:660px; margin:auto; opacity:.92; font-size:1.02rem; }
-
-  /* ---------- LAYOUT & FIX SIDEBAR ---------- */
-  .layout {
-    max-width:1120px; margin:auto; padding:48px 24px;
-    display:grid; grid-template-columns:240px 1fr; gap:56px;
-  }
-  main { min-width: 0; max-width: 100%; }
-  
-  aside { 
-    position: -webkit-sticky;
-    position: sticky; 
-    top: 88px; align-self: start; font-size: .92rem; 
-    max-height: calc(100vh - 100px); height: max-content;
-    overflow-y: auto; padding-right: 6px; z-index: 10;
-  }
-  aside ul { list-style:none; }
-  aside > ul > li { margin-bottom:14px; }
-  aside > ul > li > a { font-weight:700; color:var(--biru); display:block; padding:4px 0; }
-  aside ul ul { margin:6px 0 0 12px; border-left:2px solid var(--abu-2); }
-  aside ul ul a { display:block; padding:4px 12px; color:var(--teks-lembut); border-radius:0 6px 6px 0; font-size:.88rem; }
-  aside ul ul a:hover { background:var(--abu); color:var(--biru); text-decoration:none; }
-  aside a.aktif { color:var(--aksen); font-weight:600; background:var(--abu); }
-
-  main h2 { color:var(--biru); font-size:1.7rem; margin:8px 0 10px; font-weight:800; letter-spacing:-.3px; }
-  main hr { border:0; height:4px; width:64px; border-radius:99px; background:linear-gradient(90deg,var(--kuning),#ffd45e); margin-bottom:24px; }
-  main h3 { margin:28px 0 8px; font-size:1.15rem; color:var(--biru); font-weight:700; }
-  main h4 { margin:22px 0 8px; font-size:1.02rem; color:var(--biru); font-weight:700; }
-  main p, main ul.t, main ol { margin-bottom:14px; }
-  main ol, main ul.t { padding-left:24px; }
-  main ul.t li, main ol li { margin-bottom:6px; }
-  main section { margin-bottom:56px; }
-
-  /* ---------- PERKECIL GAMBAR ---------- */
-  figure { margin:20px 0; }
-  figure .g {
-    background:linear-gradient(135deg,#dbe5f7,#eef3fd);
-    border-radius:var(--radius); overflow:hidden; 
-    border:1px solid var(--abu-2);
-    max-width: 100%; 
-    margin: 0 auto; 
-  }
-  figure img { 
-    width:100%; 
-    display:block; 
-    max-height: 380px; 
-    object-fit: cover; 
-  }
-  figcaption { font-size:.88rem; color:var(--teks-lembut); text-align:center; margin-top:8px; font-style:italic; }
-
-  /* ---------- INFO GRID ---------- */
-  .info {
-    display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:14px;
-    background:var(--abu); padding:20px; border-radius:var(--radius); margin:16px 0;
-    border:1px solid var(--abu-2);
-  }
-  .info > div { padding:4px 0; }
-  .info b { display:block; font-size:.74rem; text-transform:uppercase; letter-spacing:.6px; color:var(--teks-lembut); margin-bottom:2px; }
-
-  /* ---------- TOMBOL VIEW PROJECT ---------- */
-  .view-project { display:flex; justify-content:center; margin-top:10px; }
-  .view-project .btn-view {
-    display:inline-flex; align-items:center; gap:8px;
-    background:linear-gradient(135deg, var(--aksen), #1e56c8);
-    color:#fff; padding:9px 20px; border-radius:9px;
-    font-weight:600; font-size:.88rem; border:0; cursor:pointer;
-    box-shadow:0 4px 14px rgba(47,107,255,.28);
-    transition:transform .15s, box-shadow .2s, filter .2s;
-    text-decoration:none;
-  }
-  .view-project .btn-view:hover {
-    transform:translateY(-1px); filter:brightness(1.06);
-    box-shadow:0 8px 20px rgba(47,107,255,.4); color:#fff; text-decoration:none;
-  }
-  .view-project .btn-view svg { width:15px; height:15px; flex-shrink:0; }
-  .view-project .btn-view.yt { background:linear-gradient(135deg, #ff0033, #c62828); box-shadow:0 4px 14px rgba(255,0,51,.3); }
-  .view-project .btn-view.yt:hover { box-shadow:0 8px 20px rgba(255,0,51,.45); }
-
-  /* ---------- TABLE UMUM ---------- */
-  .tw { overflow-x:auto; margin-bottom:16px; border-radius:var(--radius); border:1px solid var(--abu-2); }
-  table { border-collapse:collapse; width:100%; font-size:.93rem; }
-  th, td { border-bottom:1px solid var(--abu-2); padding:11px 14px; text-align:left; vertical-align:top; }
-  th { background:var(--abu); color:var(--biru); font-weight:700; font-size:.86rem; text-transform:uppercase; letter-spacing:.4px; }
-  tr:last-child td { border-bottom:0; }
-  tbody tr:hover { background:#fafbfe; }
-  tfoot th { background:#eef2fb; color:var(--biru); }
-
-  /* ---------- KHUSUS TABEL REKAP SEQ (BISA DIGESER) ---------- */
-  .table-scroll {
-    width: 100%; max-width: 100%;
-    overflow-x: auto; -webkit-overflow-scrolling: touch;
-    border-radius: var(--radius); border: 1px solid var(--abu-2); box-shadow: 0 4px 12px rgba(0,0,0,0.03); margin-bottom: 20px; background: #fff;
-  }
-  .table-scroll::-webkit-scrollbar { height: 8px; }
-  .table-scroll::-webkit-scrollbar-track { background: #f4f6fb; border-radius: 4px; }
-  .table-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-  .table-scroll::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-
-  .tabel-seq {
-    width: 100%; min-width: 1000px; table-layout: fixed; border-collapse: collapse; font-size: 0.85rem; white-space: nowrap;
-  }
-  .tabel-seq th, .tabel-seq td {
-    border: 1px solid var(--abu-2); padding: 8px 10px; text-align: center; vertical-align: middle;
-    overflow: hidden; text-overflow: ellipsis;
-  }
-  .tabel-seq th { background: #e8edf7; color: var(--biru); font-weight: 700; }
-  
-  .tabel-seq th:nth-child(1), .tabel-seq td:nth-child(1) { width: 40px; }
-  .tabel-seq th:nth-child(2), .tabel-seq td:nth-child(2) { width: 160px; }
-  .tabel-seq th:last-child, .tabel-seq td:last-child { width: 90px; }
-  
-  /* Kolom Nomor (Sticky) */
-  .tabel-seq th:nth-child(1), .tabel-seq td:nth-child(1) {
-    position: sticky; left: 0; background: #f4f6fb; z-index: 2; box-shadow: 2px 0 4px rgba(0,0,0,0.05);
-  }
-  .tabel-seq th:nth-child(1) { background: #e8edf7; z-index: 3; }
-
-  /* Kolom Nama (Sticky) */
-  .tabel-seq th:nth-child(2), .tabel-seq td:nth-child(2) {
-    text-align: left; position: sticky; left: 40px; background: #fff; z-index: 2; box-shadow: 2px 0 4px rgba(0,0,0,0.05);
-  }
-  .tabel-seq th:nth-child(2) { background: #e8edf7; z-index: 3; }
-  
-  /* Footer / Baris Rata-rata */
-  .tabel-seq tfoot th { background: #fdf6e3; color: var(--teks); border-top: 2px solid var(--kuning); }
-  
-  .tabel-seq tfoot th:nth-child(1),
-  .tabel-seq tfoot th:nth-child(2) {
-    position: sticky; background: #fdf6e3; z-index: 3;
-  }
-  .tabel-seq tfoot th:nth-child(1) { left: 0; box-shadow: 2px 0 4px rgba(0,0,0,0.05); }
-  .tabel-seq tfoot th:nth-child(2) { left: 40px; box-shadow: 2px 0 4px rgba(0,0,0,0.05); }
-
-  .tabel-seq tbody tr:hover td { background: #f4f6fb; }
-  .tabel-seq tbody tr:hover td:nth-child(2) { background: #f4f6fb; }
-
-  /* ---------- DOKUMEN ---------- */
-  .dok { list-style:none; }
-  .dok li {
-    background:var(--abu); padding:14px 18px; border-radius:10px; margin-bottom:10px;
-    display:flex; justify-content:space-between; gap:12px; align-items:center;
-    border:1px solid var(--abu-2); transition:background .2s;
-  }
-  .dok li:hover { background:#eef2fb; }
-  .dok li a {
-    background:#fff; border:1px solid var(--abu-2); padding:6px 16px;
-    border-radius:8px; font-size:.88rem; font-weight:600; white-space:nowrap;
-  }
-  .dok li a:hover { background:var(--aksen); color:#fff; border-color:var(--aksen); text-decoration:none; }
-
-  /* ---------- BUTTONS ---------- */
-  .btn {
-    display:inline-flex; align-items:center; gap:8px;
-    background:var(--kuning); color:#1c2433; padding:11px 24px; border:0;
-    border-radius:9px; font-weight:700; cursor:pointer; font-size:.95rem;
-    transition:transform .15s, box-shadow .2s, filter .2s;
-    box-shadow:0 4px 14px rgba(245,180,0,.3);
-  }
-  .btn:hover { text-decoration:none; filter:brightness(.96); transform:translateY(-1px); box-shadow:0 8px 20px rgba(245,180,0,.4); }
-
-  /* ---------- KHUSUS GRAFIK SEQ ---------- */
-  .grafik-wrap {
-    background:#fff; border:1px solid var(--abu-2); border-radius:var(--radius);
-    padding:16px; margin:16px 0 8px; box-shadow:0 4px 12px rgba(0,0,0,.03);
-    position:relative; height:420px;
-  }
-  .grafik-wrap canvas { width:100% !important; height:100% !important; }
-
-  /* ---------- KHUSUS TABEL BEFORE/AFTER ---------- */
-  .ba-table { table-layout: fixed; }
-  .ba-table td img {
-    border-radius:8px; border:1px solid var(--abu-2);
-    width:100%;
-    height:auto;
-    max-height:420px;
-    object-fit:contain;
-    background:#f4f6fb;
-    display:block;
-    transition:transform .15s;
-  }
-  .ba-table td img:hover { transform:scale(1.02); }
-  .ba-table td { width:calc((100% - 170px)/2); }
-  .ba-table td:first-child { width:170px; }
-
-  /* ---------- FOOTER ---------- */
-  footer {
-    background:
-      radial-gradient(circle at 80% -20%, rgba(245,180,0,.18), transparent 45%),
-      radial-gradient(circle at 10% 120%, rgba(47,107,255,.45), transparent 50%),
-      linear-gradient(135deg, #0f2c5c, #1e56c8);
-    color:#fff; padding:56px 24px 36px; text-align:center; font-size:.9rem;
-    position:relative; overflow:hidden;
-  }
-
-  footer .ucapan {
-    max-width:640px;
-    margin:0 auto 28px;
-    padding: 0 8px;
-  }
-  footer .ucapan h2 {
-    font-family: 'Brush Script MT', 'Dancing Script', 'Pacifico', cursive;
-    font-size: 3.4rem;
-    font-style: italic;
-    font-weight: normal;
-    letter-spacing: 2px;
-    margin-bottom: 10px;
-    background: var(--emas);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    color: #B38728;
-    animation: kelipEmas 1.6s ease-in-out infinite;
-  }
-  footer .ucapan p {
-    font-size: 1.02rem;
-    color: rgba(255,255,255,.92);
-    font-style: italic;
-    margin: 0 auto;
-    animation: kelipTeks 2.4s ease-in-out infinite;
-  }
-
-  footer .link-footer {
-    border-top:1px solid rgba(255,255,255,.18);
-    padding-top:22px;
-    margin-top:8px;
-  }
-  footer a { color:rgba(255,255,255,.85); margin:0 8px; }
-  footer a:hover { color:var(--kuning); text-decoration:none; }
-  footer .copy { margin-top:10px; opacity:.6; font-size:.82rem; }
-
-  @keyframes kelipEmas {
-    0%, 100% {
-      opacity: 1;
-      filter: drop-shadow(0 0 12px rgba(252,246,186,.85)) drop-shadow(0 0 24px rgba(245,180,0,.55));
-      transform: scale(1);
-    }
-    50% {
-      opacity: .55;
-      filter: drop-shadow(0 0 2px rgba(252,246,186,.15));
-      transform: scale(.985);
-    }
-  }
-
-  @keyframes kelipTeks {
-    0%, 100% { opacity: .95; text-shadow: 0 0 8px rgba(255,255,255,.35); }
-    50%      { opacity: .45; text-shadow: 0 0 0 rgba(255,255,255,0); }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    footer .ucapan h2,
-    footer .ucapan p { animation: none; }
-  }
-
-  /* ---------- RESPONSIVE ---------- */
-  @media (max-width:820px) {
-    #toggle { display:block; }
-    .nav nav { width:100%; display:none; }
-    .nav nav.buka { display:block; }
-    .nav ul { flex-direction:column; gap:0; padding:8px 0; }
-    .nav ul a { display:block; padding:11px 0; border-top:1px solid rgba(255,255,255,.12); }
-    .layout { grid-template-columns:1fr; gap:12px; padding:32px 20px; }
-    aside { display:none; }
-    .hero { padding:60px 20px 52px; }
-    .hero h1 { font-size:1.65rem; }
-    figure img { max-height: 250px; }
-
-    footer { padding:44px 18px 28px; }
-    footer .ucapan h2 { font-size: 2.6rem; }
-    footer .ucapan p { font-size: .98rem; }
-
-    .grafik-wrap { height:340px; padding:10px; }
-    .ba-table td { display:block; width:100% !important; border-bottom:0; }
-    .ba-table td:first-child { background:var(--abu); border-radius:8px 8px 0 0; font-weight:700; }
-    .ba-table td img { max-height:none; height:auto; }
-    .ba-table tr { border-bottom:2px solid var(--abu-2); }
-  }
-</style>
-</head>
-<body>
-
-<header><div class="nav">
-  <span class="brand">Rizki Ramdani</span>
-  <button id="toggle" aria-label="Menu">&#9776;</button>
-  <nav id="menu"><ul>
-    <li><a href="#overview">Overview</a></li>
-    <li><a href="#metodologi">Metodologi</a></li>
-    <li><a href="#tahap1">Pengujian 1</a></li>
-    <li><a href="#desain">Desain</a></li>
-    <li><a href="#tahap2">Pengujian Ulang</a></li>
-    <li><a href="#dokumen">Dokumen</a></li>
-  </ul></nav>
-</div></header>
-
-<div class="hero">
-  <span class="badge">CASE STUDY · UX RESEARCH</span>
-  <h1>Evaluasi Usability Website<br>SMKN 21 Jakarta</h1>
-  <p>Card sorting, pengujian SEQ, wawancara, perbaikan (mockup, wireframe, wireflow, userflow, prototype), dan pengujian ulang untuk memastikan website lebih mudah digunakan.</p>
-</div>
-
-<div class="layout">
-<aside><ul>
-  <li><a href="#overview">Overview</a><ul>
-    <li><a href="#objek">Objek Penelitian</a></li>
-    <li><a href="#masalah">Masalah</a></li><li><a href="#alur">Alur Pengerjaan</a></li></ul></li>
-  <li><a href="#metodologi">Metodologi</a><ul>
-    <li><a href="#pendekatan">Pendekatan</a></li>
-    <li><a href="#setting">Setting &amp; Prosedur</a></li>
-    <li><a href="#tasklist">Task List 15 Tugas</a></li>
-    <li><a href="#skoring">Skoring &amp; Kriteria</a></li></ul></li>
-  <li><a href="#tahap1">Pengujian Pertama</a><ul>
-    <li><a href="#tujuan-uji1">Yang Diteliti</a></li>
-    <li><a href="#gambaran-uji1">Gambaran Umum</a></li>
-    <li><a href="#cardsort">Card Sorting 1</a></li>
-    <li><a href="#seq">Formulir SEQ</a></li>
-    <li><a href="#user1">Peserta &amp; Nilai per User</a></li>
-    <li><a href="#wawancara">Wawancara</a></li>
-    <li><a href="#hitung">Perhitungan SEQ</a></li>
-    <li><a href="#lap1">Laporan 1</a></li></ul></li>
-  <li><a href="#desain">Desain / Mockup</a><ul>
-    <li><a href="#mockup">Mockup</a></li>
-    <li><a href="#wireframe">Wireframe</a></li>
-    <li><a href="#wireflow">Wireflow</a></li>
-    <li><a href="#userflow">Userflow</a></li>
-    <li><a href="#prototype">Prototype</a></li></ul></li>
-  <li><a href="#tahap2">Pengujian Ulang</a><ul>
-    <li><a href="#tujuh">7 Perbaikan</a></li>
-    <li><a href="#before-after">Before / After</a></li>
-    <li><a href="#cardsort2">Card Sorting 2</a></li>
-    <li><a href="#seq2">Formulir SEQ 2</a></li>
-    <li><a href="#user2">Peserta &amp; Nilai per User</a></li>
-    <li><a href="#wawancara2">Wawancara 2</a></li>
-    <li><a href="#hitung2">Perhitungan SEQ 2</a></li>
-    <li><a href="#lap2">Laporan 2</a></li>
-    <li><a href="#grafik">Grafik P1 vs P2</a></li>
-    <li><a href="#banding">Perbandingan SEQ</a></li></ul></li>
-  <li><a href="#dokumen">Dokumen</a></li>
-  <li><a href="#belajar">Yang Dipelajari</a></li>
-</ul></aside>
-
-<main>
-<section id="overview">
-  <h2>Overview</h2><hr>
-  
-  <h3 id="objek">Objek Penelitian</h3>
-  <p>Website yang dievaluasi dalam studi kasus ini adalah <b>website resmi SMKN 21 Jakarta</b>. Pengujian dilakukan terhadap versi website yang aktif pada saat penelitian (November 2026).</p>
-  <div class="info">
-    <div><b>Nama Situs</b>Website SMKN 21 Jakarta</div>
-    <div><b>URL</b><a href="https://smkn21jakarta.sch.id" target="_blank" rel="noopener">smkn21jakarta.sch.id</a></div>
-    <div><b>Institusi</b>SMK Negeri 21 Jakarta</div>
-    <div><b>Lokasi</b>Jakarta Pusat, DKI Jakarta</div>
-  </div>
-  <p><small>Catatan: Terdapat juga domain alternatif <a href="https://smkn21jakarta.id" target="_blank" rel="noopener">smkn21jakarta.id</a> yang dikaitkan dengan sekolah ini. Domain utama yang digunakan saat pengujian adalah <b>smkn21jakarta.sch.id</b>.</small></p>
-
-  <h3 id="masalah">Masalah</h3>
-  <p>Website SMKN 21 Jakarta seharusnya memudahkan siswa dan orang tua dalam mencari informasi. Namun, kenyataannya pengguna justru sering tersesat karena posisi menu tidak sesuai ekspektasi dan beberapa tautan tidak terlihat bisa diklik.</p>
-  <p>Sebagai contoh, saat mencari dokumentasi P5 tahun lalu atau informasi prestasi siswa, pengguna harus membuka banyak halaman dan sering berakhir kebingungan. Di sisi lain, penggunaan istilah asing seperti "Job Fair" dan "Tracer Study" serta tidak adanya tombol "Beranda" yang jelas membuat navigasi terasa menyulitkan.</p>
-  <p>Karena waktu pengguna habis hanya untuk menebak struktur menu, evaluasi usability ini dilakukan untuk menemukan akar masalahnya dan merancang perbaikan yang paling berdampak.</p>
-
-  <div class="info">
-    <div><b>Peran</b>UX Researcher &amp; Designer</div>
-    <div><b>Timeline</b>November 2026</div>
-    <div><b>Tim</b>Rizki Ramdani</div>
-    <div><b>Tools</b>Figma, Google Workspace, YouTube</div>
-  </div>
-  
-  <h3 id="alur">Alur Pengerjaan</h3>
-  <ol>
-    <li><b>Pengujian pertama:</b> menganalisis card sorting bawaan website, mengisi formulir SEQ, wawancara, menghitung hasil SEQ, lalu membuat laporan.</li>
-    <li><b>Desain:</b> membuat mockup, wireframe, wireflow, userflow, dan prototype.</li>
-    <li><b>Perbaikan:</b> 7 perbaikan, menyusun ulang Card Sorting, menguji ulang (Formulir, Wawancara, Perhitungan, Laporan).</li>
-    <li><b>Pengujian ulang:</b> card sorting, SEQ, wawancara, perhitungan, laporan. Hasilnya semua perbaikan lolos.</li>
-  </ol>
-</section>
-
-<!-- ====== SECTION METODOLOGI ====== -->
-<section id="metodologi">
-  <h2>Metodologi &amp; Prosedur Pengujian</h2><hr>
-
-  <h3 id="pendekatan">Pendekatan Penelitian</h3>
-  <p>Evaluasi usability ini menggunakan <b>mixed-methods</b> (kuantitatif + kualitatif) untuk mendapatkan gambaran menyeluruh tentang pengalaman pengguna website SMKN 21 Jakarta. Data kuantitatif diambil dari <b>SEQ (Single Ease Question)</b>, sedangkan data kualitatif digali melalui <b>wawancara semi-terstruktur</b> dan <b>card sorting</b>.</p>
-
-  <div class="info">
-    <div><b>Jenis Penelitian</b>Evaluasi Usability (Formative)</div>
-    <div><b>Metode</b>Card Sorting, Task-Based Testing, SEQ, Wawancara</div>
-    <div><b>Pendekatan</b>Moderated, Tatap Muka</div>
-    <div><b>Instrumen</b>Google Form (SEQ), Lembar Tugas, Panduan Wawancara</div>
-  </div>
-
-  <h3 id="setting">Setting &amp; Prosedur</h3>
-  <div class="tw"><table>
-    <thead><tr><th>Aspek</th><th>Detail</th></tr></thead>
-    <tbody>
-      <tr><td><b>Lokasi</b></td><td>SMKN 1 Cipeundeuy (tatap muka)</td></tr>
-      <tr><td><b>Perangkat</b></td><td>Laptop/PC dengan browser Chrome (default)</td></tr>
-      <tr><td><b>Moderator</b></td><td>1 orang (Rizki Ramdani) — tanpa asisten</td></tr>
-      <tr><td><b>Durasi per sesi</b></td><td>±5–10 menit per peserta</td></tr>
-      <tr><td><b>Perekaman</b></td><td>Video wawancara (YouTube), screenshot layar, catatan moderator</td></tr>
-    </tbody>
-  </table></div>
-
-  <h3 id="tasklist">Task List (15 Tugas yang Diuji)</h3>
-  <p>Setiap peserta diminta menyelesaikan 15 tugas berikut pada website, lalu menilai tingkat kemudahan setiap tugas dengan SEQ (1–7):</p>
-  <div class="tw"><table>
-    <thead><tr><th>No</th><th>Tugas</th><th>Target Halaman/Elemen</th></tr></thead>
-    <tbody>
-      <tr><td>1</td><td>Menemukan profil/sejarah sekolah</td><td>Profil</td></tr>
-      <tr><td>2</td><td>Menemukan kurikulum sistem pembelajaran sekolah</td><td>Berita</td></tr>
-      <tr><td>3</td><td><b>Menemukan informasi P5</b></td><td>Kurikulum → P5</td></tr>
-      <tr><td>4</td><td>Menemukan informasi TEFA (Teaching Factory)</td><td>Kurikulum → TEFA</td></tr>
-      <tr><td>5</td><td>Menemukan informasi ekstrakurikuler</td><td>Kesiswaan → Ekstrakurikuler</td></tr>
-      <tr><td>6</td><td><b>Menemukan informasi Prestasi siswa</b></td><td>Kesiswaan → Prestasi</td></tr>
-      <tr><td>7</td><td>Menemukan informasi SPMB</td><td>Kesiswaan → SPMB</td></tr>
-      <tr><td>8</td><td>Menemukan halaman Sapras</td><td>Menu Sapras</td></tr>
-      <tr><td>9</td><td><b>Menemukan informasi Job Fair / Bursa Kerja</b></td><td>Hubin/Humas → Job Fair</td></tr>
-      <tr><td>10</td><td><b>Menemukan informasi Tracer Study / Data Alumni</b></td><td>Hubin/Humas → Tracer Study</td></tr>
-      <tr><td>11</td><td>Menemukan kontak sekolah</td><td>Kontak</td></tr>
-      <tr><td>12</td><td>Menemukan galeri/foto kegiatan</td><td>Adiwiyata</td></tr>
-      <tr><td>13</td><td><b>Membuka menu Kesiswaan (klik)</b></td><td>Menu Kesiswaan</td></tr>
-      <tr><td>14</td><td><b>Menemukan arsip P5 tahun 2024–2025</b></td><td>Kurikulum → P5 → Arsip</td></tr>
-      <tr><td>15</td><td><b>Kembali ke Beranda</b></td><td>Tombol Beranda / Logo</td></tr>
-    </tbody>
-  </table></div>
-  <p><small>Catatan: Tugas yang <b>ditebalkan</b> adalah tugas dengan skor SEQ terendah pada Pengujian 1 dan menjadi dasar 7 perbaikan.</small></p>
-
-  <h3 id="skoring">Cara Skoring SEQ &amp; Kriteria Keberhasilan</h3>
-  <p>SEQ menggunakan skala <b>1–7</b> (1 = sangat sulit, 7 = sangat mudah). Skor rata-rata dihitung per tugas (dari seluruh peserta) dan per peserta (dari seluruh tugas). Nilai rata-rata keseluruhan diperoleh dari rata-rata seluruh skor. Interpretasi: skor mendekati 7 menunjukkan tugas semakin mudah; skor di bawah 5 mengindikasikan masalah usability yang perlu diperbaiki.</p>
-  <p><b>Kriteria keberhasilan pengujian ulang:</b></p>
-  <ul class="t">
-    <li>Rata-rata SEQ keseluruhan <b>≥ 6,0</b> setelah perbaikan.</li>
-    <li>Tidak ada tugas dengan rata-rata SEQ <b>&lt; 5,0</b>.</li>
-    <li>Peserta menyatakan (melalui wawancara) bahwa menu dan istilah lebih mudah dipahami.</li>
-  </ul>
-</section>
-
-<section id="tahap1">
-  <h2>Pengujian Pertama</h2><hr>
-
-  <h3 id="tujuan-uji1">Apa yang Diteliti pada Pengujian Pertama</h3>
-  <p>Pengujian pertama bertujuan untuk <b>mengukur kondisi awal (baseline) usability website SMKN 21 Jakarta</b> sebelum dilakukan perbaikan apa pun. Dengan kata lain, tahap ini menjawab pertanyaan: <i>“Seberapa mudah website yang sekarang digunakan, dan di mana letak kesulitannya?”</i></p>
-  <p>Aspek yang diteliti pada pengujian pertama meliputi:</p>
-  <ul class="t">
-    <li><b>Struktur informasi (information architecture):</b> bagaimana menu dan kategori bawaan website tersusun, serta apakah susunan tersebut sesuai dengan cara pengguna mencari informasi.</li>
-    <li><b>Kemudahan menemukan informasi (findability):</b> apakah pengguna dapat menemukan halaman penting seperti P5, Prestasi, Job Fair, dan Tracer Study tanpa kebingungan.</li>
-    <li><b>Kejelasan label dan istilah menu:</b> apakah istilah yang digunakan (termasuk istilah berbahasa Inggris) dipahami oleh pengguna.</li>
-    <li><b>Kejelasan navigasi dan elemen interaktif:</b> apakah menu terlihat bisa diklik, dan apakah pengguna tahu cara kembali ke halaman utama.</li>
-    <li><b>Tingkat kesulitan tugas (task difficulty):</b> diukur dengan <b>SEQ (Single Ease Question)</b> skala 1–7 setelah pengguna menyelesaikan tugas.</li>
-    <li><b>Pengalaman dan keluhan pengguna:</b> digali melalui <b>wawancara</b> setelah pengujian untuk mendapatkan alasan di balik kesulitan yang dialami.</li>
-  </ul>
-  <div class="info">
-    <div><b>Metode</b>Card Sorting, SEQ, Wawancara</div>
-    <div><b>Objek</b>Website asli SMKN 21 Jakarta</div>
-    <div><b>Fokus</b>Menemukan masalah usability</div>
-    <div><b>Output</b>Daftar temuan &amp; rekomendasi perbaikan</div>
-  </div>
-
-  <h3 id="gambaran-uji1">Gambaran Keseluruhan Pengujian Pertama</h3>
-  <p>Pengujian pertama dilakukan dalam satu rangkaian yang saling melengkapi, sehingga data kuantitatif (skor) dan data kualitatif (alasan pengguna) bisa dibandingkan:</p>
-  <ol>
-    <li><b>Card Sorting 1:</b> memetakan <b>struktur menu bawaan website asli</b> — kategori apa saja yang ada dan kartu/isi apa yang berada di dalamnya. Hasilnya menjadi gambaran awal bagaimana informasi dikelompokkan oleh pembuat website.</li>
-    <li><b>Formulir SEQ:</b> peserta diminta menyelesaikan tugas-tugas tertentu (misalnya mencari informasi P5, Prestasi, dan Job Fair), lalu menilai seberapa mudah tugas tersebut dengan skala 1 (sangat sulit) sampai 7 (sangat mudah).</li>
-    <li><b>Wawancara:</b> setelah mengisi SEQ, peserta diwawancarai untuk menggali bagian mana yang membingungkan, penyebab kesulitan, dan saran perbaikan menurut mereka.</li>
-    <li><b>Perhitungan SEQ:</b> skor dari seluruh peserta diolah untuk mendapatkan nilai rata-rata, sehingga tingkat kesulitan website bisa diukur secara angka dan menjadi pembanding pada pengujian ulang.</li>
-    <li><b>Laporan Pengujian 1:</b> seluruh temuan dirangkum menjadi daftar masalah (TC-3, TC-6, TC-9, TC-10, TC-13, TC-14, TC-15) yang kemudian menjadi dasar 7 perbaikan pada tahap desain dan pengujian ulang.</li>
-  </ol>
-  <p><b>Hasil akhir pengujian pertama</b> menunjukkan bahwa website asli masih menyulitkan pengguna dalam menemukan informasi tertentu, terutama karena struktur menu yang tidak sesuai ekspektasi, istilah asing yang membingungkan, dan elemen navigasi yang kurang jelas. Temuan inilah yang menjadi titik awal seluruh proses perbaikan pada case study ini.</p>
-
-  <h3 id="cardsort">Card Sorting 1 — Bawaan Website Asli</h3>
-  <p>Card sorting pertama diambil dari <b>struktur bawaan website asli</b> SMKN 21 Jakarta, yaitu menu dan kategori yang memang sudah ada di website tersebut. Tujuannya untuk melihat struktur konten yang berjalan saat ini.</p>
-  <div class="tw"><table>
-    <thead><tr><th>Kategori (Menu Website Asli)</th><th>Kartu / Isi Website</th><th>Catatan</th></tr></thead>
-    <tbody>
-      <tr>
-        <td>KURIKULUM</td>
-        <td>P5 (di dalamnya ada P5 2024-2025), TEFA (Teaching Factory)</td>
-        <td>Struktur bawaan website</td>
-      </tr>
-      <tr>
-        <td>KESISWAAN</td>
-        <td>Ekstrakurikuler, Prestasi, SPMB</td>
-        <td>Struktur bawaan website</td>
-      </tr>
-      <tr>
-        <td>HUBIN / HUMAS</td>
-        <td>Job Fair, Tracer Study</td>
-        <td>Struktur bawaan website</td>
-      </tr>
-    </tbody>
-  </table></div>
-  
-  <figure>
-    <div class="g">
-      <img src="gambar/card1.png" alt="Hasil card sorting 1 website asli">
-    </div>
-    <figcaption>Dokumentasi card sorting 1 (website asli)</figcaption>
-  </figure>
-
-  <h3 id="seq">Formulir Pengujian SEQ</h3>
-  <p>SEQ (Single Ease Question) menanyakan seberapa mudah tugas dilakukan, dengan skala 1 (sangat sulit) sampai 7 (sangat mudah).</p>
-  <figure>
-    <div class="g">
-      <img src="gambar/pengujian1.png" alt="Formulir SEQ pengujian 1">
-    </div>
-    <figcaption>Formulir SEQ pengujian 1</figcaption>
-    <div class="view-project">
-      <a class="btn-view" href="https://drive.google.com/file/d/1iEo5nQSuRKE73B1Ngc3idh7p8EAgR3XT/view?usp=drivesdk" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-        View Project
-      </a>
-    </div>
-  </figure>
-
-  <h3 id="user1">Rekap Nilai SEQ per User (Pengujian 1)</h3>
-  <p>Berikut data peserta (Abdul Manaf, Nopal, Gustian Maulana, Moch Nazrul, M. Zaki Fadli) beserta nilai SEQ dari tugas 1 sampai 15 untuk masing-masing tugas pada website asli.</p>
-  
-  <div class="table-scroll">
-    <table class="tabel-seq">
-      <thead>
-        <tr>
-          <th>NO</th>
-          <th>Responden/User</th>
-          <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>
-          <th>6</th><th>7</th><th>8</th><th>9</th><th>10</th>
-          <th>11</th><th>12</th><th>13</th><th>14</th><th>15</th>
-          <th>Rata-rata</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td>1</td><td>Abdul Manaf</td><td>6</td><td>6</td><td>5</td><td>5</td><td>5</td><td>4</td><td>5</td><td>5</td><td>3</td><td>1</td><td>7</td><td>6</td><td>5</td><td>7</td><td>2</td><td><b>5</b></td></tr>
-        <tr><td>2</td><td>Nopal</td><td>6</td><td>6</td><td>6</td><td>6</td><td>6</td><td>5</td><td>6</td><td>7</td><td>5</td><td>6</td><td>7</td><td>7</td><td>4</td><td>5</td><td>7</td><td><b>6</b></td></tr>
-        <tr><td>3</td><td>Gustian Maulana</td><td>7</td><td>6</td><td>6</td><td>6</td><td>6</td><td>4</td><td>6</td><td>7</td><td>6</td><td>6</td><td>6</td><td>6</td><td>7</td><td>5</td><td>7</td><td><b>6</b></td></tr>
-        <tr><td>4</td><td>Moch Nazrul</td><td>6</td><td>7</td><td>5</td><td>6</td><td>6</td><td>5</td><td>5</td><td>7</td><td>7</td><td>5</td><td>5</td><td>4</td><td>7</td><td>4</td><td>7</td><td><b>6</b></td></tr>
-        <tr><td>5</td><td>M. Zaki Fadli</td><td>5</td><td>6</td><td>5</td><td>7</td><td>5</td><td>5</td><td>7</td><td>7</td><td>4</td><td>5</td><td>5</td><td>6</td><td>4</td><td>4</td><td>2</td><td><b>5</b></td></tr>
-      </tbody>
-      <tfoot>
-        <tr>
-          <th></th>
-          <th style="text-align:left;">Rata-rata Skenario</th>
-          <th>6</th><th>6,2</th><th>5,4</th><th>6</th><th>5,6</th>
-          <th>4,6</th><th>6,2</th><th>6,6</th><th>4,6</th><th>4,6</th>
-          <th>5,8</th><th>6,4</th><th>4,8</th><th>5</th><th>5</th>
-          <th>5,5</th>
-        </tr>
-      </tfoot>
-    </table>
-  </div>
-
-  <p>Rata-rata keseluruhan SEQ Pengujian 1 adalah <b>5,5</b> dari skala 1–7. Meskipun terlihat cukup tinggi secara keseluruhan, terdapat beberapa skenario yang nilainya cukup rendah, seperti tugas ke-6 (rata-rata 4,6), ke-9 (rata-rata 4,6), ke-10 (rata-rata 4,6), ke-13 (rata-rata 4,8), dan ke-14 (rata-rata 5). Ini sejalan dengan temuan bahwa pengguna masih kesulitan pada bagian tertentu.</p>
-
-  <h3 id="wawancara">Wawancara</h3>
-  <p>Setelah mengerjakan tugas, setiap peserta diwawancarai untuk mencari hal yang perlu diperbaiki.</p>
-  <ul class="t">
-    <li>Bagian mana yang paling membingungkan?</li>
-    <li>Apa yang membuat tugas tadi terasa sulit?</li>
-    <li>Apa saran kamu agar website lebih enak digunakan?</li>
-  </ul>
-  <p><b>Ringkasan jawaban peserta pengujian 1:</b></p>
-  <ul class="t">
-    <li><b>Kebingungan utama:</b> pengguna kesulitan menemukan informasi P5 dan Prestasi karena posisi menu tidak sesuai dugaan mereka.</li>
-    <li><b>Penyebab kesulitan:</b> istilah berbahasa Inggris ("Job Fair", "Tracer Study") tidak dipahami, dan menu Kesiswaan tidak terlihat bisa diklik.</li>
-    <li><b>Saran pengguna:</b> gunakan istilah berbahasa Indonesia yang umum, tambahkan tombol "Beranda", buat menu lebih jelas dan mudah diklik, serta sediakan arsip P5 berdasarkan tahun.</li>
-  </ul>
-  <figure>
-    <div class="g">
-      <img src="gambar/vidio1.png" alt="Thumbnail Video Wawancara 1">
-    </div>
-    <figcaption>Dokumentasi wawancara pengujian 1</figcaption>
-    <div class="view-project">
-      <a class="btn-view yt" href="https://youtu.be/fd08vq5lzcQ?si=QnRwOD4fDZlFrDsx" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.4 31.4 0 0 0 0 12a31.4 31.4 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.4 31.4 0 0 0 24 12a31.4 31.4 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg>
-        View Project
-      </a>
-    </div>
-  </figure>
-
-  <h3 id="hitung">Perhitungan SEQ</h3>
-  <p>Hasil perhitungan skor SEQ dari jawaban pengguna.</p>
-  <figure>
-    <div class="g">
-      <img src="gambar/perhitungan1.png" alt="Perhitungan SEQ pengujian 1">
-    </div>
-    <figcaption>Perhitungan SEQ pengujian 1</figcaption>
-    <div class="view-project">
-      <a class="btn-view" href="https://docs.google.com/spreadsheets/d/1R8cjXrSjE5eKj_6e7JNp3Z2bfPJBp8SO/edit?usp=drivesdk&ouid=113743465150629458824&rtpof=true&sd=true" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-        View Project
-      </a>
-    </div>
-  </figure>
-
-  <h3 id="lap1">Laporan Pengujian 1</h3>
-  <p>Berisi tujuan, hasil card sorting, hasil SEQ, temuan wawancara, dan daftar perbaikan.</p>
-  <figure>
-    <div class="g">
-      <img src="gambar/laporan1.png" alt="Laporan Pengujian 1">
-    </div>
-    <figcaption>Laporan Pengujian 1</figcaption>
-    <div class="view-project">
-      <a class="btn-view" href="https://drive.google.com/file/d/1X9GLFz44b1LhCimljjVJ4V59fMPmxcgA/view?usp=drivesdk" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-        View Project
-      </a>
-    </div>
-  </figure>
-</section>
-
-<!-- ====== SECTION DESAIN ====== -->
-<section id="desain">
-  <h2>Desain (Mockup, Wireframe, Wireflow, Userflow, Prototype)</h2><hr>
-  
-  <h3 id="mockup">Mockup</h3>
-  <p>Mockup adalah tampilan visual desain yang sudah menggunakan warna, tipografi, gambar, dan elemen antarmuka sebenarnya. Mockup pada case study ini merupakan <b>hasil pembuatan ulang (redesign) dari tampilan website asli SMKN 21 Jakarta</b> — saya meniru layout dan gaya visual aslinya, kemudian memperbaikinya berdasarkan temuan pengujian pertama, seperti penataan menu P5 dan Prestasi, penggantian istilah asing ("Job Fair" → "Bursa Kerja", "Tracer Study" → "Data Alumni"), penegasan menu Kesiswaan agar terlihat bisa diklik, serta penambahan tombol "Beranda". Dengan begitu, pengguna tetap mengenali website aslinya, tetapi pengalamannya menjadi lebih mudah.</p>
-  <figure>
-    <div class="g"><img src="gambar/mockup.png" alt="Mockup"></div>
-    <figcaption>Mockup hasil perbaikan</figcaption>
-    <div class="view-project">
-      <a class="btn-view" href="https://www.figma.com/design/W7Jjf9chuPflyUrtNvHNB1/moc-up---prototype?node-id=137-2&t=vp8nNrOySdFFyhQg-1" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> View Project
-      </a>
-    </div>
-  </figure>
-
-  <h3 id="wireframe">Wireframe</h3>
-  <p>Wireframe yang saya buat adalah <b>kerangka halaman utama website SMKN 21 Jakarta versi perbaikan</b>, yang hanya menampilkan tata letak tanpa warna dan gambar detail. Di dalamnya saya menyusun ulang posisi elemen berdasarkan temuan pengujian pertama: menu <b>Kurikulum</b> (berisi Kurikulum, P5, TEFA), <b>Kesiswaan</b> (berisi Kesiswaan, Ekstrakurikuler, Prestasi, SPMB), dan <b>Hubin/Humas</b> (berisi Bursa Kerja, Data Alumni) ditempatkan pada posisi yang sesuai ekspektasi pengguna. Tombol <b>Beranda</b> juga saya letakkan jelas di navigasi.</p>
-  <p><b>Untuk apa wireframe ini saya buat?</b> Untuk memastikan <b>posisi menu, konten, dan navigasi</b> sudah benar sebelum masuk ke desain visual — sehingga saya tidak membuang waktu mewarnai atau memberi gambar pada tata letak yang masih salah. Wireframe ini menjadi acuan saya saat membuat mockup dan prototype.</p>
-  <figure>
-    <div class="g"><img src="gambar/wireframe.png" alt="Wireframe"></div>
-    <figcaption>Wireframe halaman utama</figcaption>
-    <div class="view-project">
-      <a class="btn-view" href="https://www.figma.com/design/W7Jjf9chuPflyUrtNvHNB1/moc-up---prototype?node-id=374-184&t=vp8nNrOySdFFyhQg-1" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> View Project
-      </a>
-    </div>
-  </figure>
-
-  <h3 id="wireflow">Wireflow</h3>
-  <p>Wireflow yang saya buat adalah <b>gabungan wireframe halaman-halaman hasil perbaikan yang dihubungkan dengan panah alur navigasi</b>. Di dalamnya terlihat bagaimana pengguna berpindah dari <b>Beranda → Kurikulum → P5 → Arsip P5 2024–2025</b>, atau dari <b>Beranda → Kesiswaan → Prestasi</b>, atau dari <b>Beranda → Hubin/Humas → Bursa Kerja</b>.</p>
-  <p><b>Untuk apa wireflow ini saya buat?</b> Untuk memeriksa apakah <b>alur navigasi antar halaman sudah logis dan tidak memutar</b>. Misalnya, apakah akses ke P5 benar-benar bisa dicapai dalam dua klik dari Beranda, atau apakah menu Kesiswaan benar-benar mengarah ke halaman Prestasi. Wireflow membantu saya menemukan jalur yang buntu atau tautan yang salah <b>sebelum</b> saya membuat prototype interaktif.</p>
-  <figure>
-    <div class="g"><img src="gambar/wireflow.png" alt="Wireflow"></div>
-    <figcaption>Wireflow alur navigasi hasil perbaikan</figcaption>
-    <div class="view-project">
-      <a class="btn-view" href="https://www.figma.com/design/W7Jjf9chuPflyUrtNvHNB1/moc-up---prototype?node-id=503-184&t=fC7HfEINfq5ClEpk-1" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> View Project
-      </a>
-    </div>
-  </figure>
-
-  <h3 id="userflow">Userflow</h3>
-  <p>Userflow yang saya buat adalah <b>diagram langkah-langkah pengguna</b> dalam menyelesaikan tugas-tugas yang diuji pada pengujian ulang, khususnya tiga tugas yang paling bermasalah di pengujian pertama: <b>mencari informasi P5, mencari Prestasi, dan mencari Bursa Kerja (Job Fair)</b>. Setiap userflow dimulai dari titik awal (membuka Beranda) hingga tujuan akhir (menemukan informasi yang dicari), dengan jalur yang sudah disederhanakan sesuai hasil perbaikan.</p>
-  <p><b>Untuk apa userflow ini saya buat?</b> Untuk memastikan setiap tugas memiliki <b>jalur yang singkat, jelas, dan sesuai ekspektasi pengguna</b> — bukan jalur yang menurut pembuat website wajar, tapi jalur yang benar-benar ditempuh pengguna. Userflow inilah yang menjadi dasar saya menilai apakah perbaikan (akses P5, penempatan Prestasi, penggantian istilah) benar-benar memudahkan pengguna saat diuji ulang dengan SEQ.</p>
-  <figure>
-    <div class="g"><img src="gambar/userflow.png" alt="Userflow"></div>
-    <figcaption>Userflow untuk tugas mencari P5, Prestasi, dan Bursa Kerja</figcaption>
-    <div class="view-project">
-      <a class="btn-view" href="https://www.figma.com/design/W7Jjf9chuPflyUrtNvHNB1/moc-up---prototype?node-id=503-9069&t=fC7HfEINfq5ClEpk-1" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> View Project
-      </a>
-    </div>
-  </figure>
-
-  <h3 id="prototype">Prototype</h3>
-  <p>Prototype yang saya buat adalah <b>versi interaktif dari seluruh desain hasil perbaikan</b> — menggabungkan wireframe, wireflow, dan userflow menjadi alur yang bisa diklik dan dijelajahi seperti website sungguhan di Figma. Prototype ini <b>bukan meniru tampilan website asli</b>, melainkan hasil desain saya sendiri berdasarkan 7 perbaikan dari pengujian pertama: akses P5 yang jelas, penempatan Prestasi di Kesiswaan, istilah "Bursa Kerja" dan "Data Alumni", menu Kesiswaan yang terlihat bisa diklik, arsip P5 per tahun, dan tombol Beranda.</p>
-  <p><b>Untuk apa prototype ini saya buat?</b> Untuk <b>menguji ulang desain secara nyata</b> — peserta pengujian 2 benar-benar mencoba prototype ini, mengisi SEQ (hasilnya naik dari 5,5 ke 6,5), dan diwawancarai. Jadi prototype ini berfungsi sebagai <b>alat verifikasi</b> bahwa 7 perbaikan yang saya rancang benar-benar membantu pengguna, bukan hanya diasumsikan berhasil. Prototype ini juga menjadi acuan final bagi pengembang tentang perilaku website yang diharapkan.</p>
-  <figure>
-    <div class="g"><img src="gambar/prototype.png" alt="Prototype"></div>
-    <figcaption>Tampilan prototype</figcaption>
-    <div class="view-project">
-      <a class="btn-view" href="https://www.figma.com/proto/W7Jjf9chuPflyUrtNvHNB1/moc-up---prototype?node-id=193-1183&p=f&t=tupXLtGY4FjwZCmY-1&scaling=min-zoom&content-scaling=fixed&page-id=193%3A1182" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> View Project
-      </a>
-    </div>
-  </figure>
-
-  <h3>Hubungan Keempat Desain</h3>
-  <div class="tw"><table>
-    <thead>
-      <tr>
-        <th>Desain</th>
-        <th>Isi desain saya</th>
-        <th>Untuk apa</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><b>Wireframe</b></td>
-        <td>Kerangka halaman utama dengan menu Kurikulum, Kesiswaan, Hubin/Humas yang sudah ditata ulang</td>
-        <td>Memastikan posisi elemen benar sebelum diberi warna</td>
-      </tr>
-      <tr>
-        <td><b>Wireflow</b></td>
-        <td>Kerangka halaman + panah alur (Beranda → P5, Prestasi, Bursa Kerja)</td>
-        <td>Memastikan hubungan antar halaman logis dan tidak memutar</td>
-      </tr>
-      <tr>
-        <td><b>Userflow</b></td>
-        <td>Langkah pengguna mencari P5, Prestasi, dan Bursa Kerja dari Beranda hingga tujuan</td>
-        <td>Memastikan jalur tugas singkat dan sesuai ekspektasi pengguna</td>
-      </tr>
-      <tr>
-        <td><b>Prototype</b></td>
-        <td>Versi interaktif seluruh perbaikan yang bisa diklik di Figma</td>
-        <td>Menguji ulang desain secara nyata (SEQ naik 5,5 → 6,5)</td>
-      </tr>
-    </tbody>
-  </table></div>
-</section>
-
-<!-- PENGUJIAN ULANG -->
-<section id="tahap2">
-  <h2>Pengujian Ulang</h2><hr>
-  <h3 id="tujuh">7 Perbaikan dari Pengujian 1</h3>
-  <div class="tw"><table>
-    <thead><tr><th>No</th><th>Temuan</th><th>Perbaikan</th></tr></thead>
-    <tbody>
-      <tr><td>1</td><td><b>Tugas ke-3 – Informasi P5:</b> Akses menuju informasi P5 kurang jelas.</td><td>Membuat akses menuju informasi P5 lebih jelas melalui menu atau submenu yang mudah dikenali.</td></tr>
-      <tr><td>2</td><td><b>Tugas ke-6 – Informasi Prestasi:</b> Informasi prestasi sulit ditemukan.</td><td>Menempatkan informasi Prestasi pada menu Kesiswaan dengan struktur navigasi yang lebih jelas agar mudah ditemukan.</td></tr>
-      <tr><td>3</td><td><b>Tugas ke-9 – Informasi Job Fair:</b> Istilah dalam bahasa Inggris membingungkan pengguna.</td><td>Menggunakan istilah "Bursa Kerja" atau "Lowongan Kerja" agar lebih mudah dipahami oleh pengguna yang kurang familiar dengan istilah bahasa Inggris.</td></tr>
-      <tr><td>4</td><td><b>Tugas ke-10 – Informasi Tracer Study:</b> Istilah dan akses menuju halaman membingungkan.</td><td>Menggunakan istilah yang lebih mudah dipahami, misalnya "Tracer Study (Data Alumni)", serta membuat akses menuju halaman tersebut lebih jelas.</td></tr>
-      <tr><td>5</td><td><b>Tugas ke-13 – Informasi Kesiswaan:</b> Menu Kesiswaan tidak terlihat bisa diklik.</td><td>Membuat menu utama "Kesiswaan" lebih jelas sebagai bagian yang dapat diklik, misalnya dengan memberikan tanda atau petunjuk bahwa menu tersebut dapat dipilih untuk menuju halaman Kesiswaan.</td></tr>
-      <tr><td>6</td><td><b>Tugas ke-14 – P5 Tahun 2024–2025:</b> Pengguna kesulitan mencari informasi P5 dari tahun sebelumnya.</td><td>Menambahkan daftar atau arsip berdasarkan tahun sehingga pengguna lebih mudah menemukan informasi P5 dari tahun sebelumnya.</td></tr>
-      <tr><td>7</td><td><b>Tugas ke-15 – Kembali ke Beranda:</b> Pengguna hanya bergantung pada logo sekolah untuk kembali ke halaman utama.</td><td>Menambahkan tombol atau tulisan "Beranda" yang jelas pada navigasi agar pengguna tidak hanya bergantung pada logo sekolah untuk kembali ke halaman utama.</td></tr>
-    </tbody>
-  </table></div>
-
-  <!-- ====== BEFORE / AFTER (MENU + DESAIN) ====== -->
-  <h3 id="before-after">Perbandingan Visual: Sebelum vs Sesudah Perbaikan</h3>
-  <p>Berikut perbandingan langsung antara tampilan website asli dan hasil redesign, disusun berdasarkan struktur menu website (navbar + 3 dropdown) serta tampilan halaman beranda secara keseluruhan.</p>
-
-  <h4>A. Perbandingan Menu (Navbar &amp; Dropdown)</h4>
-  <div class="tw"><table class="ba-table">
-    <thead>
-      <tr>
-        <th style="width:170px;">Bagian Website</th>
-        <th>Sebelum (Website Asli)</th>
-        <th>Sesudah (Redesign)</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><b>Navbar / Beranda</b></td>
-        <td><img src="gambar/before-home.png" alt="Navbar website asli"></td>
-        <td><img src="gambar/after-home.png" alt="Navbar redesign dengan tombol Beranda"></td>
-      </tr>
-      <tr>
-        <td><b>Dropdown KURIKULUM</b></td>
-        <td><img src="gambar/before-kurikulum.png" alt="Dropdown Kurikulum website asli"></td>
-        <td><img src="gambar/after-kurikulum.png" alt="Dropdown Kurikulum redesign"></td>
-      </tr>
-      <tr>
-        <td><b>Dropdown KESISWAAN</b></td>
-        <td><img src="gambar/before-kesiswaan.png" alt="Dropdown Kesiswaan website asli"></td>
-        <td><img src="gambar/after-kesiswaan.png" alt="Dropdown Kesiswaan redesign"></td>
-      </tr>
-      <tr>
-        <td><b>Dropdown HUBIN / HUMAS</b></td>
-        <td><img src="gambar/before-hubin.png" alt="Dropdown Hubin website asli"></td>
-        <td><img src="gambar/after-hubin.png" alt="Dropdown Hubin redesign"></td>
-      </tr>
-    </tbody>
-  </table></div>
-
-  <h4>B. Perbandingan Desain Halaman (Contoh: Beranda)</h4>
-  <p>Selain menu, berikut perbandingan tampilan visual <b>halaman Beranda</b> secara keseluruhan antara website asli dan hasil redesign (mockup).</p>
-  <div class="tw"><table class="ba-table">
-    <thead>
-      <tr>
-        <th style="width:170px;">Halaman</th>
-        <th>Website Asli</th>
-        <th>Redesign (Mockup)</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><b>Halaman Beranda</b></td>
-        <td><img src="gambar/asli-beranda.png" alt="Halaman beranda website asli"></td>
-        <td><img src="gambar/redesign-beranda.png" alt="Halaman beranda redesign"></td>
-      </tr>
-    </tbody>
-  </table></div>
-  <p><small>Gambar "sebelum" diambil dari screenshot website asli saat pengujian. Gambar "sesudah" diambil dari mockup/prototype Figma hasil perbaikan.</small></p>
-
-  <h3 id="cardsort2">Card Sorting 2 — Susunan Saya</h3>
-  <p>Setelah melihat struktur bawaan website dan hasil wawancara, saya <b>menyusun ulang card sorting sendiri</b> untuk merapikan kategori dan menu.</p>
-  <div class="tw"><table>
-    <thead><tr><th>Kategori (Susunan Saya)</th><th>Kartu / Isi Website</th><th>Perubahan dari Website Asli</th></tr></thead>
-    <tbody>
-      <tr><td>KURIKULUM</td><td>Kurikulum, P5, TEFA (Teaching Factory)</td><td>Struktur lebih rapi dan istilah diperjelas</td></tr>
-      <tr><td>KESISWAAN</td><td>Kesiswaan, Ekstrakurikuler, Prestasi, SPMB</td><td>Menu Kesiswaan dibuat lebih jelas dan mudah diklik</td></tr>
-      <tr><td>HUBIN / HUMAS</td><td>Bursa Kerja, Data Alumni</td><td>Istilah "Job Fair" &amp; "Tracer Study" diganti agar lebih mudah dipahami</td></tr>
-    </tbody>
-  </table></div>
-  
-  <figure>
-    <div class="g"><img src="gambar/card2.png" alt="Hasil card sorting 2 susunan saya"></div>
-    <figcaption>Dokumentasi card sorting 2 (susunan saya)</figcaption>
-  </figure>
-
-  <h3 id="seq2">Formulir SEQ 2</h3>
-  <p>Formulir evaluasi SEQ setelah dilakukan perbaikan desain.</p>
-  <figure>
-    <div class="g"><img src="gambar/pengujian2.png" alt="Formulir SEQ pengujian 2"></div>
-    <figcaption>Formulir SEQ pengujian 2</figcaption>
-    <div class="view-project">
-      <a class="btn-view" href="https://drive.google.com/file/d/1lt41x_2p69DiuHU1tCoL7wdzKUrUHfau/view?usp=drivesdk" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> View Project
-      </a>
-    </div>
-  </figure>
-
-  <h3 id="user2">Rekap Nilai SEQ per User (Pengujian 2)</h3>
-  <p>Daftar peserta (Nopal Januar, Ainiya Fadla Azmi, Aditia Surya Saputra, Mesya Sri Mulyani, Abdul Manaf) pada pengujian ulang beserta nilai SEQ setelah desain diperbaiki.</p>
-  
-  <div class="table-scroll">
-    <table class="tabel-seq">
-      <thead>
-        <tr>
-          <th>NO</th>
-          <th>Responden/User</th>
-          <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>
-          <th>6</th><th>7</th><th>8</th><th>9</th><th>10</th>
-          <th>11</th><th>12</th><th>13</th><th>14</th><th>15</th>
-          <th>Rata-rata</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td>1</td><td>Nopal Januar J.S</td><td>7</td><td>6</td><td>7</td><td>7</td><td>7</td><td>7</td><td>7</td><td>7</td><td>6</td><td>7</td><td>7</td><td>7</td><td>6</td><td>6</td><td>7</td><td><b>6,7</b></td></tr>
-        <tr><td>2</td><td>Ainiya Fadla azmi</td><td>7</td><td>6</td><td>7</td><td>6</td><td>7</td><td>7</td><td>7</td><td>6</td><td>6</td><td>7</td><td>6</td><td>6</td><td>7</td><td>7</td><td>7</td><td><b>6,5</b></td></tr>
-        <tr><td>3</td><td>Aditia Surya Saputra</td><td>7</td><td>6</td><td>7</td><td>7</td><td>7</td><td>6</td><td>7</td><td>6</td><td>7</td><td>7</td><td>7</td><td>6</td><td>7</td><td>6</td><td>7</td><td><b>6,6</b></td></tr>
-        <tr><td>4</td><td>Mesya sri mulyani</td><td>6</td><td>6</td><td>6</td><td>7</td><td>6</td><td>7</td><td>7</td><td>7</td><td>6</td><td>7</td><td>6</td><td>6</td><td>7</td><td>7</td><td>7</td><td><b>6,5</b></td></tr>
-        <tr><td>5</td><td>Abdul Manaf</td><td>7</td><td>6</td><td>6</td><td>7</td><td>6</td><td>7</td><td>6</td><td>7</td><td>6</td><td>7</td><td>6</td><td>7</td><td>6</td><td>7</td><td>7</td><td><b>6,5</b></td></tr>
-      </tbody>
-      <tfoot>
-        <tr>
-          <th></th>
-          <th style="text-align:left;">Rata-rata Skenario</th>
-          <th>6,8</th><th>6</th><th>6,8</th><th>6,8</th><th>6,4</th>
-          <th>6,8</th><th>6,6</th><th>6,8</th><th>6,4</th><th>6,4</th>
-          <th>6,8</th><th>6,6</th><th>6,4</th><th>6,6</th><th>7</th>
-          <th>6,5</th>
-        </tr>
-      </tfoot>
-    </table>
-  </div>
-
-  <p>Rata-rata keseluruhan SEQ Pengujian 2 adalah <b>6,5</b> (skala 1–7). Hampir seluruh skenario berada di atas angka 6, menunjukkan bahwa pengguna merasa desain yang baru jauh lebih mudah digunakan dibandingkan website asli.</p>
-
-  <h3 id="wawancara2">Wawancara 2</h3>
-  <p>Dokumentasi wawancara dengan pengguna setelah desain diperbaiki.</p>
-  <p><b>Ringkasan jawaban peserta pengujian 2:</b></p>
-  <ul class="t">
-    <li>Pengguna merasa menu sudah lebih jelas dan mudah ditemukan, terutama akses ke P5 dan Prestasi.</li>
-    <li>Istilah "Bursa Kerja" dan "Data Alumni" lebih mudah dipahami dibanding "Job Fair" dan "Tracer Study".</li>
-    <li>Tombol "Beranda" memudahkan pengguna kembali ke halaman utama tanpa harus mengklik logo.</li>
-    <li>Menu Kesiswaan sekarang terlihat bisa diklik sehingga pengguna tidak ragu membukanya.</li>
-  </ul>
-  <figure>
-    <div class="g"><img src="gambar/wawancara2.png" alt="Wawancara pengujian 2"></div>
-    <figcaption>Dokumentasi wawancara pengujian 2</figcaption>
-    <div class="view-project">
-      <a class="btn-view yt" href="https://youtu.be/keB66xBGScQ?si=XrT7ctwgFHVXuuwv" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.4 31.4 0 0 0 0 12a31.4 31.4 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.4 31.4 0 0 0 24 12a31.4 31.4 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg> View Project
-      </a>
-    </div>
-  </figure>
-
-  <h3 id="hitung2">Perhitungan SEQ 2</h3>
-  <p>Hasil perhitungan skor SEQ pengujian kedua.</p>
-  <figure>
-    <div class="g"><img src="gambar/perhitungan2.png" alt="Perhitungan SEQ pengujian 2"></div>
-    <figcaption>Perhitungan SEQ pengujian 2</figcaption>
-    <div class="view-project">
-      <a class="btn-view" href="https://docs.google.com/spreadsheets/d/1DPOgrww75h_NGiCg1GeuJqOWUmASwYPg/edit?usp=drive_link&ouid=113743465150629458824&rtpof=true&sd=true" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> View Project
-      </a>
-    </div>
-  </figure>
-
-  <h3 id="lap2">Laporan Pengujian 2</h3>
-  <p>Berisi hasil evaluasi pengujian ulang setelah perbaikan.</p>
-  <figure>
-    <div class="g"><img src="gambar/laporan2.png" alt="Laporan Pengujian 2"></div>
-    <figcaption>Laporan Pengujian 2</figcaption>
-    <div class="view-project">
-      <a class="btn-view" href="https://drive.google.com/file/d/1hV_joGKrufsE6SP6gPbyGAHQxR5n1l21/view?usp=drive_link" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> View Project
-      </a>
-    </div>
-  </figure>
-
-  <!-- ====== GRAFIK SEQ P1 vs P2 ====== -->
-  <h3 id="grafik">Grafik Perbandingan SEQ per Tugas (P1 vs P2)</h3>
-  <p>Grafik berikut menunjukkan peningkatan skor rata-rata SEQ untuk setiap tugas dari Pengujian 1 (website asli) ke Pengujian 2 (setelah perbaikan). Tugas 3, 6, 9, 10, 13, 14, dan 15 — yang menjadi dasar 7 perbaikan — menunjukkan kenaikan paling signifikan.</p>
-
-  <figure>
-    <div class="grafik-wrap">
-      <canvas id="grafikSEQ"></canvas>
-    </div>
-    <figcaption>Perbandingan rata-rata SEQ per tugas: Pengujian 1 vs Pengujian 2</figcaption>
-  </figure>
-
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Rizki Ramdani — Creative Developer &amp; UI Designer</title>
+  <meta name="description" content="Portfolio Rizki Ramdani, siswa Rekayasa Perangkat Lunak SMKN 1 Cipeundeuy. Web development, UI design, dan proyek pilihan.">
+  <meta name="theme-color" content="#eaf4ff">
+  <meta property="og:title" content="Rizki Ramdani — Portfolio">
+  <meta property="og:description" content="Creative Developer & UI Designer">
+  <meta property="og:type" content="website">
+
+  <!-- THEME INIT -->
   <script>
-  (function() {
-    function initChart() {
-      const ctx = document.getElementById('grafikSEQ');
-      if (!ctx) return;
-      if (typeof Chart === 'undefined') {
-        ctx.parentElement.innerHTML = '<p style="color:#c62828;text-align:center;padding:40px;">Grafik tidak dapat dimuat. Periksa koneksi internet.</p>';
+    (function () {
+      try {
+        var saved = localStorage.getItem("theme");
+        var root = document.documentElement;
+        if (saved === "light" || saved === "dark") {
+          root.setAttribute("data-theme", saved);
+        } else {
+          root.setAttribute("data-theme",
+            matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
+          );
+        }
+      } catch (e) {}
+    })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ═══════════════════════════════════════════════════════════
+       01 · DESIGN TOKENS
+       ═══════════════════════════════════════════════════════════ */
+    :root {
+      --bg:         #f5faff;
+      --bg-2:       #e8f3ff;
+      --bg-3:       #d7e8fa;
+      --bg-grad:    linear-gradient(180deg, #ffffff 0%, #eff7ff 45%, #e1efff 100%);
+
+      --ink:        #0f223d;
+      --ink-soft:   #1c3557;
+      --mut:        #3f5a7d;
+      --mut-2:      #5b7395;
+
+      --acc:        #2f7fd1;
+      --acc-2:      #5aa5e8;
+      --acc-3:      #a8d0f5;
+      --acc-soft:   #e5f1ff;
+
+      --card:       rgba(255, 255, 255, 0.82);
+      --card-solid: #ffffff;
+      --line:       rgba(47, 127, 209, 0.14);
+      --line-2:     rgba(47, 127, 209, 0.24);
+
+      --sh-sm: 0 4px 14px rgba(47, 127, 209, 0.08);
+      --sh:    0 12px 36px rgba(47, 127, 209, 0.12);
+      --sh-lg: 0 24px 60px rgba(47, 127, 209, 0.18);
+
+      --r-sm: 12px;
+      --r:    18px;
+      --r-lg: 26px;
+
+      color-scheme: light;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg:         #0b1626;
+        --bg-2:       #0f2036;
+        --bg-3:       #17304d;
+        --bg-grad:    linear-gradient(180deg, #0a1422 0%, #0f2036 60%, #163050 100%);
+        --ink:        #f1f7ff;
+        --ink-soft:   #d8e6f7;
+        --mut:        #b6cbe3;
+        --mut-2:      #93a9c4;
+        --acc:        #6bb0f0;
+        --acc-2:      #4a8fd0;
+        --acc-3:      #2f5f95;
+        --acc-soft:   rgba(107, 176, 240, 0.14);
+        --card:       rgba(20, 38, 62, 0.72);
+        --card-solid: #152842;
+        --line:       rgba(107, 176, 240, 0.2);
+        --line-2:     rgba(107, 176, 240, 0.35);
+        --sh-sm: 0 4px 14px rgba(0, 0, 0, 0.3);
+        --sh:    0 12px 36px rgba(0, 0, 0, 0.4);
+        --sh-lg: 0 24px 60px rgba(0, 0, 0, 0.55);
+        color-scheme: dark;
+      }
+    }
+
+    :root[data-theme="dark"] {
+      --bg:         #0b1626;
+      --bg-2:       #0f2036;
+      --bg-3:       #17304d;
+      --bg-grad:    linear-gradient(180deg, #0a1422 0%, #0f2036 60%, #163050 100%);
+      --ink:        #f1f7ff;
+      --ink-soft:   #d8e6f7;
+      --mut:        #b6cbe3;
+      --mut-2:      #93a9c4;
+      --acc:        #6bb0f0;
+      --acc-2:      #4a8fd0;
+      --acc-3:      #2f5f95;
+      --acc-soft:   rgba(107, 176, 240, 0.14);
+      --card:       rgba(20, 38, 62, 0.72);
+      --card-solid: #152842;
+      --line:       rgba(107, 176, 240, 0.2);
+      --line-2:     rgba(107, 176, 240, 0.35);
+      --sh-sm: 0 4px 14px rgba(0, 0, 0, 0.3);
+      --sh:    0 12px 36px rgba(0, 0, 0, 0.4);
+      --sh-lg: 0 24px 60px rgba(0, 0, 0, 0.55);
+      color-scheme: dark;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       02 · RESET & BASE
+       ═══════════════════════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; }
+    * { margin: 0; }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 90px;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      font-family: "Plus Jakarta Sans", "Inter", system-ui, -apple-system, sans-serif;
+      font-size: 16px;
+      color: var(--ink);
+      line-height: 1.75;
+      overflow-x: hidden;
+      background: var(--bg);
+      background-image: var(--bg-grad);
+      background-attachment: fixed;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    :focus-visible {
+      outline: 2px solid var(--acc);
+      outline-offset: 3px;
+      border-radius: 8px;
+    }
+
+    ::selection {
+      background: var(--acc-3);
+      color: var(--ink);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       03 · LAYOUT & UTILITAS
+       ═══════════════════════════════════════════════════════════ */
+    .wrap {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    section {
+      padding: 72px 0;
+      position: relative;
+    }
+
+    h2 {
+      font-size: clamp(1.9rem, 3.8vw, 2.7rem);
+      font-weight: 800;
+      letter-spacing: -0.028em;
+      line-height: 1.15;
+      margin-bottom: 14px;
+      color: var(--ink);
+    }
+
+    .sub {
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: var(--mut);
+      max-width: 560px;
+      margin-bottom: 32px;
+      line-height: 1.65;
+    }
+
+    .grad {
+      background: linear-gradient(120deg, #1f6fbf 0%, #4a97e0 50%, #7cb8f0 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .card {
+      background: var(--card);
+      backdrop-filter: blur(20px) saturate(1.2);
+      -webkit-backdrop-filter: blur(20px) saturate(1.2);
+      border: 1px solid var(--line);
+      border-radius: var(--r-lg);
+      box-shadow: var(--sh);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       04 · BACKGROUND BLOBS
+       ═══════════════════════════════════════════════════════════ */
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(100px);
+      z-index: -1;
+      opacity: 0.55;
+      pointer-events: none;
+      animation: fl 22s ease-in-out infinite;
+    }
+    .blob.a {
+      width: 480px;
+      height: 480px;
+      background: radial-gradient(circle, #a8d0f5 0%, transparent 70%);
+      top: -140px;
+      right: -120px;
+    }
+    .blob.b {
+      width: 420px;
+      height: 420px;
+      background: radial-gradient(circle, #c9e2fa 0%, transparent 70%);
+      bottom: -120px;
+      left: -120px;
+      animation-delay: -10s;
+    }
+    @keyframes fl {
+      50% { transform: translate(30px, -40px) scale(1.05); }
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       05 · NAVIGASI
+       ═══════════════════════════════════════════════════════════ */
+    nav {
+      position: fixed;
+      top: 12px;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      padding: 0 12px;
+      transition: top 0.35s ease;
+    }
+
+    .bar {
+      display: flex;
+      align-items: center;
+      height: 64px;
+      padding: 0 22px;
+      max-width: 1140px;
+      margin: 0 auto;
+      border-radius: 100px;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(20px) saturate(1.4);
+      -webkit-backdrop-filter: blur(20px) saturate(1.4);
+      border: 1px solid var(--line);
+      box-shadow: 0 4px 20px rgba(47, 127, 209, 0.08);
+      transition: all 0.4s cubic-bezier(.2, .8, .2, 1);
+      position: relative;
+      gap: 8px;
+    }
+
+    nav.s .bar {
+      background: rgba(255, 255, 255, 0.95);
+      border-color: var(--line-2);
+      box-shadow: 0 8px 28px rgba(47, 127, 209, 0.16);
+    }
+
+    .bar-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+      margin-left: 4px;
+    }
+
+    .logo {
+      font-weight: 800;
+      font-size: 1.35rem;
+      letter-spacing: -0.03em;
+      transition: transform 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      color: var(--ink);
+    }
+    .logo:hover { transform: scale(1.06); }
+    .logo i {
+      font-style: normal;
+      background: linear-gradient(135deg, #2f7fd1, #5aa5e8);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .menu {
+      display: flex;
+      gap: 6px;
+      list-style: none;
+      padding: 0;
+      margin-left: auto;
+    }
+    .menu a {
+      position: relative;
+      font-weight: 600;
+      font-size: 0.94rem;
+      padding: 8px 14px;
+      border-radius: 100px;
+      color: var(--ink-soft);
+      transition: all 0.3s;
+    }
+    .menu a:hover {
+      color: var(--acc);
+      background: var(--acc-soft);
+    }
+    .menu a.on {
+      color: #ffffff;
+      background: linear-gradient(135deg, #2f7fd1, #5aa5e8);
+      box-shadow: 0 6px 18px rgba(47, 127, 209, 0.4);
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+    }
+
+    @supports not (backdrop-filter: blur(1px)) {
+      .bar { background: #ffffff; }
+      nav.s .bar { background: #ffffff; }
+    }
+
+    .theme-toggle {
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: var(--acc-soft);
+      border: 1.5px solid var(--line-2);
+      cursor: pointer;
+      color: var(--acc);
+      transition: background 0.3s, border-color 0.3s, transform 0.3s, color 0.3s;
+      flex-shrink: 0;
+      padding: 0;
+    }
+    .theme-toggle:hover {
+      background: var(--acc);
+      border-color: var(--acc);
+      color: #ffffff;
+      transform: rotate(-15deg);
+    }
+    .theme-toggle svg {
+      width: 20px;
+      height: 20px;
+      position: absolute;
+      transition: opacity 0.3s ease, transform 0.4s ease;
+    }
+    .theme-toggle .icon-moon { opacity: 1; transform: rotate(0deg) scale(1); }
+    .theme-toggle .icon-sun  { opacity: 0; transform: rotate(-90deg) scale(0.5); }
+
+    :root[data-theme="light"] .theme-toggle .icon-sun  { opacity: 1; transform: rotate(0deg) scale(1); }
+    :root[data-theme="light"] .theme-toggle .icon-moon { opacity: 0; transform: rotate(90deg) scale(0.5); }
+
+    .burger {
+      display: none;
+      background: var(--acc-soft);
+      border: 1.5px solid var(--line-2);
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      cursor: pointer;
+      color: var(--acc);
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 5px;
+      transition: background 0.3s, border-color 0.3s;
+    }
+    .burger:hover {
+      background: var(--acc);
+      border-color: var(--acc);
+      color: #ffffff;
+    }
+    .burger i {
+      display: block;
+      width: 18px;
+      height: 2px;
+      background: currentColor;
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+    .burger[aria-expanded="true"] i:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .burger[aria-expanded="true"] i:nth-child(2) { opacity: 0; }
+
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) .bar { background: rgba(20, 38, 62, 0.85); }
+      :root:not([data-theme="light"]) nav.s .bar { background: rgba(20, 38, 62, 0.95); }
+      :root:not([data-theme="light"]) .logo { color: #f1f7ff; }
+      :root:not([data-theme="light"]) .menu a { color: #d8e6f7; }
+      :root:not([data-theme="light"]) .menu a:hover {
+        color: #6bb0f0;
+        background: rgba(107, 176, 240, 0.14);
+      }
+    }
+    :root[data-theme="dark"] .bar { background: rgba(20, 38, 62, 0.85); }
+    :root[data-theme="dark"] nav.s .bar { background: rgba(20, 38, 62, 0.95); }
+    :root[data-theme="dark"] .logo { color: #f1f7ff; }
+    :root[data-theme="dark"] .menu a { color: #d8e6f7; }
+    :root[data-theme="dark"] .menu a:hover {
+      color: #6bb0f0;
+      background: rgba(107, 176, 240, 0.14);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       06 · TOMBOL
+       ═══════════════════════════════════════════════════════════ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 28px;
+      border-radius: 100px;
+      font: 700 0.95rem "Plus Jakarta Sans", sans-serif;
+      border: 1.5px solid var(--line-2);
+      color: var(--ink);
+      background: var(--card-solid);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+    }
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 28px rgba(47, 127, 209, 0.2);
+      border-color: var(--acc);
+    }
+    .btn:active { transform: scale(0.97); }
+
+    .btn.p {
+      background: linear-gradient(135deg, #2f7fd1 0%, #5aa5e8 100%);
+      color: #fff;
+      border: 0;
+      box-shadow: 0 8px 22px rgba(47, 127, 209, 0.35);
+    }
+    .btn.p:hover { box-shadow: 0 14px 34px rgba(47, 127, 209, 0.45); }
+
+    .btn.off {
+      opacity: 0.55;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none !important;
+      padding: 11px 20px;
+      font-size: 0.88rem;
+    }
+
+    .btn.sm { padding: 11px 20px; font-size: 0.9rem; }
+
+    .rip {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.5);
+      transform: scale(0);
+      animation: rp 0.6s ease-out;
+      pointer-events: none;
+    }
+    @keyframes rp {
+      to { transform: scale(4); opacity: 0; }
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       07 · HERO
+       ═══════════════════════════════════════════════════════════ */
+    #home {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 120px 0 40px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .hi {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--acc);
+      background: var(--acc-soft);
+      padding: 8px 16px;
+      border-radius: 100px;
+      margin-bottom: 20px;
+      border: 1px solid var(--line-2);
+    }
+
+    h1 {
+      font-size: clamp(2.6rem, 5.6vw, 4.4rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.05;
+      margin-bottom: 24px;
+      color: var(--ink);
+    }
+    h1 .ln { display: block; overflow: hidden; padding-bottom: 0.08em; }
+    h1 .ln > span {
+      display: block;
+      transform: translateY(100%);
+      animation: up 0.9s cubic-bezier(.2, .8, .2, 1) forwards;
+      animation-delay: calc(0.25s + var(--i) * 0.14s);
+    }
+    @keyframes up { to { transform: none; } }
+
+    .lead {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--mut);
+      max-width: 520px;
+      margin-bottom: 28px;
+      line-height: 1.7;
+    }
+
+    .cta {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+
+    .soc { display: flex; gap: 10px; }
+    .soc a {
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: var(--card-solid);
+      border: 1px solid var(--line);
+      color: var(--acc);
+      transition: 0.3s;
+      box-shadow: var(--sh-sm);
+    }
+    .soc a:hover {
+      transform: translateY(-4px);
+      background: linear-gradient(135deg, #2f7fd1, #5aa5e8);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 12px 26px rgba(47, 127, 209, 0.35);
+    }
+    .soc svg { width: 20px; height: 20px; fill: currentColor; }
+
+    .ph {
+      position: relative;
+      max-width: 420px;
+      width: 100%;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      isolation: isolate;
+    }
+
+    .ph::before {
+      content: "";
+      position: absolute;
+      inset: 8% -18% -18% 8%;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(168, 208, 245, 0.65), transparent 60%),
+        radial-gradient(circle at 70% 70%, rgba(122, 184, 240, 0.55), transparent 65%);
+      filter: blur(48px);
+      z-index: -3;
+      animation: phBreath 6s ease-in-out infinite;
+    }
+    @keyframes phBreath {
+      0%, 100% { transform: scale(1)    rotate(0deg); opacity: 0.75; }
+      50%      { transform: scale(1.08) rotate(8deg); opacity: 1;    }
+    }
+
+    .ph::after {
+      content: "";
+      position: absolute;
+      inset: -6%;
+      border-radius: 50%;
+      z-index: -2;
+      background: conic-gradient(
+        from 0deg,
+        transparent 0deg,
+        rgba(47, 127, 209, 0.0) 40deg,
+        rgba(47, 127, 209, 0.55) 90deg,
+        rgba(168, 208, 245, 0.0) 140deg,
+        transparent 180deg,
+        rgba(47, 127, 209, 0.0) 220deg,
+        rgba(90, 165, 232, 0.6) 270deg,
+        rgba(168, 208, 245, 0.0) 320deg,
+        transparent 360deg
+      );
+      -webkit-mask: radial-gradient(circle, transparent 62%, #000 63%, #000 70%, transparent 71%);
+              mask: radial-gradient(circle, transparent 62%, #000 63%, #000 70%, transparent 71%);
+      animation: phSpin 18s linear infinite;
+    }
+    @keyframes phSpin { to { transform: rotate(360deg); } }
+
+    .ph-fx {
+      position: absolute;
+      inset: -14%;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .ph-fx .ring-2 {
+      position: absolute;
+      inset: 2%;
+      border-radius: 50%;
+      border: 1.5px dashed rgba(47, 127, 209, 0.28);
+      animation: phSpinRev 26s linear infinite;
+    }
+    @keyframes phSpinRev { to { transform: rotate(-360deg); } }
+
+    .ph-fx .orbit {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      animation: phSpin 14s linear infinite;
+    }
+    .ph-fx .orbit:nth-child(3) { animation-duration: 20s; animation-direction: reverse; }
+    .ph-fx .orbit:nth-child(4) { animation-duration: 26s; }
+
+    .ph-fx .orbit span {
+      position: absolute;
+      top: -5px;
+      left: 50%;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #ffffff 0%, #5aa5e8 60%, transparent 100%);
+      box-shadow: 0 0 12px rgba(90, 165, 232, 0.8);
+      transform: translateX(-50%);
+    }
+    .ph-fx .orbit:nth-child(3) span {
+      width: 7px;
+      height: 7px;
+      background: radial-gradient(circle, #ffffff 0%, #a8d0f5 60%, transparent 100%);
+      box-shadow: 0 0 10px rgba(168, 208, 245, 0.9);
+    }
+    .ph-fx .orbit:nth-child(4) span {
+      width: 6px;
+      height: 6px;
+      background: radial-gradient(circle, #ffffff 0%, #2f7fd1 60%, transparent 100%);
+      box-shadow: 0 0 10px rgba(47, 127, 209, 0.9);
+    }
+
+    .ph-fx .dots {
+      position: absolute;
+      inset: -20%;
+      background-image: radial-gradient(rgba(47, 127, 209, 0.35) 1px, transparent 1.5px);
+      background-size: 18px 18px;
+      -webkit-mask: radial-gradient(circle at center, #000 0%, transparent 68%);
+              mask: radial-gradient(circle at center, #000 0%, transparent 68%);
+      opacity: 0.5;
+      animation: phDots 8s ease-in-out infinite;
+    }
+    @keyframes phDots {
+      0%, 100% { opacity: 0.35; transform: scale(1); }
+      50%      { opacity: 0.6;  transform: scale(1.04); }
+    }
+
+    .ph-fx .spark {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      background:
+        linear-gradient(0deg, transparent 45%, #fff 50%, transparent 55%),
+        linear-gradient(90deg, transparent 45%, #fff 50%, transparent 55%);
+      filter: drop-shadow(0 0 6px rgba(90, 165, 232, 0.9));
+      opacity: 0;
+      animation: phSpark 4s ease-in-out infinite;
+    }
+    .ph-fx .spark.s1 { top: 6%;  left: 4%;  animation-delay: 0s; }
+    .ph-fx .spark.s2 { top: 18%; right: -2%; animation-delay: 1.2s; transform: scale(0.8); }
+    .ph-fx .spark.s3 { bottom: 10%; left: -2%; animation-delay: 2.4s; transform: scale(0.9); }
+    .ph-fx .spark.s4 { bottom: 22%; right: 8%; animation-delay: 3.2s; transform: scale(0.7); }
+    @keyframes phSpark {
+      0%, 100%   { opacity: 0; transform: scale(0.4) rotate(0deg); }
+      45%, 55%   { opacity: 1; transform: scale(1)   rotate(90deg); }
+    }
+
+    .frame {
+      position: relative;
+      aspect-ratio: 4 / 5;
+      width: 100%;
+      border-radius: 32px;
+      overflow: visible;
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+      cursor: pointer;
+      perspective: 1600px;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform 0.5s cubic-bezier(.34, 1.56, .64, 1);
+    }
+    .frame:hover { transform: scale(1.03); }
+    .frame:active { transform: scale(0.98); }
+
+    .flip-wrap {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 1.1s cubic-bezier(.15, .85, .15, 1);
+      will-change: transform;
+    }
+    .frame.flipped .flip-wrap { transform: rotateY(180deg); }
+
+    .flip-face {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      border-radius: 24px;
+      overflow: hidden;
+      filter: blur(0);
+      transition: filter 0.35s ease;
+    }
+
+    .frame.flipping .flip-face {
+      filter: blur(2px);
+    }
+
+    .flip-face img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: bottom center;
+      filter: drop-shadow(0 24px 40px rgba(47, 127, 209, 0.32));
+      border-radius: 24px;
+      transition: filter 0.4s ease, transform 0.4s ease;
+    }
+
+    .frame.flipping .flip-face img {
+      filter: drop-shadow(0 32px 60px rgba(47, 127, 209, 0.5));
+    }
+
+    .flip-back { transform: rotateY(180deg); }
+
+    .frame::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 24px;
+      background: radial-gradient(circle, rgba(90, 165, 232, 0.55), transparent 65%);
+      opacity: 0;
+      transform: scale(0.5);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    .frame.flipping::after {
+      opacity: 1;
+      transform: scale(1.6);
+      transition: opacity 0.6s ease-out, transform 0.9s cubic-bezier(.2, .8, .2, 1);
+    }
+
+    .frame.flipped:not(.flipping)::after {
+      opacity: 0;
+      transform: scale(1.2);
+      transition: opacity 1s ease 0.3s, transform 1s ease 0.3s;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ph::before, .ph::after,
+      .ph-fx .ring-2, .ph-fx .orbit,
+      .ph-fx .dots, .ph-fx .spark,
+      .flip-wrap {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       08 · ABOUT
+       ═══════════════════════════════════════════════════════════ */
+    .about {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 24px;
+    }
+    .about .card { padding: 32px; }
+    .about p {
+      font-size: 1.02rem;
+      color: var(--mut);
+      margin-bottom: 14px;
+      line-height: 1.8;
+    }
+    .about p:last-child { margin: 0; }
+
+    dl { display: grid; gap: 2px; }
+    dl div {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      padding: 14px 0;
+      border-bottom: 1px dashed var(--line-2);
+    }
+    dl div:last-child { border: 0; }
+    dt {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--mut-2);
+      letter-spacing: 0.01em;
+    }
+    dd {
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-align: right;
+      color: var(--ink);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       09 · SKILLS
+       ═══════════════════════════════════════════════════════════ */
+    .sk {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .sg {
+      padding: 26px;
+      transition: transform 0.4s, box-shadow 0.4s;
+    }
+    .sg:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--sh-lg);
+    }
+    .sg h3 {
+      font-size: 1.1rem;
+      font-weight: 800;
+      margin-bottom: 18px;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+    }
+
+    .pills { display: flex; flex-wrap: wrap; gap: 10px; }
+    .pl {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 16px 8px 8px;
+      border-radius: 100px;
+      background: var(--card-solid);
+      border: 1.5px solid var(--line);
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--ink-soft);
+      transition: 0.3s;
+      cursor: default;
+    }
+    .pl b {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 0.7rem;
+      font-weight: 800;
+      background: var(--acc-soft);
+      color: var(--acc);
+      transition: 0.3s;
+    }
+    .pl:hover {
+      transform: translateY(-3px);
+      border-color: var(--acc-2);
+      box-shadow: 0 8px 20px rgba(47, 127, 209, 0.15);
+      color: var(--acc);
+    }
+    .pl:hover b {
+      background: linear-gradient(135deg, #2f7fd1, #5aa5e8);
+      color: #fff;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       10 · PROJECTS
+       ═══════════════════════════════════════════════════════════ */
+    .pj {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 22px;
+    }
+    .pc {
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      background: var(--card-solid);
+      border: 1px solid var(--line);
+      border-radius: var(--r-lg);
+      box-shadow: var(--sh);
+      transition: transform 0.45s cubic-bezier(.2, .8, .2, 1), box-shadow 0.45s, border-color 0.45s;
+    }
+    .pc:hover {
+      transform: translateY(-10px);
+      border-color: var(--acc-2);
+      box-shadow: 0 28px 60px rgba(47, 127, 209, 0.22);
+    }
+    .im {
+      overflow: hidden;
+      aspect-ratio: 16 / 10;
+      background: var(--bg-2);
+    }
+    .im img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.8s cubic-bezier(.2, .8, .2, 1);
+    }
+    .pc:hover .im img { transform: scale(1.08); }
+
+    .tx {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      flex: 1;
+    }
+    .tx h3 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.015em;
+      color: var(--ink);
+      line-height: 1.3;
+    }
+    .tx p {
+      font-size: 0.95rem;
+      color: var(--mut);
+      flex: 1;
+      line-height: 1.7;
+    }
+    .tx .btn { align-self: flex-start; }
+
+    .tx .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-self: flex-start;
+    }
+    .tx .btn-group .btn { align-self: auto; }
+
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tags span {
+      font-size: 0.76rem;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 100px;
+      background: var(--acc-soft);
+      color: var(--acc);
+      letter-spacing: 0.02em;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       10B · CASE STUDY — BG EMAS PREMIUM (FOTO TETAP NORMAL)
+       ═══════════════════════════════════════════════════════════ */
+    .pc.gold {
+      border-color: rgba(198, 150, 50, 0.45);
+      box-shadow: 0 12px 36px rgba(180, 130, 30, 0.18);
+      background: linear-gradient(160deg, #fffdf6 0%, #fff7e0 100%);
+    }
+    .pc.gold:hover {
+      border-color: #c9a227;
+      box-shadow: 0 28px 60px rgba(180, 130, 30, 0.32);
+    }
+    .pc.gold .im {
+      background:
+        radial-gradient(circle at 20% 20%, rgba(255, 236, 170, 0.95), transparent 55%),
+        radial-gradient(circle at 80% 80%, rgba(212, 160, 45, 0.75), transparent 60%),
+        linear-gradient(135deg, #f7e7a8 0%, #d4a02d 45%, #a87a12 100%);
+      position: relative;
+    }
+    .pc.gold .im::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.35) 50%, transparent 70%);
+      pointer-events: none;
+      z-index: 1;
+      mix-blend-mode: screen;
+    }
+    .pc.gold .im img {
+      position: relative;
+      z-index: 2;
+      mix-blend-mode: normal;
+      opacity: 1;
+    }
+    .pc.gold .tx h3 { color: #6b4e0a; }
+    .pc.gold .tx p  { color: #6e5a2a; }
+    .pc.gold .tags span {
+      background: rgba(212, 160, 45, 0.18);
+      color: #8a6410;
+      border: 1px solid rgba(198, 150, 50, 0.35);
+    }
+    .pc.gold .btn.p {
+      background: linear-gradient(135deg, #d4a02d 0%, #b8860b 100%);
+      box-shadow: 0 8px 22px rgba(180, 130, 30, 0.45);
+      color: #fff;
+    }
+    .pc.gold .btn.p:hover {
+      box-shadow: 0 14px 34px rgba(180, 130, 30, 0.6);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) .pc.gold {
+        background: linear-gradient(160deg, #1f1a0c 0%, #2a210d 100%);
+        border-color: rgba(212, 175, 55, 0.45);
+        box-shadow: 0 12px 36px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(212, 175, 55, 0.15) inset;
+      }
+      :root:not([data-theme="light"]) .pc.gold:hover {
+        border-color: #e6c25a;
+        box-shadow: 0 28px 60px rgba(0, 0, 0, 0.7), 0 0 30px rgba(212, 175, 55, 0.25);
+      }
+      :root:not([data-theme="light"]) .pc.gold .tx h3 { color: #f0d47a; }
+      :root:not([data-theme="light"]) .pc.gold .tx p  { color: #d9c48a; }
+      :root:not([data-theme="light"]) .pc.gold .tags span {
+        background: rgba(212, 175, 55, 0.18);
+        color: #f0d47a;
+        border-color: rgba(212, 175, 55, 0.4);
+      }
+    }
+    :root[data-theme="dark"] .pc.gold {
+      background: linear-gradient(160deg, #1f1a0c 0%, #2a210d 100%);
+      border-color: rgba(212, 175, 55, 0.45);
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(212, 175, 55, 0.15) inset;
+    }
+    :root[data-theme="dark"] .pc.gold:hover {
+      border-color: #e6c25a;
+      box-shadow: 0 28px 60px rgba(0, 0, 0, 0.7), 0 0 30px rgba(212, 175, 55, 0.25);
+    }
+    :root[data-theme="dark"] .pc.gold .tx h3 { color: #f0d47a; }
+    :root[data-theme="dark"] .pc.gold .tx p  { color: #d9c48a; }
+    :root[data-theme="dark"] .pc.gold .tags span {
+      background: rgba(212, 175, 55, 0.18);
+      color: #f0d47a;
+      border-color: rgba(212, 175, 55, 0.4);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       10C · MODAL DETAIL PRA UJIKOM
+       ═══════════════════════════════════════════════════════════ */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(8, 20, 36, 0.55);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 24px 16px;
+      overflow-y: auto;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s ease;
+    }
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-box {
+      background: var(--bg);
+      background-image: var(--bg-grad);
+      border: 1px solid var(--line-2);
+      border-radius: 28px;
+      box-shadow: var(--sh-lg);
+      max-width: 1080px;
+      width: 100%;
+      margin: auto;
+      padding: clamp(24px, 4vw, 44px);
+      position: relative;
+      transform: translateY(30px) scale(0.97);
+      transition: transform 0.4s cubic-bezier(.2, .8, .2, 1);
+    }
+    .modal-overlay.open .modal-box {
+      transform: none;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      border: 1.5px solid var(--line-2);
+      background: var(--card-solid);
+      color: var(--acc);
+      font-size: 1.4rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      transition: 0.3s;
+      z-index: 2;
+    }
+    .modal-close:hover {
+      background: linear-gradient(135deg, #2f7fd1, #5aa5e8);
+      color: #fff;
+      border-color: transparent;
+      transform: rotate(90deg);
+    }
+
+    .modal-title {
+      font-size: clamp(1.5rem, 3.5vw, 2.1rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 8px;
+      color: var(--ink);
+    }
+    .modal-desc {
+      font-size: 1rem;
+      color: var(--mut);
+      margin-bottom: 28px;
+      max-width: 620px;
+      line-height: 1.7;
+    }
+
+    .file-cards {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+    .file-card {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      padding: 28px 24px;
+      border-radius: 20px;
+      background: var(--card-solid);
+      border: 1.5px solid var(--line);
+      box-shadow: var(--sh-sm);
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+      text-align: left;
+      font: inherit;
+      color: inherit;
+    }
+    .file-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--acc-2);
+      box-shadow: var(--sh-lg);
+    }
+    .file-card-icon {
+      display: inline-grid;
+      place-items: center;
+      width: 58px;
+      height: 58px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #2f7fd1, #5aa5e8);
+      color: #fff;
+      box-shadow: 0 10px 24px rgba(47, 127, 209, 0.35);
+    }
+    .file-card-icon svg { width: 28px; height: 28px; }
+    .file-card h4 {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--ink);
+      letter-spacing: -0.015em;
+      margin: 0;
+    }
+    .file-card p {
+      font-size: 0.9rem;
+      color: var(--mut);
+      line-height: 1.6;
+      margin: 0;
+      flex: 1;
+    }
+    .file-card-meta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--acc);
+    }
+    .file-card-meta::after {
+      content: "→";
+      font-size: 1rem;
+      transition: transform 0.3s;
+    }
+    .file-card:hover .file-card-meta::after {
+      transform: translateX(4px);
+    }
+
+    .file-detail { display: none; }
+    .file-detail.on { display: block; animation: detailIn 0.4s ease; }
+    @keyframes detailIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 18px;
+      border-radius: 100px;
+      border: 1.5px solid var(--line-2);
+      background: var(--card-solid);
+      color: var(--ink-soft);
+      font: 700 0.88rem "Plus Jakarta Sans", sans-serif;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-bottom: 22px;
+    }
+    .btn-back:hover {
+      border-color: var(--acc);
+      color: var(--acc);
+      transform: translateX(-3px);
+    }
+
+    .file-detail-head {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 22px;
+      padding-bottom: 18px;
+      border-bottom: 1px dashed var(--line-2);
+    }
+    .file-icon {
+      display: inline-grid;
+      place-items: center;
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #2f7fd1, #5aa5e8);
+      color: #fff;
+      flex-shrink: 0;
+      box-shadow: 0 8px 20px rgba(47, 127, 209, 0.35);
+    }
+    .file-icon svg { width: 26px; height: 26px; }
+    .file-detail-head h4 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--ink);
+      line-height: 1.3;
+      margin: 0;
+    }
+    .file-detail-head small {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--acc);
+      margin-top: 2px;
+    }
+
+    .tugas-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 16px;
+    }
+    .tugas-item {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 20px;
+      border-radius: 16px;
+      background: var(--card-solid);
+      border: 1px solid var(--line);
+      box-shadow: var(--sh-sm);
+      transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+    }
+    .tugas-item:hover {
+      transform: translateY(-4px);
+      border-color: var(--acc-2);
+      box-shadow: var(--sh);
+    }
+    .tugas-item .tugas-num {
+      display: inline-grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 10px;
+      background: var(--acc-soft);
+      color: var(--acc);
+      font-weight: 800;
+      font-size: 0.85rem;
+    }
+    .tugas-item h5 {
+      font-size: 0.98rem;
+      font-weight: 800;
+      line-height: 1.35;
+      color: var(--ink);
+      margin: 0;
+    }
+    .tugas-item p {
+      font-size: 0.85rem;
+      color: var(--mut);
+      line-height: 1.6;
+      flex: 1;
+      margin: 0;
+    }
+    .tugas-item .btn { align-self: flex-start; padding: 9px 16px; font-size: 0.82rem; }
+
+    @media (max-width: 900px) {
+      .modal-overlay { padding: 12px; }
+      .modal-box { padding: 22px 18px; border-radius: 20px; }
+      .modal-close { top: 12px; right: 12px; width: 40px; height: 40px; }
+      .modal-desc { margin-bottom: 22px; font-size: 0.94rem; }
+      .file-cards { grid-template-columns: 1fr; gap: 14px; }
+      .file-card { padding: 22px 18px; }
+      .file-card-icon { width: 50px; height: 50px; border-radius: 14px; }
+      .file-card-icon svg { width: 24px; height: 24px; }
+      .file-card h4 { font-size: 1.08rem; }
+      .file-detail-head { gap: 10px; }
+      .file-icon { width: 44px; height: 44px; border-radius: 12px; }
+      .file-icon svg { width: 22px; height: 22px; }
+      .file-detail-head h4 { font-size: 1rem; }
+      .tugas-grid { grid-template-columns: 1fr; gap: 12px; }
+      .tugas-item { padding: 16px; }
+    }
+
+    body.modal-open { overflow: hidden; }
+
+    /* ═══════════════════════════════════════════════════════════
+       11 · EXPERIENCE & EDUCATION
+       ═══════════════════════════════════════════════════════════ */
+    .two {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 44px;
+    }
+    .two h2 { margin-bottom: 26px; }
+
+    .tl {
+      position: relative;
+      padding-left: 32px;
+      display: grid;
+      gap: 18px;
+    }
+    .tl::before {
+      content: "";
+      position: absolute;
+      left: 6px;
+      top: 10px;
+      bottom: 10px;
+      width: 2px;
+      border-radius: 2px;
+      background: linear-gradient(180deg, var(--acc-2), var(--acc), var(--acc-3));
+    }
+
+    .ti {
+      position: relative;
+      padding: 22px 24px;
+      background: var(--card-solid);
+      border: 1px solid var(--line);
+      border-radius: var(--r);
+      box-shadow: var(--sh-sm);
+      transition: transform 0.35s, box-shadow 0.35s;
+    }
+    .ti:hover {
+      transform: translateX(4px);
+      box-shadow: var(--sh);
+    }
+    .ti::before {
+      content: "";
+      position: absolute;
+      left: -32px;
+      top: 28px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #fff;
+      border: 3px solid var(--acc);
+      box-shadow: 0 0 0 5px rgba(47, 127, 209, 0.14);
+    }
+    .ti h4 {
+      font-size: 1.02rem;
+      font-weight: 800;
+      line-height: 1.45;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+    .ti small {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--acc);
+      margin: 2px 0 10px;
+      letter-spacing: 0.02em;
+    }
+    .ti p,
+    .ti li {
+      font-size: 0.94rem;
+      color: var(--mut);
+      line-height: 1.7;
+    }
+    .ti ul { padding-left: 18px; margin-top: 6px; }
+    .ti li { margin-bottom: 6px; }
+
+    /* ═══════════════════════════════════════════════════════════
+       12 · CONTACT
+       ═══════════════════════════════════════════════════════════ */
+    .ct {
+      padding: clamp(28px, 4vw, 48px);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      border-radius: 32px;
+      background:
+        radial-gradient(circle at top right, rgba(168, 208, 245, 0.4), transparent 60%),
+        linear-gradient(135deg, #ffffff 0%, #eff7ff 100%);
+      border: 1px solid var(--line);
+      box-shadow: var(--sh-lg);
+    }
+
+    .ct h2 { color: var(--ink); }
+
+    .ct p {
+      font-size: 1.02rem;
+      font-weight: 500;
+      color: var(--ink-soft);
+      margin-bottom: 22px;
+      line-height: 1.7;
+    }
+
+    .mail {
+      display: inline-block;
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 22px;
+      color: var(--acc);
+      word-break: break-all;
+      border-bottom: 2px solid var(--acc-3);
+      padding-bottom: 2px;
+      transition: border-color 0.3s;
+    }
+    .mail:hover { border-color: var(--acc); }
+
+    form { display: grid; gap: 16px; }
+
+    .fld { position: relative; }
+    .fld input,
+    .fld textarea {
+      width: 100%;
+      padding: 26px 18px 10px;
+      border-radius: var(--r-sm);
+      border: 1.5px solid var(--line-2);
+      background: #ffffff;
+      font: 500 0.98rem "Plus Jakarta Sans", sans-serif;
+      color: var(--ink);
+      transition: 0.3s;
+      resize: vertical;
+    }
+    .fld input::placeholder,
+    .fld textarea::placeholder { color: transparent; }
+
+    .fld label {
+      position: absolute;
+      left: 18px;
+      top: 18px;
+      font-size: 0.98rem;
+      font-weight: 500;
+      color: var(--ink-soft);
+      pointer-events: none;
+      transition: 0.25s cubic-bezier(.2, .8, .2, 1);
+      transform-origin: left;
+    }
+    .fld input:focus,
+    .fld textarea:focus {
+      outline: 0;
+      border-color: var(--acc);
+      background: #ffffff;
+      box-shadow: 0 0 0 4px rgba(47, 127, 209, 0.15);
+    }
+    .fld input:focus + label,
+    .fld input:not(:placeholder-shown) + label,
+    .fld textarea:focus + label,
+    .fld textarea:not(:placeholder-shown) + label {
+      transform: translateY(-12px) scale(0.78);
+      color: var(--acc);
+      font-weight: 700;
+    }
+
+    .msg {
+      min-height: 1.5em;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--acc);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) .ct {
+        background:
+          radial-gradient(circle at top right, rgba(107, 176, 240, 0.18), transparent 60%),
+          linear-gradient(135deg, #152842 0%, #0f2036 100%);
+        border-color: rgba(107, 176, 240, 0.35);
+      }
+      :root:not([data-theme="light"]) .ct h2 { color: var(--ink); }
+      :root:not([data-theme="light"]) .ct p  { color: var(--ink-soft); }
+      :root:not([data-theme="light"]) .ct .fld label { color: var(--ink-soft); }
+      :root:not([data-theme="light"]) .ct .fld input,
+      :root:not([data-theme="light"]) .ct .fld textarea {
+        background: rgba(20, 38, 62, 0.9);
+        color: var(--ink);
+        border-color: rgba(107, 176, 240, 0.4);
+      }
+      :root:not([data-theme="light"]) .ct .fld input:focus,
+      :root:not([data-theme="light"]) .ct .fld textarea:focus { background: #152842; }
+    }
+    :root[data-theme="dark"] .ct {
+      background:
+        radial-gradient(circle at top right, rgba(107, 176, 240, 0.18), transparent 60%),
+        linear-gradient(135deg, #152842 0%, #0f2036 100%);
+      border-color: rgba(107, 176, 240, 0.35);
+    }
+    :root[data-theme="dark"] .ct h2 { color: var(--ink); }
+    :root[data-theme="dark"] .ct p  { color: var(--ink-soft); }
+    :root[data-theme="dark"] .ct .fld label { color: var(--ink-soft); }
+    :root[data-theme="dark"] .ct .fld input,
+    :root[data-theme="dark"] .ct .fld textarea {
+      background: rgba(20, 38, 62, 0.9);
+      color: var(--ink);
+      border-color: rgba(107, 176, 240, 0.4);
+    }
+    :root[data-theme="dark"] .ct .fld input:focus,
+    :root[data-theme="dark"] .ct .fld textarea:focus { background: #152842; }
+
+    /* ═══════════════════════════════════════════════════════════
+       13 · FOOTER
+       ═══════════════════════════════════════════════════════════ */
+    footer {
+      padding: 32px 0 40px;
+      border-top: 1px solid var(--line);
+      margin-top: 24px;
+    }
+    footer .wrap {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      color: var(--mut);
+      font-size: 0.92rem;
+      font-weight: 500;
+    }
+
+    .up {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: var(--card-solid);
+      cursor: pointer;
+      color: var(--acc);
+      font-size: 1.1rem;
+      font-weight: 700;
+      box-shadow: var(--sh-sm);
+      transition: 0.3s;
+    }
+    .up:hover {
+      transform: translateY(-4px);
+      background: linear-gradient(135deg, #2f7fd1, #5aa5e8);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 12px 26px rgba(47, 127, 209, 0.35);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       14 · REVEAL ANIMATION
+       ═══════════════════════════════════════════════════════════ */
+    .rv {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.8s cubic-bezier(.2, .8, .2, 1),
+                  transform 0.8s cubic-bezier(.2, .8, .2, 1);
+      transition-delay: calc(var(--i, 0) * 90ms);
+    }
+    .rv.in { opacity: 1; transform: none; }
+
+    /* ═══════════════════════════════════════════════════════════
+       15 · RESPONSIVE
+       ═══════════════════════════════════════════════════════════ */
+    @media (max-width: 900px) {
+      html { scroll-padding-top: 78px; }
+      section { padding: 52px 0; }
+
+      .hero, .about, .two, .ct, .sk { grid-template-columns: 1fr; }
+      .two { gap: 32px; }
+      .ph { max-width: 300px; order: -1; }
+      #home { padding-top: 100px; padding-bottom: 40px; min-height: auto; }
+
+      h2 { font-size: clamp(1.6rem, 6vw, 2.1rem); }
+      .sub { font-size: 0.98rem; margin-bottom: 26px; }
+
+      nav { top: 8px; padding: 0 10px; }
+      .bar {
+        height: 56px;
+        padding: 0 14px 0 18px;
+        gap: 6px;
+        border-radius: 18px;
+      }
+      .logo { font-size: 1.12rem; }
+
+      .burger { display: flex; }
+      .bar-right { gap: 6px; margin-left: auto; }
+
+      .theme-toggle,
+      .burger {
+        width: 40px;
+        height: 40px;
+        border-radius: 11px;
+      }
+      .theme-toggle svg { width: 18px; height: 18px; }
+      .burger i { width: 16px; }
+
+      .menu {
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        gap: 4px;
+        padding: 10px;
+        border-radius: 18px;
+        background: #ffffff;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid var(--line-2);
+        box-shadow: 0 16px 40px rgba(47, 127, 209, 0.2);
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(-8px);
+        transition: 0.3s;
+        margin-left: 0;
+        max-height: calc(100vh - 100px);
+        overflow-y: auto;
+      }
+      .menu.o {
+        opacity: 1;
+        pointer-events: auto;
+        transform: none;
+      }
+      .menu a {
+        padding: 12px 18px;
+        font-size: 0.98rem;
+        border-radius: 12px;
+        color: var(--ink-soft);
+      }
+      .menu a.on { color: #ffffff; }
+
+      .hi { font-size: 0.88rem; padding: 7px 14px; margin-bottom: 16px; }
+      h1 { font-size: clamp(2.2rem, 9vw, 3rem); margin-bottom: 18px; }
+      .lead { font-size: 1rem; margin-bottom: 22px; }
+      .cta { gap: 10px; margin-bottom: 22px; }
+      .cta .btn { flex: 1 1 auto; min-width: 140px; }
+      .soc a { width: 44px; height: 44px; }
+
+      .about .card { padding: 24px 20px; }
+      .about p { font-size: 0.98rem; }
+      dl div { padding: 12px 0; gap: 14px; }
+      dt { font-size: 0.85rem; }
+      dd { font-size: 0.9rem; }
+
+      .sg { padding: 22px 18px; }
+      .sg h3 { font-size: 1rem; margin-bottom: 16px; }
+      .pl { font-size: 0.85rem; padding: 7px 14px 7px 7px; }
+      .pl b { width: 26px; height: 26px; font-size: 0.65rem; }
+
+      .pj { grid-template-columns: 1fr; gap: 18px; }
+      .pc { border-radius: 20px; }
+      .tx { padding: 20px 18px; gap: 12px; }
+      .tx h3 { font-size: 1.12rem; }
+      .tx p { font-size: 0.92rem; }
+      .tx .btn { width: 100%; }
+      .tx .btn-group { width: 100%; flex-direction: column; }
+      .tx .btn-group .btn { width: 100%; }
+      .tags span { font-size: 0.72rem; padding: 4px 10px; }
+
+      .tl { padding-left: 26px; gap: 16px; }
+      .ti { padding: 18px 16px; border-radius: 14px; }
+      .ti::before { left: -26px; top: 24px; width: 12px; height: 12px; }
+      .ti h4 { font-size: 0.98rem; }
+      .ti small { font-size: 0.78rem; }
+      .ti p, .ti li { font-size: 0.9rem; }
+
+      .ct {
+        padding: 24px 18px;
+        gap: 26px;
+        border-radius: 22px;
+      }
+      .ct h2 { font-size: clamp(1.5rem, 6vw, 1.9rem); }
+      .ct p { font-size: 0.96rem; }
+      .mail { font-size: 0.92rem; }
+      .ct .cta { margin-bottom: 0; }
+      .ct .cta .btn { flex: 1 1 auto; }
+      .fld input,
+      .fld textarea {
+        padding: 22px 14px 8px;
+        font-size: 0.95rem;
+      }
+      .fld label { left: 14px; top: 15px; font-size: 0.94rem; }
+
+      footer { padding: 24px 0 28px; margin-top: 18px; }
+      footer .wrap {
+        flex-direction: column;
+        text-align: center;
+        gap: 14px;
+        font-size: 0.86rem;
+      }
+      .up { width: 42px; height: 42px; }
+    }
+
+    @media (max-width: 480px) {
+      .wrap { padding: 0 16px; }
+      section { padding: 46px 0; }
+      #home { padding-top: 92px; padding-bottom: 36px; }
+
+      .bar { padding: 0 12px 0 16px; height: 54px; }
+      .logo { font-size: 1.05rem; }
+      .theme-toggle,
+      .burger { width: 38px; height: 38px; }
+
+      h1 { font-size: clamp(2rem, 10vw, 2.6rem); }
+      .lead { font-size: 0.95rem; }
+      .btn { padding: 12px 20px; font-size: 0.88rem; }
+      .btn.sm { padding: 10px 18px; font-size: 0.85rem; }
+
+      .ph { max-width: 250px; }
+
+      .about .card { padding: 20px 16px; }
+      .sg { padding: 18px 16px; }
+
+      .tx { padding: 18px 16px; }
+
+      .ct { padding: 20px 16px; border-radius: 20px; }
+
+      footer .wrap { gap: 12px; }
+    }
+
+    @media (max-width: 360px) {
+      .wrap { padding: 0 14px; }
+      .logo { font-size: 0.98rem; }
+      .theme-toggle,
+      .burger { width: 36px; height: 36px; }
+      h1 { font-size: 1.85rem; }
+      .cta .btn { font-size: 0.84rem; padding: 11px 16px; }
+      .pl { font-size: 0.8rem; }
+    }
+
+    @media (max-width: 900px) and (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) .menu {
+        background: #152842;
+        border-color: rgba(107, 176, 240, 0.35);
+      }
+      :root:not([data-theme="light"]) .menu a { color: #d8e6f7; }
+    }
+    @media (max-width: 900px) {
+      :root[data-theme="dark"] .menu {
+        background: #152842;
+        border-color: rgba(107, 176, 240, 0.35);
+      }
+      :root[data-theme="dark"] .menu a { color: #d8e6f7; }
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       16 · AKSESIBILITAS
+       ═══════════════════════════════════════════════════════════ */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      html { scroll-behavior: auto; }
+      .rv, h1 .ln > span { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="blob a"></div>
+  <div class="blob b"></div>
+
+  <nav id="nav">
+    <div class="wrap" style="padding:0;">
+      <div class="bar">
+        <a href="#home" class="logo" aria-label="Rizki Ramdani">Rizki Ramdani<i>.</i></a>
+
+        <ul class="menu" id="menu">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#experience">Experience</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+
+        <div class="bar-right">
+          <button class="theme-toggle" id="themeToggle" aria-label="Ganti tema" title="Ganti tema">
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"/>
+              <line x1="12" y1="1" x2="12" y2="3"/>
+              <line x1="12" y1="21" x2="12" y2="23"/>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+              <line x1="1" y1="12" x2="3" y2="12"/>
+              <line x1="21" y1="12" x2="23" y2="12"/>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+          </button>
+
+          <button class="burger" id="burger" aria-label="Buka menu" aria-expanded="false">
+            <i></i><i></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+
+  <main>
+    <!-- 01 · HERO -->
+    <section id="home">
+      <div class="wrap hero">
+        <div>
+          <p class="hi rv">👋 Hi, I'm Rizki Ramdani</p>
+          <h1 aria-label="Creative Developer & UI Designer">
+            <span class="ln" aria-hidden="true">
+              <span style="--i:0">Creative Developer</span>
+            </span>
+            <span class="ln" aria-hidden="true">
+              <span style="--i:1" class="grad">&amp; UI Designer</span>
+            </span>
+          </h1>
+          <p class="lead rv" style="--i:2">
+            Saya adalah siswa Rekayasa Perangkat Lunak yang tertarik pada pengembangan website,
+            desain antarmuka, dan pembuatan solusi digital yang menarik serta mudah digunakan.
+          </p>
+          <div class="cta rv" style="--i:3">
+            <a class="btn p" href="#projects">Explore Projects</a>
+            <a class="btn" href="#contact">Get In Touch</a>
+          </div>
+          <div class="soc rv" style="--i:4" id="soc"></div>
+        </div>
+        <div class="ph rv" style="--i:2">
+          <div class="ph-fx" aria-hidden="true">
+            <div class="dots"></div>
+            <div class="ring-2"></div>
+            <div class="orbit"><span></span></div>
+            <div class="orbit"><span></span></div>
+            <div class="orbit"><span></span></div>
+            <span class="spark s1"></span>
+            <span class="spark s2"></span>
+            <span class="spark s3"></span>
+            <span class="spark s4"></span>
+          </div>
+          <div class="frame" id="profileFrame"
+               title="Klik untuk tukar foto"
+               role="button"
+               tabindex="0"
+               aria-label="Klik untuk menukar foto formal dan non-formal">
+            <div class="flip-wrap">
+              <div class="flip-face flip-front">
+                <img id="avatar" alt="Foto formal Rizki Ramdani" src="profil.png">
+              </div>
+              <div class="flip-face flip-back">
+                <img id="avatar2" alt="Foto non-formal Rizki Ramdani" src="profil1.png">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 · ABOUT -->
+    <section id="about">
+      <div class="wrap">
+        <h2 class="rv">A Little <span class="grad">About Me</span></h2>
+        <p class="sub rv" style="--i:1">Pelajar RPL yang senang belajar, membangun, dan merancang.</p>
+        <div class="about">
+          <div class="card rv" style="--i:2">
+            <p>Saya Rizki Ramdani, siswa SMKN 1 Cipeundeuy jurusan Rekayasa Perangkat Lunak. Saya senang mempelajari teknologi, mengembangkan website, dan merancang tampilan antarmuka yang menarik.</p>
+            <p>Melalui berbagai proyek, saya terus mengembangkan kemampuan teknis, kreativitas, dan kerja sama tim sebagai persiapan memasuki dunia profesional.</p>
+          </div>
+          <div class="card rv" style="--i:3; padding: 18px 28px">
+            <dl id="facts"></dl>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 · SKILLS -->
+    <section id="skills">
+      <div class="wrap">
+        <h2 class="rv">My <span class="grad">Skills</span></h2>
+        <p class="sub rv" style="--i:1">Keahlian yang saya pelajari dan gunakan dalam proyek sekolah.</p>
+        <div class="sk" id="sk"></div>
+      </div>
+    </section>
+
+    <!-- 04 · PROJECTS -->
+    <section id="projects">
+      <div class="wrap">
+        <h2 class="rv">Featured <span class="grad">Projects</span></h2>
+        <p class="sub rv" style="--i:1">Proyek pengembangan aplikasi, website, dan case study — dari perancangan hingga implementasi.</p>
+        <div class="pj" id="pj"></div>
+      </div>
+    </section>
+
+    <!-- 05 · EXPERIENCE & EDUCATION -->
+    <section id="experience">
+      <div class="wrap">
+        <div class="two">
+          <div>
+            <h2 class="rv">My <span class="grad">Experience</span></h2>
+            <div class="tl" id="exp"></div>
+          </div>
+          <div>
+            <h2 class="rv">My <span class="grad">Education</span></h2>
+            <div class="tl" id="edu"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06 · CONTACT -->
+    <section id="contact">
+      <div class="wrap">
+        <div class="ct card rv">
+          <div>
+            <h2>Let's <span class="grad">Connect!</span></h2>
+            <p>Punya ide menarik atau ingin berkolaborasi? Hubungi saya dan mari buat sesuatu yang bermanfaat bersama.</p>
+            <a class="mail" id="mail" href="#"></a>
+            <div class="cta">
+              <a class="btn p" id="mailbtn" href="#">Email Me</a>
+              <a class="btn" id="inbtn" href="#" target="_blank" rel="noopener">LinkedIn</a>
+            </div>
+          </div>
+          <form id="form" novalidate>
+            <div class="fld">
+              <input id="fn" name="nama" placeholder=" " required autocomplete="name">
+              <label for="fn">Nama</label>
+            </div>
+            <div class="fld">
+              <input id="fe" name="email" type="email" placeholder=" " required autocomplete="email">
+              <label for="fe">Email</label>
+            </div>
+            <div class="fld">
+              <textarea id="fm" name="pesan" rows="5" placeholder=" " required></textarea>
+              <label for="fm">Pesan</label>
+            </div>
+            <button class="btn p" type="submit">Kirim pesan</button>
+            <p class="msg" id="msg" role="status"></p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+
+  <footer>
+    <div class="wrap">
+      <span>© <span id="yr"></span> Rizki Ramdani. All rights reserved.</span>
+      <div class="soc" id="soc3"></div>
+      <button class="up" id="up" aria-label="Kembali ke atas">↑</button>
+    </div>
+  </footer>
+
+
+  <!-- MODAL DETAIL — TUGAS PRA UJIKOM -->
+  <div class="modal-overlay" id="modalPraujikom" role="dialog" aria-modal="true" aria-labelledby="praujikomTitle">
+    <div class="modal-box">
+      <button class="modal-close" id="modalClose" aria-label="Tutup">&times;</button>
+      <h3 class="modal-title" id="praujikomTitle">Tugas <span class="grad">Pra Ujikom</span></h3>
+      <p class="modal-desc">Pilih file di bawah untuk melihat tugas-tugasnya.</p>
+
+      <div id="fileCardsWrap" class="file-cards"></div>
+      <div id="fileDetailWrap"></div>
+    </div>
+  </div>
+
+
+  <script>
+    /* A · KONFIGURASI */
+    const CONFIG = {
+      email:    "rizkiramdani111108@gmail.com",
+      linkedin: "https://www.linkedin.com/in/rizki-ramdani-2420b3432/",
+      photo:    "profil.png",
+      photo2:   "profil1.png"
+    };
+
+    const FACTS = [
+      ["Nama",       "Rizki Ramdani"],
+      ["Pendidikan", "SMKN 1 Cipeundeuy"],
+      ["Jurusan",    "Rekayasa Perangkat Lunak"],
+      ["Lokasi",     "Bandung Barat, Jawa Barat"],
+      ["Minat",      "Web Development dan UI Design"]
+    ];
+
+    const SKILLS = [
+      { g: "Programming & Development", i: [["HTML", "H5"], ["CSS", "C3"], ["PHP", "Ph"], ["Pengembangan Software", "Sw"]] },
+      { g: "Design", i: [["UI Design", "Ui"], ["UX Design", "Ux"], ["Wireframing", "Wf"], ["Desain Grafis", "Gd"]] },
+      { g: "Other Skills", i: [["Manajemen Media Sosial", "Sm"], ["Kolaborasi Tim", "Kt"]] }
+    ];
+
+    /* PROJECTS */
+    const PROJECTS = [
+      {
+        t: "Website Perusahaan Aspal",
+        role: "UI/UX Designer", year: "2026",
+        d: "Berkolaborasi dalam tim beranggotakan empat orang untuk merancang antarmuka dan pengalaman pengguna website perusahaan aspal. Proyek dikerjakan menggunakan pendekatan kolaboratif dan vibe coding.",
+        k: ["Vibe Coding"], img: "aspal.png",
+        u: "https://majumulusjayaaspal.com/", btn: "View Project",
+        c: ["#d7e8fa", "#a8d0f5"]
+      },
+      {
+        t: "Aplikasi Kasir",
+        role: "Student Developer", year: "",
+        d: "Membuat aplikasi kasir sederhana untuk membantu proses pemesanan, melihat pesanan, menghitung total pembayaran, dan mengelola transaksi.",
+        k: [], img: "kasir.png",
+        u: "https://stupendous-starlight-5212d3.netlify.app/", btn: "View Project",
+        c: ["#c9e2fa", "#7cb8f0"]
+      },
+      {
+        t: "Wireframe Aplikasi",
+        role: "UI Designer", year: "",
+        d: "Membuat wireframe untuk merancang struktur aplikasi, navigasi, tata letak elemen, dan alur pengguna sebagai dasar pengembangan desain antarmuka.",
+        k: ["Wireframing"], img: "wireframe.png",
+        u: "https://drive.google.com/drive/folders/1epk25MSklv9vuVX4J0FV-UV-KLl03DqR", btn: "View Wireframe",
+        c: ["#e1efff", "#a8d0f5"]
+      },
+      {
+        t: "Tugas Pra Ujikom",
+        role: "UX Researcher & UI Designer", year: "2026",
+        d: "Kumpulan tugas persiapan Uji Kompetensi — terdiri dari 2 file: Tahap 1 dan Tahap 2. Berisi formulir SEQ, video wawancara, perhitungan SEQ, laporan usability testing, serta mockup, wireframe, wireflow, user flow, dan prototype.",
+        k: ["Pra Ujikom", "SEQ", "Usability Test", "2 File"],
+        img: "praujikom.png",
+        u: "MODAL", btn: "Buka Tugas",
+        c: ["#dbeafe", "#7cb8f0"]
+      },
+      {
+        t: "Case Study",
+        role: "UI/UX Researcher", year: "2026",
+        d: "Menyusun case study untuk mendokumentasikan proses perancangan dan pengembangan sebuah proyek digital — mulai dari latar belakang masalah, riset pengguna, solusi desain, hingga hasil akhir. Case study ini menjadi portofolio profesional yang menjelaskan proses berpikir dan dampak dari setiap keputusan desain.",
+        k: ["Case Study", "Research", "Documentation"], img: "case_study.png",
+        u: "https://rizkiramdani111108-wq.github.io/case-study/", btn: "View Case Study",
+        gold: true,
+        c: ["#f7e7a8", "#d4a02d"]
+      }
+    ];
+
+    /* ── Isi File Tugas Pra Ujikom ── */
+    const PRAUJIKOM_FILES = [
+      {
+        nama: "File 1 — Tahap 1",
+        sub: "Pengujian Usabilitas Website SMKN 21 Jakarta",
+        desc: "Berisi 4 tugas: Formulir SEQ, Video Wawancara, Perhitungan SEQ, dan Laporan Usability Testing.",
+        items: [
+          { t: "Formulir Pengujian SEQ", d: "Formulir pengujian usabilitas SEQ website SMKN 21 Jakarta (Tahap 1).", u: "https://drive.google.com/file/d/1iEo5nQSuRKE73B1Ngc3idh7p8EAgR3XT/view?usp=drive_link", btn: "View Formulir" },
+          { t: "Video Wawancara", d: "Wawancara pengguna Tahap 1 untuk menggali kebutuhan dan kendala.", u: "https://youtu.be/fd08vq5lzcQ?si=jedq8nlnKWaUKvJo", btn: "Watch Video" },
+          { t: "Perhitungan SEQ", d: "Pengolahan skor SEQ Tahap 1 sebagai dasar evaluasi usabilitas.", u: "https://docs.google.com/spreadsheets/d/1R8cjXrSjE5eKj_6e7JNp3Z2bfPJBp8SO/edit?usp=drive_link&ouid=106630114561904664417&rtpof=true&sd=true", btn: "View Perhitungan" },
+          { t: "Laporan Usability Testing", d: "Laporan lengkap hasil usability testing Tahap 1 + rekomendasi.", u: "https://drive.google.com/file/d/1X9GLFz44b1LhCimljjVJ4V59fMPmxcgA/view?usp=drive_link", btn: "View Laporan" }
+        ]
+      },
+      {
+        nama: "File 2 — Tahap 2",
+        sub: "Mockup, Wireframe, Wireflow, User Flow, Prototype + Usability Test",
+        desc: "Berisi 9 tugas: Mockup, Wireframe, Wireflow, User Flow, Prototype, Formulir SEQ, Video Wawancara, Perhitungan SEQ, dan Laporan Usability Testing.",
+        items: [
+          { t: "Mockup", d: "Mockup desain antarmuka website SMKN 21 Jakarta (Tahap 2).", u: "https://www.figma.com/design/W7Jjf9chuPflyUrtNvHNB1/moc-up---prototype?node-id=137-2", btn: "View Mockup" },
+          { t: "Wireframe", d: "Wireframe struktur & alur pengguna website (Tahap 2).", u: "https://www.figma.com/design/W7Jjf9chuPflyUrtNvHNB1/moc-up---prototype?node-id=374-184&t=C39Bi9G6yR7wZomG-0", btn: "View Wireframe" },
+          { t: "Wireflow", d: "Wireflow memetakan perpindahan antar halaman dengan menggabungkan wireframe dan alur navigasi (Tahap 2).", u: "https://www.figma.com/design/W7Jjf9chuPflyUrtNvHNB1/moc-up---prototype?node-id=503-184&t=fC7HfEINfq5ClEpk-1", btn: "View Wireflow" },
+          { t: "User Flow", d: "User flow memetakan langkah pengguna dari titik masuk hingga menyelesaikan tugas utama pada website (Tahap 2).", u: "https://www.figma.com/design/W7Jjf9chuPflyUrtNvHNB1/moc-up---prototype?node-id=503-9069&t=fC7HfEINfq5ClEpk-1", btn: "View User Flow" },
+          { t: "Prototype", d: "Prototype interaktif website untuk menguji alur pengguna.", u: "https://www.figma.com/proto/W7Jjf9chuPflyUrtNvHNB1/moc-up---prototype?node-id=193-1183&p=f&t=tupXLtGY4FjwZCmY-1&scaling=min-zoom&content-scaling=fixed&page-id=193%3A1182", btn: "View Prototype" },
+          { t: "Formulir Pengujian SEQ", d: "Formulir SEQ Tahap 2 sebagai evaluasi lanjutan setelah perbaikan.", u: "https://drive.google.com/file/d/1iEo5nQSuRKE73B1Ngc3idh7p8EAgR3XT/view?usp=drivesdk", btn: "View Formulir" },
+          { t: "Video Wawancara", d: "Wawancara pengguna Tahap 2 untuk mengevaluasi pengalaman baru.", u: "https://youtu.be/keB66xBGScQ?si=YzLJmDIt6SxgQiFl", btn: "Watch Video" },
+          { t: "Perhitungan SEQ", d: "Pengolahan skor SEQ Tahap 2 + perbandingan dengan Tahap 1.", u: "https://docs.google.com/spreadsheets/d/1R8cjXrSjE5eKj_6e7JNp3Z2bfPJBp8SO/edit?usp=drivesdk&ouid=111624142528544805797&rtpof=true&sd=true", btn: "View Perhitungan" },
+          { t: "Laporan Usability Testing", d: "Laporan lengkap usability testing Tahap 2 + rekomendasi akhir.", u: "https://drive.google.com/file/d/1X9GLFz44b1LhCimljjVJ4V59fMPmxcgA/view?usp=drivesdk", btn: "View Laporan" }
+        ]
+      }
+    ];
+
+    /* EXPERIENCE */
+    const EXPERIENCE = [
+      {
+        t: "Website Perusahaan Aspal — UI/UX Designer",
+        w: "2026",
+        b: [
+          "Berkolaborasi dalam tim beranggotakan empat orang untuk merancang antarmuka dan pengalaman pengguna website.",
+          "Membantu merancang tampilan yang menarik, informatif, dan mudah digunakan dengan pendekatan vibe coding."
+        ]
+      },
+      {
+        t: "Aplikasi Kasir — Student Developer",
+        w: "",
+        b: [
+          "Mengembangkan aplikasi kasir sederhana sebagai proyek pembelajaran.",
+          "Membuat fitur pemesanan, melihat pesanan, menghitung total pembayaran, dan mengelola transaksi."
+        ]
+      },
+      {
+        t: "Wireframe Aplikasi — UI Designer",
+        w: "",
+        b: [
+          "Menyusun wireframe sebagai dasar rancangan antarmuka aplikasi.",
+          "Merancang struktur navigasi, tata letak elemen, dan alur pengguna sebelum tahap desain visual."
+        ]
+      },
+      {
+        t: "Tugas Pra Ujikom — Tahap 1 & Tahap 2",
+        w: "2026",
+        b: [
+          "Melakukan pengujian usabilitas (SEQ) website SMKN 21 Jakarta pada Tahap 1 dan Tahap 2.",
+          "Melakukan wawancara pengguna, mengolah perhitungan SEQ, dan menyusun laporan usability testing.",
+          "Merancang mockup, wireframe, wireflow, user flow, dan prototype interaktif sebagai lanjutan perbaikan desain pada Tahap 2."
+        ]
+      },
+      {
+        t: "Case Study — Riset & Dokumentasi Desain",
+        w: "2026",
+        b: [
+          "Menyusun case study yang mendokumentasikan proses riset pengguna, solusi desain, dan hasil akhir proyek.",
+          "Menjelaskan alasan di balik setiap keputusan desain untuk memperkuat portofolio profesional."
+        ]
+      }
+    ];
+
+    const EDUCATION = [
+      { t: "SMKN 1 Cipeundeuy",  s: "Rekayasa Perangkat Lunak", w: "2024–Sekarang" },
+      { t: "MTs Darul Falah",    s: "",                         w: "Juli 2021–Juni 2024" },
+      { t: "SDN Gunung Leutik",  s: "",                         w: "Juli 2015–Juni 2021" }
+    ];
+
+
+    /* A1 · THEME TOGGLE */
+    (function initTheme() {
+      const root = document.documentElement;
+      const toggle = document.getElementById("themeToggle");
+      if (!toggle) return;
+      toggle.addEventListener("click", () => {
+        const current = root.getAttribute("data-theme") || "light";
+        const next = current === "dark" ? "light" : "dark";
+        root.setAttribute("data-theme", next);
+        try { localStorage.setItem("theme", next); } catch (e) {}
+      });
+    })();
+
+
+    /* B · UTILITAS */
+    const $  = (s, r = document) => r.querySelector(s);
+    const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+    const RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+
+    /* C · GENERATOR GAMBAR SVG */
+    const art = (c, t) =>
+      "data:image/svg+xml;utf8," + encodeURIComponent(
+        `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 400'>
+          <defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='${c[0]}'/><stop offset='1' stop-color='${c[1]}'/></linearGradient></defs>
+          <rect width='640' height='400' fill='url(#g)'/>
+          <circle cx='540' cy='70' r='120' fill='#fff' opacity='.4'/>
+          <rect x='90' y='90' width='380' height='210' rx='20' fill='#fff' opacity='.85'/>
+          <rect x='116' y='120' width='160' height='14' rx='7' fill='${c[1]}'/>
+          <rect x='116' y='150' width='300' height='9' rx='5' fill='${c[0]}'/>
+          <rect x='116' y='170' width='240' height='9' rx='5' fill='${c[0]}'/>
+          <rect x='116' y='250' width='84' height='28' rx='14' fill='${c[1]}'/>
+          <text x='320' y='360' text-anchor='middle' font-family='sans-serif' font-size='20' font-weight='600' fill='#2f7fd1'>${esc(t)}</text>
+        </svg>`
+      );
+
+    const AV = "data:image/svg+xml;utf8," + encodeURIComponent(
+      `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 250'>
+        <defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='#ffffff'/><stop offset='1' stop-color='#d7e8fa'/></linearGradient></defs>
+        <rect width='200' height='250' fill='url(#g)'/>
+        <circle cx='100' cy='100' r='36' fill='#a8d0f5' opacity='.9'/>
+        <path d='M30 250c8-56 42-78 70-78s62 22 70 78z' fill='#a8d0f5' opacity='.9'/>
+      </svg>`
+    );
+
+
+    /* D · FOTO + FLIP */
+    const avatarEl = $("#avatar");
+    avatarEl.src = CONFIG.photo || AV;
+    avatarEl.onerror = () => { avatarEl.src = AV; };
+
+    const avatar2El = $("#avatar2");
+    avatar2El.src = CONFIG.photo2 || AV;
+    avatar2El.onerror = () => { avatar2El.src = AV; };
+
+    const profileFrame = $("#profileFrame");
+    let isFlipping = false;
+
+    function togglePhoto() {
+      if (isFlipping) return;
+      isFlipping = true;
+      profileFrame.classList.add("flipping");
+      profileFrame.classList.toggle("flipped");
+      const isFlipped = profileFrame.classList.contains("flipped");
+      profileFrame.setAttribute("aria-label", isFlipped ? "Klik untuk kembali ke foto formal" : "Klik untuk menukar foto formal dan non-formal");
+      setTimeout(() => { profileFrame.classList.remove("flipping"); isFlipping = false; }, 1100);
+    }
+
+    profileFrame.addEventListener("click", togglePhoto);
+    profileFrame.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); togglePhoto(); }
+    });
+
+    $("#yr").textContent = new Date().getFullYear();
+
+    const LI = "M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.5h4V21H3zM9.5 9.5h3.8v1.6c.6-1 1.9-1.9 3.9-1.9 4 0 4.8 2.6 4.8 6V21h-4v-5c0-1.3 0-3-1.9-3s-2.1 1.4-2.1 2.9V21h-4z";
+    const ML = "M3 5h18a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm1.5 2.2V17.5h15V7.2L12 12.6z";
+
+    const soc = `
+      <a class="card" href="${esc(CONFIG.linkedin)}" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24"><path d="${LI}"/></svg>
+      </a>
+      <a class="card" href="mailto:${esc(CONFIG.email)}" aria-label="Email">
+        <svg viewBox="0 0 24 24"><path d="${ML}"/></svg>
+      </a>
+    `;
+
+    $("#soc").innerHTML = soc;
+    $("#soc3").innerHTML = soc;
+    $("#mail").textContent = CONFIG.email;
+    $("#mail").href = $("#mailbtn").href = "mailto:" + CONFIG.email;
+    $("#inbtn").href = CONFIG.linkedin;
+
+
+    /* E · RENDER DATA → HTML */
+    $("#facts").innerHTML = FACTS.map(f => `<div><dt>${esc(f[0])}</dt><dd>${esc(f[1])}</dd></div>`).join("");
+
+    $("#sk").innerHTML = SKILLS.map((g, gi) => `
+      <div class="card sg rv" style="--i:${gi}">
+        <h3>${esc(g.g)}</h3>
+        <div class="pills">${g.i.map(s => `<span class="pl"><b>${s[1]}</b>${esc(s[0])}</span>`).join("")}</div>
+      </div>
+    `).join("");
+
+    $("#pj").innerHTML = PROJECTS.map((p, i) => {
+      const tags = [p.role, p.year, ...p.k].filter(Boolean);
+      let buttonsHTML = "";
+      if (p.u === "MODAL") {
+        buttonsHTML = `<button class="btn p sm mag" data-open-praujikom>${esc(p.btn)} <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 17 17 7M8 7h9v9"/></svg></button>`;
+      } else if (p.u && p.u2) {
+        buttonsHTML = `
+          <div class="btn-group">
+            <a class="btn p sm mag" href="${esc(p.u)}" target="_blank" rel="noopener">${esc(p.btn)} <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+            <a class="btn sm mag" href="${esc(p.u2)}" target="_blank" rel="noopener">${esc(p.btn2)} <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+          </div>`;
+      } else if (p.u) {
+        buttonsHTML = `<a class="btn p sm mag" href="${esc(p.u)}" target="_blank" rel="noopener">${esc(p.btn)} <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 17 17 7M8 7h9v9"/></svg></a>`;
+      } else {
+        buttonsHTML = `<span class="btn off" aria-disabled="true" title="Tautan belum ditambahkan">${esc(p.btn)}</span>`;
+      }
+      return `
+        <article class="card pc rv${p.gold ? " gold" : ""}" style="--i:${i}">
+          <div class="im"><img loading="lazy" alt="Screenshot ${esc(p.t)}" src="${p.img || art(p.c, "Preview Proyek")}"></div>
+          <div class="tx">
+            <h3>${esc(p.t)}</h3>
+            <div class="tags">${tags.map(k => `<span>${esc(k)}</span>`).join("")}</div>
+            <p>${esc(p.d)}</p>
+            ${buttonsHTML}
+          </div>
+        </article>
+      `;
+    }).join("");
+
+    $("#exp").innerHTML = EXPERIENCE.map((e, i) => `
+      <div class="ti rv" style="--i:${i}">
+        <h4>${esc(e.t)}</h4>
+        ${e.w ? `<small>${esc(e.w)}</small>` : ""}
+        <ul>${e.b.map(x => `<li>${esc(x)}</li>`).join("")}</ul>
+      </div>
+    `).join("");
+
+    $("#edu").innerHTML = EDUCATION.map((e, i) => `
+      <div class="ti rv" style="--i:${i}">
+        <h4>${esc(e.t)}</h4>
+        <small>${esc(e.w)}</small>
+        ${e.s ? `<p>${esc(e.s)}</p>` : ""}
+      </div>
+    `).join("");
+
+
+    /* F · NAVIGASI */
+    const nav    = $("#nav");
+    const burger = $("#burger");
+    const menu   = $("#menu");
+    const links  = $$("#menu a");
+
+    addEventListener("scroll", () => nav.classList.toggle("s", scrollY > 40), { passive: true });
+
+    burger.onclick = () => {
+      const open = menu.classList.toggle("o");
+      burger.setAttribute("aria-expanded", open);
+    };
+
+    links.forEach(a => a.addEventListener("click", () => {
+      menu.classList.remove("o");
+      burger.setAttribute("aria-expanded", false);
+    }));
+
+    $$("main section").forEach(s => {
+      new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            links.forEach(a => a.classList.toggle("on", a.getAttribute("href") === "#" + s.id));
+          }
+        });
+      }, { rootMargin: "-45% 0px -50% 0px" }).observe(s);
+    });
+
+
+    /* G · REVEAL ON SCROLL */
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.12 });
+    $$(".rv").forEach(e => io.observe(e));
+
+
+    /* H · RIPPLE */
+    $$(".btn").forEach(b => {
+      b.addEventListener("click", e => {
+        const r = b.getBoundingClientRect();
+        const d = Math.max(r.width, r.height);
+        const s = document.createElement("span");
+        s.className = "rip";
+        s.style.cssText = `width:${d}px;height:${d}px;left:${e.clientX - r.left - d / 2}px;top:${e.clientY - r.top - d / 2}px`;
+        b.appendChild(s);
+        setTimeout(() => s.remove(), 600);
+      });
+    });
+
+
+    /* I · FORM KONTAK */
+    $("#form").addEventListener("submit", e => {
+      e.preventDefault();
+      const f = e.target;
+      const m = $("#msg");
+      const n = f.nama.value.trim();
+      const em = f.email.value.trim();
+      const p = f.pesan.value.trim();
+
+      if (!n || !/^\S+@\S+\.\S+$/.test(em) || !p) {
+        m.textContent = "Lengkapi nama, email yang valid, dan pesan.";
+        f.animate([
+          { transform: "translateX(0)" },
+          { transform: "translateX(-8px)" },
+          { transform: "translateX(8px)" },
+          { transform: "translateX(0)" }
+        ], { duration: 300 });
         return;
       }
 
-      const labels = ['T1','T2','T3','T4','T5','T6','T7','T8','T9','T10','T11','T12','T13','T14','T15'];
-      const p1 = [6.0, 6.2, 5.4, 6.0, 5.6, 4.6, 6.2, 6.6, 4.6, 4.6, 5.8, 6.4, 4.8, 5.0, 5.0];
-      const p2 = [6.8, 6.0, 6.8, 6.8, 6.4, 6.8, 6.6, 6.8, 6.4, 6.4, 6.8, 6.6, 6.4, 6.6, 7.0];
+      m.textContent = "Membuka aplikasi email Anda…";
+      location.href = `mailto:${CONFIG.email}?subject=${encodeURIComponent("Pesan dari " + n)}&body=${encodeURIComponent(p + "\n\n" + n + " (" + em + ")")}`;
 
-      new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: labels,
-          datasets: [
-            {
-              label: 'Pengujian 1 (Website Asli)',
-              data: p1,
-              backgroundColor: 'rgba(198, 40, 40, 0.65)',
-              borderColor: 'rgba(198, 40, 40, 1)',
-              borderWidth: 1
-            },
-            {
-              label: 'Pengujian 2 (Setelah Perbaikan)',
-              data: p2,
-              backgroundColor: 'rgba(26, 138, 74, 0.65)',
-              borderColor: 'rgba(26, 138, 74, 1)',
-              borderWidth: 1
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            y: {
-              beginAtZero: false,
-              min: 1,
-              max: 7,
-              ticks: { stepSize: 1 },
-              title: { display: true, text: 'Rata-rata SEQ (1–7)' }
-            },
-            x: {
-              title: { display: true, text: 'Tugas' }
-            }
-          },
-          plugins: {
-            legend: { position: 'top' },
-            tooltip: {
-              callbacks: {
-                afterBody: function(items) {
-                  const idx = items[0].dataIndex;
-                  const diff = (p2[idx] - p1[idx]).toFixed(1);
-                  return 'Peningkatan: +' + diff;
-                }
-              }
-            }
-          }
-        }
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initChart);
-    } else {
-      initChart();
-    }
-  })();
-  </script>
-
-  <h3 id="banding">Perbandingan Rata-rata SEQ Pengujian 1 vs Pengujian 2</h3>
-  <p>Setelah seluruh perbaikan diterapkan, berikut perbandingan nilai rata-rata SEQ keseluruhan antara pengujian pertama (website asli) dan pengujian ulang (desain hasil perbaikan):</p>
-  <div class="tw"><table>
-    <thead>
-      <tr>
-        <th>Aspek</th>
-        <th>Pengujian 1<br>(Website Asli)</th>
-        <th>Pengujian 2<br>(Setelah Perbaikan)</th>
-        <th>Peningkatan</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><b>Rata-rata Keseluruhan SEQ</b></td>
-        <td>5,5</td>
-        <td>6,5</td>
-        <td><b style="color:var(--hijau)">+1,0</b></td>
-      </tr>
-    </tbody>
-  </table></div>
-  <p>Rata-rata keseluruhan SEQ naik dari <b>5,5</b> menjadi <b>6,5</b> — peningkatan sebesar <b>1,0 poin</b> pada skala 1–7. Kenaikan ini menunjukkan bahwa seluruh perbaikan (akses P5 yang lebih jelas, penempatan Prestasi, penggantian istilah asing, penegasan menu Kesiswaan, arsip P5 per tahun, dan tombol Beranda) benar-benar membantu pengguna menyelesaikan tugas dengan lebih mudah. Hasil ini juga <b>memenuhi kriteria keberhasilan</b> yang ditetapkan pada bagian Metodologi (rata-rata ≥ 6,0 dan tidak ada tugas &lt; 5,0).</p>
-  <div class="info">
-    <div><b>Rata-rata Pengujian 1</b>5,5 / 7</div>
-    <div><b>Rata-rata Pengujian 2</b>6,5 / 7</div>
-    <div><b>Peningkatan</b>+1,0 poin</div>
-    <div><b>Kesimpulan</b>Semua perbaikan lolos</div>
-  </div>
-</section>
-
-<section id="dokumen">
-  <h2>Dokumen</h2><hr>
-  <ul class="dok">
-    <li><span>Website Asli SMKN 21 Jakarta</span><a href="https://smkn21jakarta.sch.id" target="_blank" rel="noopener">Buka</a></li>
-    <li><span>Laporan Pengujian 1 (Google Drive)</span><a href="https://drive.google.com/file/d/1X9GLFz44b1LhCimljjVJ4V59fMPmxcgA/view?usp=drivesdk" target="_blank" rel="noopener">Buka</a></li>
-    <li><span>Laporan Pengujian 2 (Google Drive)</span><a href="https://drive.google.com/file/d/1hV_joGKrufsE6SP6gPbyGAHQxR5n1l21/view?usp=drive_link" target="_blank" rel="noopener">Buka</a></li>
-    <li><span>Formulir SEQ Pengujian 1 (Google Drive)</span><a href="https://drive.google.com/file/d/1iEo5nQSuRKE73B1Ngc3idh7p8EAgR3XT/view?usp=drivesdk" target="_blank" rel="noopener">Buka</a></li>
-    <li><span>Formulir SEQ Pengujian 2 (Google Drive)</span><a href="https://drive.google.com/file/d/1lt41x_2p69DiuHU1tCoL7wdzKUrUHfau/view?usp=drivesdk" target="_blank" rel="noopener">Buka</a></li>
-    <li><span>Perhitungan SEQ Pengujian 1 (Google Sheets)</span><a href="https://docs.google.com/spreadsheets/d/1R8cjXrSjE5eKj_6e7JNp3Z2bfPJBp8SO/edit?usp=drivesdk&ouid=113743465150629458824&rtpof=true&sd=true" target="_blank" rel="noopener">Buka</a></li>
-    <li><span>Perhitungan SEQ Pengujian 2 (Google Sheets)</span><a href="https://docs.google.com/spreadsheets/d/1DPOgrww75h_NGiCg1GeuJqOWUmASwYPg/edit?usp=drive_link&ouid=113743465150629458824&rtpof=true&sd=true" target="_blank" rel="noopener">Buka</a></li>
-    <li><span>Wawancara Pengujian 1 (YouTube)</span><a href="https://youtu.be/fd08vq5lzcQ?si=QnRwOD4fDZlFrDsx" target="_blank" rel="noopener">Buka</a></li>
-    <li><span>Wawancara Pengujian 2 (YouTube)</span><a href="https://youtu.be/keB66xBGScQ?si=XrT7ctwgFHVXuuwv" target="_blank" rel="noopener">Buka</a></li>
-    <li><span>Mockup (Figma)</span><a href="https://www.figma.com/design/W7Jjf9chuPflyUrtNvHNB1/moc-up---prototype?node-id=137-2&t=vp8nNrOySdFFyhQg-1" target="_blank" rel="noopener">Buka</a></li>
-    <li><span>Wireframe (Figma)</span><a href="https://www.figma.com/design/W7Jjf9chuPflyUrtNvHNB1/moc-up---prototype?node-id=374-184&t=vp8nNrOySdFFyhQg-1" target="_blank" rel="noopener">Buka</a></li>
-    <li><span>Wireflow (Figma)</span><a href="https://www.figma.com/design/W7Jjf9chuPflyUrtNvHNB1/moc-up---prototype?node-id=503-184&t=fC7HfEINfq5ClEpk-1" target="_blank" rel="noopener">Buka</a></li>
-    <li><span>Userflow (Figma)</span><a href="https://www.figma.com/design/W7Jjf9chuPflyUrtNvHNB1/moc-up---prototype?node-id=503-9069&t=fC7HfEINfq5ClEpk-1" target="_blank" rel="noopener">Buka</a></li>
-    <li><span>Prototype (Figma)</span><a href="https://www.figma.com/proto/W7Jjf9chuPflyUrtNvHNB1/moc-up---prototype?node-id=193-1183&p=f&t=tupXLtGY4FjwZCmY-1&scaling=min-zoom&content-scaling=fixed&page-id=193%3A1182" target="_blank" rel="noopener">Buka</a></li>
-  </ul>
-</section>
-
-<section id="belajar">
-  <h2>Yang Saya Pelajari</h2><hr>
-  <p>Dari proses evaluasi usability ini, saya belajar bahwa:</p>
-  <ul class="t">
-    <li><b>Desain yang terlihat rapi belum tentu mudah digunakan.</b> Struktur menu yang tampak wajar bagi pembuat website bisa membingungkan pengguna karena ekspektasi mereka berbeda.</li>
-    <li><b>Data pengguna lebih penting daripada asumsi.</b> Hasil card sorting, SEQ, dan wawancara menunjukkan masalah nyata yang tidak terlihat saat hanya mengamati tampilan.</li>
-    <li><b>Istilah sangat memengaruhi kemudahan.</b> Mengganti istilah asing dengan bahasa yang lebih umum ("Bursa Kerja", "Data Alumni") langsung meningkatkan pemahaman pengguna.</li>
-    <li><b>Umpan balik pengguna adalah dasar perbaikan.</b> Tujuh perbaikan yang saya lakukan berasal langsung dari keluhan peserta, dan hasil pengujian ulang menunjukkan peningkatan yang jelas.</li>
-    <li><b>Pengujian ulang penting.</b> Perbaikan perlu diverifikasi, bukan hanya diasumsikan berhasil — SEQ dan wawancara putaran kedua membuktikan perbaikan benar-benar membantu.</li>
-  </ul>
-</section>
-</main>
-</div>
-
-<!-- ====== FOOTER ====== -->
-<footer>
-  <div class="ucapan">
-    <h2>Terima Kasih</h2>
-    <p>Terima kasih telah meluangkan waktu untuk membaca studi kasus ini. Semoga bermanfaat!</p>
-  </div>
-
-  <div class="link-footer">
-    <p>
-      <a href="#overview">Overview</a> ·
-      <a href="#metodologi">Metodologi</a> ·
-      <a href="#tahap1">Pengujian 1</a> ·
-      <a href="#desain">Desain</a> ·
-      <a href="#tahap2">Pengujian Ulang</a>
-    </p>
-    <p class="copy">&copy; 2026 Rizki Ramdani</p>
-  </div>
-</footer>
-
-<script>
-  /* ===== Menu mobile ===== */
-  const menu = document.getElementById('menu');
-  document.getElementById('toggle').onclick = () => menu.classList.toggle('buka');
-  menu.querySelectorAll('a').forEach(a => a.onclick = () => menu.classList.remove('buka'));
-
-  /* ===== Scrollspy + Auto-scroll Sidebar ===== */
-  const sidebar = document.querySelector('aside');
-  const tautan = document.querySelectorAll('aside a');
-  let isHoveringSidebar = false;
-
-  sidebar.addEventListener('mouseenter', () => { isHoveringSidebar = true; });
-  sidebar.addEventListener('mouseleave', () => { isHoveringSidebar = false; });
-
-  const bagian = [];
-  tautan.forEach(a => {
-    const href = a.getAttribute('href');
-    if (href && href.startsWith('#')) {
-      const el = document.querySelector(href);
-      if (el) bagian.push([a, el]);
-    }
-  });
-
-  let aktifSebelumnya = null;
-
-  function perbaruiAktif() {
-    if (isHoveringSidebar) return; 
-
-    const isMentokBawah = (window.innerHeight + window.scrollY) >= document.body.offsetHeight - 50;
-    const isMentokAtas = window.scrollY === 0;
-
-    let aktif = null;
-    let posisiTerbaik = -Infinity;
-
-    bagian.forEach(([link, el]) => {
-      const top = el.getBoundingClientRect().top;
-      if (top - 140 <= 0 && top > posisiTerbaik) {
-        posisiTerbaik = top;
-        aktif = link;
-      }
+      setTimeout(() => {
+        m.textContent = "Terima kasih! Pesan siap dikirim lewat email Anda.";
+        f.reset();
+      }, 900);
     });
 
-    if (!aktif && bagian.length) aktif = bagian[0][0];
 
-    tautan.forEach(a => a.classList.toggle('aktif', a === aktif));
+    /* J · SCROLL TO TOP */
+    $("#up").onclick = () => scrollTo({ top: 0, behavior: RM ? "auto" : "smooth" });
 
-    if (aktif && aktif !== aktifSebelumnya) {
-      aktifSebelumnya = aktif;
 
-      if (sidebar.scrollHeight > sidebar.clientHeight && window.innerWidth > 820 && !isMentokBawah && !isMentokAtas) {
-        const scrollTarget = aktif.offsetTop - (sidebar.clientHeight / 2) + (aktif.offsetHeight / 2);
-        
-        sidebar.scrollTo({
-          top: scrollTarget,
-          behavior: 'auto'
+    /* ═══════════════════════════════════════════════════════════
+       K · MODAL TUGAS PRA UJIKOM (2 LEVEL)
+       ═══════════════════════════════════════════════════════════ */
+    (function initPraujikomModal() {
+      const overlay      = $("#modalPraujikom");
+      const closeBtn     = $("#modalClose");
+      const cardsWrap    = $("#fileCardsWrap");
+      const detailWrap   = $("#fileDetailWrap");
+      const modalDesc    = overlay.querySelector(".modal-desc");
+      if (!overlay || !cardsWrap || !detailWrap) return;
+
+      const descDefault = modalDesc.textContent;
+
+      cardsWrap.innerHTML = PRAUJIKOM_FILES.map((file, fi) => `
+        <button class="file-card" data-file="${fi}" aria-label="Buka ${esc(file.nama)}">
+          <span class="file-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+            </svg>
+          </span>
+          <h4>${esc(file.nama)}</h4>
+          <p>${esc(file.desc)}</p>
+          <span class="file-card-meta">${file.items.length} tugas — Buka</span>
+        </button>
+      `).join("");
+
+      detailWrap.innerHTML = PRAUJIKOM_FILES.map((file, fi) => `
+        <div class="file-detail" data-detail="${fi}">
+          <button class="btn-back" data-back>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            Kembali ke daftar file
+          </button>
+          <div class="file-detail-head">
+            <span class="file-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+              </svg>
+            </span>
+            <div>
+              <h4>${esc(file.nama)}</h4>
+              <small>${esc(file.sub)}</small>
+            </div>
+          </div>
+          <div class="tugas-grid">
+            ${file.items.map((it, ii) => `
+              <div class="tugas-item">
+                <span class="tugas-num">${ii + 1}</span>
+                <h5>${esc(it.t)}</h5>
+                <p>${esc(it.d)}</p>
+                <a class="btn p sm" href="${esc(it.u)}" target="_blank" rel="noopener">${esc(it.btn)}</a>
+              </div>
+            `).join("")}
+          </div>
+        </div>
+      `).join("");
+
+      function showFileList() {
+        cardsWrap.style.display = "grid";
+        detailWrap.style.display = "none";
+        modalDesc.textContent = descDefault;
+      }
+
+      function showFileDetail(idx) {
+        cardsWrap.style.display = "none";
+        detailWrap.style.display = "block";
+        modalDesc.textContent = "Daftar tugas di dalam file yang dipilih.";
+
+        $$(".file-detail", detailWrap).forEach(d => {
+          d.classList.toggle("on", d.dataset.detail === String(idx));
         });
       }
-    }
-  }
 
-  let menunggu = false;
-  window.addEventListener('scroll', () => {
-    if (!menunggu) {
-      menunggu = true;
-      requestAnimationFrame(() => {
-        perbaruiAktif();
-        menunggu = false;
+      function openModal() {
+        overlay.classList.add("open");
+        document.body.classList.add("modal-open");
+        showFileList();
+      }
+      function closeModal() {
+        overlay.classList.remove("open");
+        document.body.classList.remove("modal-open");
+      }
+
+      document.addEventListener("click", e => {
+        if (e.target.closest("[data-open-praujikom]")) {
+          e.preventDefault();
+          openModal();
+        }
       });
-    }
-  }, { passive: true });
 
-  window.addEventListener('DOMContentLoaded', perbaruiAktif);
-  window.addEventListener('load', perbaruiAktif);
-</script>
+      closeBtn.addEventListener("click", closeModal);
+      overlay.addEventListener("click", e => { if (e.target === overlay) closeModal(); });
+      document.addEventListener("keydown", e => {
+        if (e.key === "Escape" && overlay.classList.contains("open")) closeModal();
+      });
+
+      cardsWrap.addEventListener("click", e => {
+        const card = e.target.closest(".file-card");
+        if (!card) return;
+        showFileDetail(card.dataset.file);
+      });
+
+      detailWrap.addEventListener("click", e => {
+        if (e.target.closest("[data-back]")) {
+          showFileList();
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
